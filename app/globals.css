@@ -1,26 +1,79 @@
 @import "tailwindcss";
+@config "../tailwind.config.ts";
+
+@theme {
+  --color-navy-deep: #0B1E3A;
+  --color-navy-base: #16294D;
+  --color-red-signal: #D81F3C;
+  --color-ivory: #F6F3EC;
+  --color-slate: #5B6472;
+  --color-gold-hairline: #C9A15A;
+
+  --color-bg-primary: #F6F3EC;
+  --color-bg-inverse: #0B1E3A;
+  --color-text-primary: #0B1E3A;
+  --color-text-inverse: #F6F3EC;
+  --color-text-muted: #5B6472;
+  --color-accent: #D81F3C;
+
+  --font-display: var(--font-display), serif;
+  --font-body: var(--font-body), sans-serif;
+  --font-mono: var(--font-mono), monospace;
+
+  --text-display-xl: 44px;
+  --text-display-xl--line-height: 1.15;
+  --text-display-lg: 32px;
+  --text-display-lg--line-height: 1.2;
+  --text-display-md: 26px;
+  --text-display-md--line-height: 1.25;
+  --text-body-lg: 18px;
+  --text-body-lg--line-height: 1.6;
+  --text-body-md: 16px;
+  --text-body-md--line-height: 1.6;
+  --text-body-sm: 14px;
+  --text-body-sm--line-height: 1.5;
+  --text-caption: 12px;
+  --text-caption--line-height: 1.4;
+
+  --spacing-space-1: 8px;
+  --spacing-space-2: 16px;
+  --spacing-space-3: 24px;
+  --spacing-space-4: 32px;
+  --spacing-space-6: 48px;
+  --spacing-space-8: 64px;
+  --spacing-space-12: 96px;
+
+  --radius-radius-sm: 2px;
+  --radius-radius-md: 6px;
+  --radius-radius-lg: 12px;
+
+  --shadow-card: 0 1px 3px rgba(11, 30, 58, 0.08);
+  --shadow-card-hover: 0 8px 20px rgba(11, 30, 58, 0.12);
+}
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+  --navy-deep: #0B1E3A;
+  --navy-base: #16294D;
+  --red-signal: #D81F3C;
+  --ivory: #F6F3EC;
+  --slate: #5B6472;
+  --gold-hairline: #C9A15A;
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --color-bg-primary: var(--ivory);
+  --color-bg-inverse: var(--navy-deep);
+  --color-text-primary: var(--navy-deep);
+  --color-text-inverse: var(--ivory);
+  --color-text-muted: var(--slate);
+  --color-accent: var(--red-signal);
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: var(--ivory);
+  color: var(--navy-deep);
+  font-family: var(--font-body), sans-serif;
+}
+
+.font-display {
+  font-family: var(--font-display), serif;
+  font-weight: 500;
 }
