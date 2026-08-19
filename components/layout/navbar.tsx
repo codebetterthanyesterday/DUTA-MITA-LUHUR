@@ -50,7 +50,7 @@ export function Navbar() {
           href="/"
           className="font-display font-medium text-display-md text-navy-deep hover:opacity-90 transition-opacity"
         >
-          Duta Mita Luhur
+          Duta Mitra Luhur
         </Link>
 
         {/* Desktop Navigation */}
@@ -68,11 +68,10 @@ export function Navbar() {
               <Link
                 key={link.href}
                 href={link.href}
-                className={`font-body text-body-sm font-medium transition-colors pb-0.5 border-b ${
-                  isActive
+                className={`font-body text-body-sm font-medium transition-colors pb-0.5 border-b ${isActive
                     ? "text-red-signal border-gold-hairline"
                     : "text-slate hover:text-navy-deep border-transparent"
-                }`}
+                  }`}
               >
                 {link.label}
               </Link>
@@ -148,11 +147,10 @@ export function Navbar() {
                   key={link.href}
                   href={link.href}
                   onClick={() => setIsOpen(false)}
-                  className={`font-body text-body-lg py-space-1 border-b transition-colors ${
-                    isActive
+                  className={`font-body text-body-lg py-space-1 border-b transition-colors ${isActive
                       ? "text-red-signal border-gold-hairline font-medium"
                       : "text-ivory/80 hover:text-ivory border-slate/20"
-                  }`}
+                    }`}
                 >
                   {link.label}
                 </Link>

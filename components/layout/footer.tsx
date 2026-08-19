@@ -12,7 +12,7 @@ export function Footer() {
           {/* Column 1 — Company */}
           <div className="space-y-space-3">
             <span className="font-display font-medium text-display-md text-ivory block">
-              Duta Mita Luhur
+              Duta Mitra Luhur
             </span>
             <p className="font-body text-body-sm text-slate max-w-sm">
               {/* TODO: replace with real company description */}
@@ -101,7 +101,7 @@ export function Footer() {
                     d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
                   />
                 </svg>
-                <span>info@dutamitaluhur.com</span>
+                <span>info@dutaMitraluhur.com</span>
               </li>
               <li className="flex items-center gap-space-2">
                 <svg
@@ -151,7 +151,7 @@ export function Footer() {
 
         {/* Bottom Bar */}
         <div className="border-t border-slate/30 pt-space-4 flex flex-col sm:flex-row justify-between items-center gap-space-2 font-body text-body-sm text-slate">
-          <p>© {currentYear} Duta Mita Luhur. All rights reserved.</p>
+          <p>© {currentYear} Duta Mitra Luhur. All rights reserved.</p>
           <div className="flex items-center gap-space-3">
             <a
               href="#"

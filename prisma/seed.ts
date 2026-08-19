@@ -18,7 +18,7 @@ function slugify(text: string): string {
 }
 
 async function main() {
-  console.log("🌱 Starting database seed for PT Duta Mita Luhur...");
+  console.log("🌱 Starting database seed for PT Duta Mitra Luhur...");
 
   // Clean existing catalog data in safe order
   await prisma.productImage.deleteMany();
@@ -82,7 +82,7 @@ async function main() {
       ],
       image: {
         url: "/images/products/placeholder.jpg",
-        altText: "Ribbed Smoked Sheet RSS 1 bal ekspor PT Duta Mita Luhur",
+        altText: "Ribbed Smoked Sheet RSS 1 bal ekspor PT Duta Mitra Luhur",
         isPrimary: true,
         sortOrder: 1,
       },
@@ -249,7 +249,7 @@ async function main() {
 
   if (adminEmail && adminPassword) {
     const passwordHash = await bcrypt.hash(adminPassword, 12);
-    
+
     await prisma.user.upsert({
       where: { email: adminEmail },
       update: {

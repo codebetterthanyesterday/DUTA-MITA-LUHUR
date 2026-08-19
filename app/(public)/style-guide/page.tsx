@@ -73,7 +73,7 @@ export default function StyleGuidePage() {
       fontClass: "font-body text-body-lg text-navy-deep",
       description: "Lead paragraphs (Inter 400/500)",
       sample:
-        "Duta Mita Luhur delivers premium-grade rubber polymers engineered for demanding international industrial applications.",
+        "Duta Mitra Luhur delivers premium-grade rubber polymers engineered for demanding international industrial applications.",
     },
     {
       token: "body-md",
@@ -121,7 +121,7 @@ export default function StyleGuidePage() {
             Design System &amp; Style Guide
           </h1>
           <p className="font-body text-body-md text-slate mt-space-1">
-            DUTA MITA LUHUR — Visual tokens, typography scale, spacing units, and component foundations.
+            DUTA Mitra LUHUR — Visual tokens, typography scale, spacing units, and component foundations.
           </p>
         </header>
 
@@ -140,9 +140,8 @@ export default function StyleGuidePage() {
             {colors.map((color) => (
               <div
                 key={color.name}
-                className={`p-space-3 rounded-radius-md ${color.bgClass} ${color.textClass} ${
-                  color.borderClass ?? ""
-                } shadow-card flex flex-col justify-between min-h-[140px]`}
+                className={`p-space-3 rounded-radius-md ${color.bgClass} ${color.textClass} ${color.borderClass ?? ""
+                  } shadow-card flex flex-col justify-between min-h-[140px]`}
               >
                 <div>
                   <span className="font-mono font-medium text-caption block">

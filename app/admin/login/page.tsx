@@ -47,7 +47,7 @@ export default function AdminLoginPage() {
             Admin Login
           </h1>
           <p className="font-body text-body-sm text-slate mt-space-1">
-            PT Duta Mita Luhur Management
+            PT Duta Mitra Luhur Management
           </p>
         </div>
 

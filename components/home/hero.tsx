@@ -15,7 +15,7 @@ export function Hero() {
           </h1>
 
           <p className="font-body text-body-lg text-ivory/70 max-w-[440px] pt-space-1">
-            PT Duta Mita Luhur memproduksi dan mengekspor polimer karet alam berstandar internasional dengan jaminan konsistensi mutu teknis dan ketepatan logistik global.
+            PT Duta Mitra Luhur memproduksi dan mengekspor polimer karet alam berstandar internasional dengan jaminan konsistensi mutu teknis dan ketepatan logistik global.
           </p>
 
           <div className="flex flex-wrap items-center gap-space-2 pt-space-3">

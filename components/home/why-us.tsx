@@ -73,7 +73,7 @@ export function WhyUs() {
             Keunggulan Kompetitif
           </span>
           <h2 className="font-display font-medium text-display-lg text-navy-deep">
-            Mengapa Memilih Duta Mita Luhur
+            Mengapa Memilih Duta Mitra Luhur
           </h2>
         </div>
 

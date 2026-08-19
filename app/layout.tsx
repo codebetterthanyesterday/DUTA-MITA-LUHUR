@@ -24,7 +24,7 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "DUTA MITA LUHUR — Industrial Rubber Manufacturer & Exporter",
+  title: "DUTA Mitra LUHUR — Industrial Rubber Manufacturer & Exporter",
   description: "B2B Rubber Export Company based in Indonesia",
 };
 

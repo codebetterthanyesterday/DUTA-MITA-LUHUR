@@ -3,8 +3,8 @@ import prisma from "@/lib/prisma";
 import { CatalogExplorer } from "@/components/catalog/catalog-explorer";
 
 export const metadata: Metadata = {
-  title: "Katalog Produk | Duta Mita Luhur",
-  description: "Eksplorasi spesifikasi polimer karet alam dan olahan siap ekspor dengan parameter kualitas terverifikasi dari PT Duta Mita Luhur.",
+  title: "Katalog Produk | Duta Mitra Luhur",
+  description: "Eksplorasi spesifikasi polimer karet alam dan olahan siap ekspor dengan parameter kualitas terverifikasi dari PT Duta Mitra Luhur.",
 };
 
 export default async function KatalogPage() {

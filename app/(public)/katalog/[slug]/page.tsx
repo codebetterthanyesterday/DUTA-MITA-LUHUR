@@ -30,12 +30,12 @@ export async function generateMetadata({
 
   if (!product) {
     return {
-      title: "Produk Tidak Ditemukan | Duta Mita Luhur",
+      title: "Produk Tidak Ditemukan | Duta Mitra Luhur",
     };
   }
 
   return {
-    title: `${product.name} | Duta Mita Luhur`,
+    title: `${product.name} | Duta Mitra Luhur`,
     description: product.shortDescription || undefined,
   };
 }
@@ -75,7 +75,7 @@ export default async function ProductDetailPage({
   return (
     <div className="bg-ivory min-h-screen">
       <div className="max-w-7xl mx-auto px-space-4 md:px-space-6 py-space-6 md:py-space-8">
-        
+
         {/* Breadcrumb Navigation */}
         <nav aria-label="Breadcrumb" className="font-body text-body-sm text-slate mb-space-6">
           <ol className="flex items-center space-x-2">
@@ -101,27 +101,27 @@ export default async function ProductDetailPage({
 
         {/* 2-Column Main Section */}
         <div className="grid grid-cols-1 lg:grid-cols-[1.1fr_1fr] gap-space-6 lg:gap-space-8 mb-space-12">
-          
+
           {/* Left Column: Image Gallery */}
           <div className="min-w-0">
-            <ProductGallery 
-              images={product.images} 
-              productName={product.name} 
-              categoryName={product.category.name} 
+            <ProductGallery
+              images={product.images}
+              productName={product.name}
+              categoryName={product.category.name}
             />
           </div>
 
           {/* Right Column: Sticky Info Panel */}
           <div>
             <div className="lg:sticky lg:top-24 space-y-space-4">
-              
-              <Link 
+
+              <Link
                 href={`/katalog?category=${product.categoryId}`}
                 className="font-mono text-caption text-red-signal uppercase tracking-wider hover:underline block"
               >
                 {product.category.name}
               </Link>
-              
+
               <h1 className="font-display font-medium text-display-lg text-navy-deep">
                 {product.name}
               </h1>
@@ -156,7 +156,7 @@ export default async function ProductDetailPage({
                 >
                   Ajukan Penawaran untuk Produk Ini
                 </Link>
-                
+
                 <a
                   href="https://wa.me/62XXXXXXXXXX"
                   target="_blank"

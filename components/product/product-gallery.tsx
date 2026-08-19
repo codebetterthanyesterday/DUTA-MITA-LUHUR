@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { Lightbox } from "@/components/ui/lightbox";
 
 type ProductImage = {
   id: string;
@@ -129,35 +130,12 @@ export function ProductGallery({ images, productName, categoryName }: ProductGal
       )}
 
       {/* Lightbox Overlay */}
-      {isLightboxOpen && activeImage && !hasError && (
-        <div 
-          className="fixed inset-0 z-[100] bg-navy-deep/90 flex items-center justify-center p-space-4 sm:p-space-6"
-          onClick={() => setIsLightboxOpen(false)}
-        >
-          <div 
-            className="relative max-w-5xl w-full h-full flex items-center justify-center"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <button
-              type="button"
-              onClick={() => setIsLightboxOpen(false)}
-              className="absolute top-0 right-0 z-10 text-ivory/70 hover:text-ivory bg-navy-deep/50 hover:bg-navy-deep/80 p-2 rounded-radius-sm transition-colors"
-              aria-label="Close lightbox"
-            >
-              <svg className="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-              </svg>
-            </button>
-            
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src={activeImage.url}
-              alt={activeImage.altText || productName}
-              className="max-w-full max-h-full object-contain shadow-card-hover rounded-radius-sm"
-            />
-          </div>
-        </div>
-      )}
+      <Lightbox
+        isOpen={isLightboxOpen && !!activeImage && !hasError}
+        onClose={() => setIsLightboxOpen(false)}
+        imageUrl={activeImage?.url || ""}
+        altText={activeImage?.altText || productName}
+      />
     </div>
   );
 }
