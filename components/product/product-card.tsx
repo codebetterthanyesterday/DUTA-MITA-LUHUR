@@ -34,7 +34,7 @@ export function ProductCard({ product }: { product: ProductCardData }) {
 
   return (
     <Link
-      href="/katalog" // TODO: update to /katalog/${product.slug} once PBI-09 exists
+      href={`/katalog/${product.slug}`}
       className="bg-ivory border border-border-hairline rounded-radius-md shadow-card hover:shadow-card-hover hover:-translate-y-[3px] transition-all duration-200 p-space-3 flex flex-col justify-between group h-full"
     >
       <div>
