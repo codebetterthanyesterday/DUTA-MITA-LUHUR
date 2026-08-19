@@ -79,3 +79,12 @@ body {
   font-family: var(--font-display), serif;
   font-weight: 500;
 }
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}

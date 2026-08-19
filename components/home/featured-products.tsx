@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { ProductCard } from "@/components/product/product-card";
 
 export type FeaturedProduct = {
   id: string;
@@ -72,39 +73,20 @@ export function FeaturedProducts() {
 
         {/* Product Cards Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-space-3">
-          {featuredProducts.map((product) => (
-            <Link
-              key={product.id}
-              href="/katalog"
-              className="bg-ivory border border-border-hairline rounded-radius-md shadow-card hover:shadow-card-hover hover:-translate-y-[3px] transition-all duration-200 p-space-3 flex flex-col justify-between group"
-            >
-              <div>
-                {/* CSS Neutral Placeholder Thumbnail */}
-                <div className="aspect-[4/3] bg-navy-base/5 border border-border-hairline rounded-radius-sm flex flex-col items-center justify-center p-space-2 mb-space-3 group-hover:bg-navy-base/10 transition-colors">
-                  <span className="font-mono text-caption uppercase text-slate/70">
-                    Spesimen Produk
-                  </span>
-                  <span className="font-mono text-caption text-slate/50 mt-0.5">
-                    {product.category}
-                  </span>
-                </div>
-
-                <span className="font-mono text-caption text-red-signal font-medium uppercase tracking-wider block">
-                  {product.category}
-                </span>
-
-                <h3 className="font-display font-medium text-display-md text-navy-deep mt-space-1 group-hover:text-red-signal transition-colors">
-                  {product.name}
-                </h3>
-              </div>
-
-              <div className="pt-space-3 mt-space-2 border-t border-border-hairline">
-                <p className="font-body text-body-sm text-slate">
-                  MOQ {product.moq} · {product.packaging}
-                </p>
-              </div>
-            </Link>
-          ))}
+          {featuredProducts.map((product) => {
+            // Adapter mapping from legacy FeaturedProduct to ProductCardData
+            const mappedProduct = {
+              id: product.id,
+              slug: product.id,
+              name: product.name,
+              moqValue: product.moq,
+              moqUnit: "",
+              packaging: product.packaging,
+              category: { name: product.category },
+              images: [],
+            };
+            return <ProductCard key={product.id} product={mappedProduct} />;
+          })}
         </div>
 
         {/* Bottom Link Button */}
