@@ -8,6 +8,7 @@
   --color-ivory: #F6F3EC;
   --color-slate: #5B6472;
   --color-gold-hairline: #C9A15A;
+  --color-border-hairline: rgba(11, 30, 58, 0.08);
 
   --color-bg-primary: #F6F3EC;
   --color-bg-inverse: #0B1E3A;
@@ -58,6 +59,7 @@
   --ivory: #F6F3EC;
   --slate: #5B6472;
   --gold-hairline: #C9A15A;
+  --border-hairline: rgba(11, 30, 58, 0.08);
 
   --color-bg-primary: var(--ivory);
   --color-bg-inverse: var(--navy-deep);

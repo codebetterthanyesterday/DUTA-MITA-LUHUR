@@ -15,6 +15,7 @@ const config: Config = {
         ivory: "#F6F3EC",
         slate: "#5B6472",
         "gold-hairline": "#C9A15A",
+        "border-hairline": "rgba(11, 30, 58, 0.08)",
         "bg-primary": "var(--color-bg-primary)",
         "bg-inverse": "var(--color-bg-inverse)",
         "text-primary": "var(--color-text-primary)",
