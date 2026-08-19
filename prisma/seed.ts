@@ -2,6 +2,7 @@ import "dotenv/config";
 import { PrismaClient } from "@prisma/client";
 import { PrismaPg } from "@prisma/adapter-pg";
 import { Pool } from "pg";
+import bcrypt from "bcrypt";
 
 const pool = new Pool({ connectionString: process.env.DIRECT_URL });
 const adapter = new PrismaPg(pool);
@@ -240,6 +241,29 @@ async function main() {
     console.log(
       `✓ Created Product: ${createdProduct.name} [${prod.categoryName}] (${createdProduct.id})`
     );
+  }
+
+  // 3. Seed Admin User (Conditionally)
+  const adminEmail = process.env.ADMIN_SEED_EMAIL;
+  const adminPassword = process.env.ADMIN_SEED_PASSWORD;
+
+  if (adminEmail && adminPassword) {
+    const passwordHash = await bcrypt.hash(adminPassword, 12);
+    
+    await prisma.user.upsert({
+      where: { email: adminEmail },
+      update: {
+        passwordHash,
+      },
+      create: {
+        email: adminEmail,
+        name: "Administrator",
+        passwordHash,
+      },
+    });
+    console.log(`✓ Upserted Admin User: ${adminEmail}`);
+  } else {
+    console.warn("⚠️  Skipped Admin seeding: ADMIN_SEED_EMAIL or ADMIN_SEED_PASSWORD not set.");
   }
 
   console.log("✅ Seeding completed successfully!");

@@ -1,7 +1,16 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  async rewrites() {
+    const slug = process.env.ADMIN_ROUTE_SLUG;
+    if (!slug) {
+      throw new Error("ADMIN_ROUTE_SLUG must be set in the environment");
+    }
+    return [
+      { source: `/${slug}`, destination: "/admin" },
+      { source: `/${slug}/:path*`, destination: "/admin/:path*" },
+    ];
+  },
 };
 
 export default nextConfig;
