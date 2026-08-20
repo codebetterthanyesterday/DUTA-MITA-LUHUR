@@ -34,9 +34,12 @@ export default function AdminLayout({
           <div className="flex-shrink-0 px-space-3 py-space-2 rounded-radius-sm text-body-sm font-medium text-ivory/50 cursor-not-allowed">
             Kategori (Coming Soon)
           </div>
-          <div className="flex-shrink-0 px-space-3 py-space-2 rounded-radius-sm text-body-sm font-medium text-ivory/50 cursor-not-allowed">
-            RFQ (Coming Soon)
-          </div>
+          <Link
+            href="rfq"
+            className="flex-shrink-0 px-space-3 py-space-2 rounded-radius-sm text-body-sm font-medium hover:bg-slate/10 transition-colors"
+          >
+            RFQ
+          </Link>
         </nav>
         <div className="p-space-4 border-t border-slate/20 hidden md:block">
           <LogoutButton />
