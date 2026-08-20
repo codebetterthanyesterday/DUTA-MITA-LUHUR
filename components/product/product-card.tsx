@@ -32,6 +32,8 @@ export function ProductCard({ product }: { product: ProductCardData }) {
       ? product.moqValue.toString()
       : String(product.moqValue);
 
+  const isPlaceholderUrl = primaryImage?.url === "/images/products/placeholder.jpg";
+
   return (
     <Link
       href={`/katalog/${product.slug}`}
@@ -40,7 +42,7 @@ export function ProductCard({ product }: { product: ProductCardData }) {
       <div>
         {/* Image Area */}
         <div className="aspect-[4/3] bg-navy-base/5 border border-border-hairline rounded-radius-sm mb-space-3 group-hover:bg-navy-base/10 transition-colors relative overflow-hidden flex flex-col items-center justify-center">
-          {primaryImage && !imageError ? (
+          {primaryImage?.url && !isPlaceholderUrl && !imageError ? (
             /* eslint-disable-next-line @next/next/no-img-element */
             <img
               src={primaryImage.url}

@@ -79,3 +79,20 @@ model ProductImage {
 
   @@index([productId])
 }
+
+model Certification {
+  id             String    @id @default(cuid())
+  name           String
+  issuingBody    String
+  description    String    @db.Text
+  logoUrl        String?
+  certificateUrl String?
+  validUntil     DateTime?
+  sortOrder      Int       @default(0)
+  isActive       Boolean   @default(true)
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+
+  @@index([isActive])
+  @@index([sortOrder])
+}

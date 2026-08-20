@@ -243,7 +243,60 @@ async function main() {
     );
   }
 
-  // 3. Seed Admin User (Conditionally)
+  // 3. Seed 3 Certifications
+  const certificationsData = [
+    {
+      name: "ISO 9001:2015",
+      issuingBody: "Bureau Veritas",
+      description: "Sertifikasi Sistem Manajemen Mutu yang menjamin konsistensi kualitas produk, proses pengolahan yang terdokumentasi, dan fokus pada kepuasan pelanggan sesuai standar internasional.",
+      logoUrl: null, // TODO: update logoUrl/certificateUrl once file upload is implemented in a later PBI
+      certificateUrl: null, // TODO: update logoUrl/certificateUrl once file upload is implemented in a later PBI
+      validUntil: null,
+      isActive: true,
+      sortOrder: 1,
+    },
+    {
+      name: "SNI (Standar Nasional Indonesia)",
+      issuingBody: "Badan Standardisasi Nasional (BSN)",
+      description: "Sertifikasi kelayakan teknis yang diwajibkan untuk menjamin kualitas material karet alam yang diekspor dari Indonesia, memenuhi parameter ketat industri manufaktur lokal maupun global.",
+      logoUrl: null, // TODO: update logoUrl/certificateUrl once file upload is implemented in a later PBI
+      certificateUrl: null, // TODO: update logoUrl/certificateUrl once file upload is implemented in a later PBI
+      validUntil: null,
+      isActive: true,
+      sortOrder: 2,
+    },
+    {
+      name: "REACH Compliance",
+      issuingBody: "ECHA (European Chemicals Agency)",
+      description: "Kepatuhan terhadap regulasi Uni Eropa yang memastikan produk karet alam kami diproses dan diekspor tanpa menggunakan bahan kimia berbahaya yang memengaruhi kesehatan manusia dan lingkungan.",
+      logoUrl: null, // TODO: update logoUrl/certificateUrl once file upload is implemented in a later PBI
+      certificateUrl: null, // TODO: update logoUrl/certificateUrl once file upload is implemented in a later PBI
+      validUntil: null,
+      isActive: true,
+      sortOrder: 3,
+    }
+  ];
+
+  for (const cert of certificationsData) {
+    const existing = await prisma.certification.findFirst({
+      where: { name: cert.name },
+    });
+    
+    if (existing) {
+      await prisma.certification.update({
+        where: { id: existing.id },
+        data: cert,
+      });
+      console.log(`✓ Updated Certification: ${cert.name}`);
+    } else {
+      await prisma.certification.create({
+        data: cert,
+      });
+      console.log(`✓ Created Certification: ${cert.name}`);
+    }
+  }
+
+  // 4. Seed Admin User (Conditionally)
   const adminEmail = process.env.ADMIN_SEED_EMAIL;
   const adminPassword = process.env.ADMIN_SEED_PASSWORD;
 

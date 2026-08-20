@@ -41,10 +41,5 @@
   "prisma": {
     "seed": "npx tsx prisma/seed.ts"
   },
-  "packageManager": "pnpm@11.18.0",
-  "pnpm": {
-    "onlyBuiltDependencies": [
-      "bcrypt"
-    ]
-  }
+  "packageManager": "pnpm@11.18.0"
 }

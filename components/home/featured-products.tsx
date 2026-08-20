@@ -1,61 +1,23 @@
 import Link from "next/link";
 import { ProductCard } from "@/components/product/product-card";
+import prisma from "@/lib/prisma";
 
-export type FeaturedProduct = {
-  id: string;
-  category: string;
-  name: string;
-  moq: string;
-  packaging: string;
-};
+export async function FeaturedProducts() {
+  const products = await prisma.product.findMany({
+    where: { isActive: true },
+    include: {
+      category: true,
+      images: { where: { isPrimary: true }, take: 1 },
+    },
+    take: 6,
+    orderBy: [{ category: { sortOrder: "asc" } }, { name: "asc" }],
+  });
 
-// TODO: replace with Prisma query once PBI-07/14 (product database) is implemented
-const featuredProducts: FeaturedProduct[] = [
-  {
-    id: "prod-sir-20",
-    category: "CRUMB RUBBER",
-    name: "SIR 20 (Standard Indonesian Rubber)",
-    moq: "20 MT (1 FCL)",
-    packaging: "35 kg bale / pallet",
-  },
-  {
-    id: "prod-sir-10",
-    category: "CRUMB RUBBER",
-    name: "SIR 10 (Low Dirt Grade)",
-    moq: "20 MT (1 FCL)",
-    packaging: "35 kg bale / pallet",
-  },
-  {
-    id: "prod-rss-1",
-    category: "SMOKED SHEET",
-    name: "RSS 1 (Ribbed Smoked Sheet)",
-    moq: "19.2 MT",
-    packaging: "111.11 kg bale / wrap",
-  },
-  {
-    id: "prod-rss-3",
-    category: "SMOKED SHEET",
-    name: "RSS 3 (Standard Industrial Grade)",
-    moq: "19.2 MT",
-    packaging: "111.11 kg bale / pallet",
-  },
-  {
-    id: "prod-ha-latex",
-    category: "CENTRIFUGED LATEX",
-    name: "High Ammonia Latex 60% DRC",
-    moq: "16 MT (Flexibag)",
-    packaging: "Flexibag / 205 kg drums",
-  },
-  {
-    id: "prod-la-latex",
-    category: "CENTRIFUGED LATEX",
-    name: "Low Ammonia Latex (LATZ)",
-    moq: "16 MT (Flexibag)",
-    packaging: "205 kg drums / IBC Tote",
-  },
-];
+  const serializedProducts = products.map((product) => ({
+    ...product,
+    moqValue: product.moqValue.toString(), // Serialize Prisma Decimal to string
+  }));
 
-export function FeaturedProducts() {
   return (
     <section className="bg-ivory py-space-8 px-space-4 md:px-space-6 border-b border-border-hairline">
       <div className="max-w-7xl mx-auto space-y-space-6">
@@ -73,20 +35,9 @@ export function FeaturedProducts() {
 
         {/* Product Cards Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-space-3">
-          {featuredProducts.map((product) => {
-            // Adapter mapping from legacy FeaturedProduct to ProductCardData
-            const mappedProduct = {
-              id: product.id,
-              slug: product.id,
-              name: product.name,
-              moqValue: product.moq,
-              moqUnit: "",
-              packaging: product.packaging,
-              category: { name: product.category },
-              images: [],
-            };
-            return <ProductCard key={product.id} product={mappedProduct} />;
-          })}
+          {serializedProducts.map((product) => (
+            <ProductCard key={product.id} product={product} />
+          ))}
         </div>
 
         {/* Bottom Link Button */}
