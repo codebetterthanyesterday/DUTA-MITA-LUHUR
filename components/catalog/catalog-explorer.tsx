@@ -84,17 +84,16 @@ export function CatalogExplorer({ categories, products }: CatalogExplorerProps) 
 
   return (
     <div className="space-y-space-6">
-      {/* Search Input */}
-      <div className="relative max-w-md">
-        <div className="absolute inset-y-0 left-0 pl-space-3 flex items-center pointer-events-none text-slate">
+      {/* Premium Search Input */}
+      <div className="relative max-w-xl group">
+        <div className="absolute inset-y-0 left-0 w-14 flex items-center justify-center pointer-events-none text-slate/50 group-focus-within:text-gold-hairline transition-colors duration-300">
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            width="20"
-            height="20"
+            className="w-5 h-5 shrink-0"
             viewBox="0 0 24 24"
             fill="none"
             stroke="currentColor"
-            strokeWidth="2"
+            strokeWidth="1.75"
             strokeLinecap="round"
             strokeLinejoin="round"
           >
@@ -106,10 +105,32 @@ export function CatalogExplorer({ categories, products }: CatalogExplorerProps) 
           type="text"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
-          placeholder="Cari nama produk..."
+          placeholder="Cari spesifikasi atau nama produk..."
           aria-label="Cari produk"
-          className="w-full bg-white border border-border-default rounded-radius-sm py-2 pl-10 pr-4 text-navy-deep focus:outline-none focus:ring-1 focus:ring-navy-deep focus:border-navy-deep transition-colors font-body text-body-md"
+          className="w-full min-h-[56px] bg-white border border-slate/20 rounded-full py-3 pl-14 pr-14 text-navy-deep focus:outline-none focus:border-gold-hairline focus:ring-4 focus:ring-gold-hairline/10 transition-all duration-300 font-body text-body-md shadow-sm hover:shadow-md focus:shadow-md"
         />
+        {searchTerm && (
+          <button
+            onClick={() => setSearchTerm("")}
+            className="absolute inset-y-0 right-0 pr-space-4 flex items-center text-slate/40 hover:text-red-signal transition-colors duration-200"
+            aria-label="Hapus pencarian"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </button>
+        )}
       </div>
 
       {/* Category Filter Pills */}
@@ -117,7 +138,7 @@ export function CatalogExplorer({ categories, products }: CatalogExplorerProps) 
         <button
           onClick={() => setSelectedCategoryId("all")}
           aria-pressed={selectedCategoryId === "all"}
-          className={`px-4 py-1.5 rounded-radius-sm font-body text-body-sm font-medium transition-colors ${
+          className={`px-4 py-1.5 min-h-[44px] inline-flex items-center justify-center rounded-radius-sm font-body text-body-sm font-medium transition-colors ${
             selectedCategoryId === "all"
               ? "bg-navy-deep text-ivory"
               : "bg-transparent border border-slate/30 text-slate hover:bg-slate/5"
@@ -130,7 +151,7 @@ export function CatalogExplorer({ categories, products }: CatalogExplorerProps) 
             key={cat.id}
             onClick={() => setSelectedCategoryId(cat.id)}
             aria-pressed={selectedCategoryId === cat.id}
-            className={`px-4 py-1.5 rounded-radius-sm font-body text-body-sm font-medium transition-colors ${
+            className={`px-4 py-1.5 min-h-[44px] inline-flex items-center justify-center rounded-radius-sm font-body text-body-sm font-medium transition-colors ${
               selectedCategoryId === cat.id
                 ? "bg-navy-deep text-ivory"
                 : "bg-transparent border border-slate/30 text-slate hover:bg-slate/5"
@@ -176,7 +197,7 @@ export function CatalogExplorer({ categories, products }: CatalogExplorerProps) 
           </p>
           <button
             onClick={handleReset}
-            className="inline-flex items-center justify-center px-space-4 py-2 bg-navy-deep text-ivory rounded-radius-sm hover:bg-navy-base transition-colors font-body text-body-md font-medium"
+            className="inline-flex min-h-[44px] items-center justify-center px-space-4 py-2 bg-navy-deep text-ivory rounded-radius-sm hover:bg-navy-base transition-colors font-body text-body-md font-medium"
           >
             Reset Filter
           </button>

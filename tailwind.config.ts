@@ -29,9 +29,9 @@ const config: Config = {
         mono: ["var(--font-mono)", "monospace"],
       },
       fontSize: {
-        "display-xl": ["44px", { lineHeight: "1.15" }],
-        "display-lg": ["32px", { lineHeight: "1.2" }],
-        "display-md": ["26px", { lineHeight: "1.25" }],
+        "display-xl": ["clamp(2rem, 1.4rem + 3vw, 2.75rem)", { lineHeight: "1.15" }],
+        "display-lg": ["clamp(1.5rem, 1.1rem + 2vw, 2rem)", { lineHeight: "1.2" }],
+        "display-md": ["clamp(1.25rem, 1rem + 1vw, 1.625rem)", { lineHeight: "1.25" }],
         "body-lg": ["18px", { lineHeight: "1.6" }],
         "body-md": ["16px", { lineHeight: "1.6" }],
         "body-sm": ["14px", { lineHeight: "1.5" }],

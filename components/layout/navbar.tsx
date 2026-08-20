@@ -96,7 +96,7 @@ export function Navbar() {
           aria-label="Toggle menu"
           aria-expanded={isOpen}
           onClick={() => setIsOpen((prev) => !prev)}
-          className="lg:hidden p-space-1 text-navy-deep hover:text-red-signal transition-colors focus:outline-none"
+          className="lg:hidden p-space-1 min-h-[44px] min-w-[44px] flex items-center justify-center text-navy-deep hover:text-red-signal transition-colors focus:outline-none"
         >
           {isOpen ? (
             <svg
@@ -134,7 +134,7 @@ export function Navbar() {
 
       {/* Mobile Slide-down/Dropdown Panel */}
       {isOpen && (
-        <div className="lg:hidden bg-navy-deep text-ivory border-t border-slate/20 px-space-4 py-space-6 min-h-[calc(100vh-65px)] flex flex-col justify-between">
+        <div className="lg:hidden bg-navy-deep text-ivory border-t border-slate/20 px-space-4 py-space-6 pb-[env(safe-area-inset-bottom)] min-h-[calc(100vh-65px)] overflow-y-auto flex flex-col justify-between">
           <nav aria-label="Mobile navigation" className="flex flex-col space-y-space-3">
             {NAV_LINKS.map((link) => {
               const isActive =
