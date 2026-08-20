@@ -1,0 +1,119 @@
+"use server";
+
+import { z } from "zod";
+import prisma from "@/lib/prisma";
+import { countries } from "@/lib/countries";
+
+const rfqSchema = z.object({
+  name: z.string().min(2, { message: "Nama minimal 2 karakter." }),
+  company: z.string().min(2, { message: "Perusahaan minimal 2 karakter." }),
+  country: z.enum(countries as [string, ...string[]], { 
+    message: "Pilih negara yang valid."
+  }),
+  email: z.string().email({ message: "Format email tidak valid." }),
+  phone: z.string().min(6, { message: "Nomor telepon minimal 6 karakter." }),
+  productIds: z.string().optional(),
+  quantityEstimateValue: z.string().optional(),
+  quantityEstimateUnit: z.string().optional(),
+  message: z.string().optional(),
+  companyWebsite: z.string().max(0, { message: "Honeypot filled" }), // Honeypot must be empty
+}).refine(data => {
+  if (data.quantityEstimateValue && !data.quantityEstimateUnit) {
+    return false;
+  }
+  return true;
+}, {
+  message: "Unit kuantitas harus diisi jika nilai kuantitas ada.",
+  path: ["quantityEstimateUnit"]
+}).refine(data => {
+  if (data.quantityEstimateValue) {
+    const val = parseFloat(data.quantityEstimateValue);
+    if (isNaN(val) || val <= 0) return false;
+  }
+  return true;
+}, {
+  message: "Kuantitas harus berupa angka positif.",
+  path: ["quantityEstimateValue"]
+});
+
+export type RfqActionState = {
+  success?: boolean;
+  error?: string;
+  fieldErrors?: {
+    name?: string[];
+    company?: string[];
+    country?: string[];
+    email?: string[];
+    phone?: string[];
+    quantityEstimateValue?: string[];
+    quantityEstimateUnit?: string[];
+    message?: string[];
+  };
+};
+
+export async function submitRfq(
+  prevState: RfqActionState,
+  formData: FormData
+): Promise<RfqActionState> {
+  const data = {
+    name: formData.get("name") as string,
+    company: formData.get("company") as string,
+    country: formData.get("country") as string,
+    email: formData.get("email") as string,
+    phone: formData.get("phone") as string,
+    productIds: formData.get("productIds") as string, // Comma separated
+    quantityEstimateValue: formData.get("quantityEstimateValue") as string,
+    quantityEstimateUnit: formData.get("quantityEstimateUnit") as string,
+    message: formData.get("message") as string,
+    companyWebsite: formData.get("companyWebsite") as string,
+  };
+
+  const parsed = rfqSchema.safeParse(data);
+
+  if (!parsed.success) {
+    const isHoneypotFilled = parsed.error.issues.some((i) => i.path[0] === "companyWebsite");
+    if (isHoneypotFilled) {
+      // Silently return fake success for bots
+      return { success: true };
+    }
+    return {
+      success: false,
+      fieldErrors: parsed.error.flatten().fieldErrors,
+    };
+  }
+
+  const { 
+    name, company, country, email, phone, 
+    productIds, quantityEstimateValue, quantityEstimateUnit, message 
+  } = parsed.data;
+
+  const parsedProductIds = productIds ? productIds.split(",").filter(Boolean) : [];
+  
+  try {
+    await prisma.rFQ.create({
+      data: {
+        name,
+        company,
+        country,
+        email,
+        phone,
+        quantityEstimateValue: quantityEstimateValue ? parseFloat(quantityEstimateValue) : null,
+        quantityEstimateUnit: quantityEstimateUnit || null,
+        message: message || null,
+        products: {
+          connect: parsedProductIds.map(id => ({ id }))
+        }
+      }
+    });
+
+    // TODO: PBI-12 will add a best-effort email notification here after successful RFQ creation
+
+    return { success: true };
+  } catch (error) {
+    console.error("Failed to submit RFQ:", error);
+    return {
+      success: false,
+      error: "Terjadi kesalahan sistem saat mengirim penawaran. Silakan coba lagi nanti."
+    };
+  }
+}

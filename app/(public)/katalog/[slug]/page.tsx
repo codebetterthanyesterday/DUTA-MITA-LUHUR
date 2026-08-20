@@ -151,7 +151,7 @@ export default async function ProductDetailPage({
               {/* CTAs */}
               <div className="space-y-space-3 pt-space-2">
                 <Link
-                  href={`/kontak?product=${product.slug}`} // TODO: prefill RFQ form with this product once PBI-11 exists
+                  href={`/rfq?product=${product.slug}`}
                   className="block w-full text-center bg-red-signal hover:bg-red-signal/90 text-ivory py-space-3 rounded-radius-sm font-body font-medium text-body-lg transition-colors shadow-card hover:shadow-card-hover"
                 >
                   Ajukan Penawaran untuk Produk Ini

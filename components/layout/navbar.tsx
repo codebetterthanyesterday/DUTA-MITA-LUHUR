@@ -79,11 +79,10 @@ export function Navbar() {
           })}
         </nav>
 
-        {/* Desktop CTA Button */}
+          {/* Desktop CTA Button */}
         <div className="hidden lg:flex items-center">
-          {/* TODO: update when RFQ route exists */}
           <Link
-            href="/kontak"
+            href="/rfq"
             className="bg-red-signal hover:bg-red-signal/90 text-ivory px-space-3 py-space-1 rounded-radius-sm font-body font-medium text-body-sm transition-colors"
           >
             Ajukan Penawaran
@@ -159,9 +158,8 @@ export function Navbar() {
           </nav>
 
           <div className="pt-space-6 border-t border-slate/30 mt-space-6">
-            {/* TODO: update when RFQ route exists */}
             <Link
-              href="/kontak"
+              href="/rfq"
               onClick={() => setIsOpen(false)}
               className="block w-full text-center bg-red-signal hover:bg-red-signal/90 text-ivory py-space-2 rounded-radius-sm font-body font-medium text-body-md transition-colors"
             >

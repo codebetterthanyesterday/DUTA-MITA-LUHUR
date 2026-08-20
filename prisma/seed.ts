@@ -319,6 +319,90 @@ async function main() {
     console.warn("⚠️  Skipped Admin seeding: ADMIN_SEED_EMAIL or ADMIN_SEED_PASSWORD not set.");
   }
 
+  // 5. Seed RFQ Entries
+  const allProducts = await prisma.product.findMany();
+  const rss1 = allProducts.find(p => p.slug === "rss-1");
+  const rss3 = allProducts.find(p => p.slug === "rss-3");
+  const latexHA = allProducts.find(p => p.slug === "high-ammonia-latex-60-drc");
+  const sir20 = allProducts.find(p => p.slug === "sir-20");
+
+  const rfqsData = [
+    {
+      name: "Hans Weber",
+      company: "Weber Reifen GmbH",
+      country: "Germany",
+      email: "hans.weber@weber-reifen.de",
+      phone: "+49 89 12345678",
+      quantityEstimateValue: 100,
+      quantityEstimateUnit: "ton",
+      message: "We are looking to source high quality RSS 1 for our premium tire manufacturing line. Please provide pricing and shipping details to Hamburg port.",
+      status: "NEW" as const,
+      createdAt: new Date(Date.now() - 14 * 24 * 60 * 60 * 1000),
+      products: { connect: rss1 ? [{ id: rss1.id }] : [] }
+    },
+    {
+      name: "Rajesh Kumar",
+      company: "Kumar Rubber Industries",
+      country: "India",
+      email: "purchasing@kumar-rubber.in",
+      phone: "+91 98765 43210",
+      quantityEstimateValue: 50,
+      quantityEstimateUnit: "ton",
+      message: "Interested in regular monthly shipments of SIR 20. Could you please send us the latest COA and pricing CIF Mumbai?",
+      status: "IN_PROGRESS" as const,
+      createdAt: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000),
+      products: { connect: (rss3 && sir20) ? [{ id: rss3.id }, { id: sir20.id }] : [] }
+    },
+    {
+      name: "Lee Min-ho",
+      company: "Seoul Medical Supplies Corp",
+      country: "South Korea",
+      email: "lee.minho@seoulmed.kr",
+      phone: "+82 2 123 4567",
+      quantityEstimateValue: 2,
+      quantityEstimateUnit: "container",
+      message: "Requesting quotation for High Ammonia Latex 60% DRC for surgical glove production. We need to verify stability and VFA parameters.",
+      status: "CLOSED" as const,
+      createdAt: new Date(Date.now() - 21 * 24 * 60 * 60 * 1000),
+      products: { connect: latexHA ? [{ id: latexHA.id }] : [] }
+    },
+    {
+      name: "Elena Rossi",
+      company: "Rossi Componenti",
+      country: "Italy",
+      email: "elena@rossicomponenti.it",
+      phone: "+39 02 1234567",
+      quantityEstimateValue: null,
+      quantityEstimateUnit: null,
+      message: "We are exploring new suppliers for industrial rubber components. Can you provide a general product catalog and your minimum order quantities for European shipments?",
+      status: "NEW" as const,
+      createdAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000),
+      products: { connect: [] }
+    },
+    {
+      name: "John Smith",
+      company: "Global Polymers Ltd",
+      country: "United Kingdom",
+      email: "jsmith@globalpolymers.co.uk",
+      phone: "+44 20 7123 4567",
+      quantityEstimateValue: 200,
+      quantityEstimateUnit: "MT",
+      message: "Looking for long term supply contract for SIR 20. Need to know your monthly production capacity and if you hold ISO certifications.",
+      status: "IN_PROGRESS" as const,
+      createdAt: new Date(Date.now() - 10 * 24 * 60 * 60 * 1000),
+      products: { connect: sir20 ? [{ id: sir20.id }] : [] }
+    }
+  ];
+
+  await prisma.rFQ.deleteMany(); // clean before seeding
+
+  for (const rfq of rfqsData) {
+    await prisma.rFQ.create({
+      data: rfq,
+    });
+  }
+  console.log(`✓ Seeded 5 RFQ entries`);
+
   console.log("✅ Seeding completed successfully!");
 }
 
