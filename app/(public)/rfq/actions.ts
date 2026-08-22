@@ -106,7 +106,32 @@ export async function submitRfq(
       }
     });
 
-    // TODO: PBI-12 will add a best-effort email notification here after successful RFQ creation
+    // Fetch product names for the email notification
+    const connectedProducts = parsedProductIds.length > 0 
+      ? await prisma.product.findMany({
+          where: { id: { in: parsedProductIds } },
+          select: { name: true }
+        })
+      : [];
+
+    try {
+      const { sendRfqNotification } = await import("@/lib/email");
+      await sendRfqNotification({
+        name,
+        company,
+        country,
+        email,
+        phone,
+        productNames: connectedProducts.map(p => p.name),
+        quantityEstimateValue: quantityEstimateValue ? parseFloat(quantityEstimateValue) : null,
+        quantityEstimateUnit: quantityEstimateUnit || null,
+        message: message || null,
+        submittedAt: new Date(), // using current time
+      });
+    } catch (emailError) {
+      console.error("Failed to trigger RFQ notification email:", emailError);
+      // We swallow this error so the form submission still succeeds for the user.
+    }
 
     return { success: true };
   } catch (error) {
