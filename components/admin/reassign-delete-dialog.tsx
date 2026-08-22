@@ -1,0 +1,101 @@
+"use client";
+
+import React, { useState } from "react";
+import { CategoryListItem } from "@/app/admin/categories/category-table";
+
+interface ReassignDeleteDialogProps {
+  isOpen: boolean;
+  onClose: () => void;
+  onConfirm: (targetCategoryId: string) => void;
+  category: CategoryListItem | null;
+  allCategories: CategoryListItem[];
+  isPending: boolean;
+}
+
+export function ReassignDeleteDialog({
+  isOpen,
+  onClose,
+  onConfirm,
+  category,
+  allCategories,
+  isPending,
+}: ReassignDeleteDialogProps) {
+  const [targetId, setTargetId] = useState("");
+
+  if (!isOpen || !category) return null;
+
+  const validTargets = allCategories.filter(c => c.id !== category.id);
+  const hasValidTarget = validTargets.length > 0;
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+      {/* Backdrop */}
+      <div 
+        className="absolute inset-0 bg-navy-deep/60 backdrop-blur-sm animate-in fade-in duration-200" 
+        onClick={() => !isPending && onClose()}
+      />
+      
+      {/* Dialog */}
+      <div 
+        className="relative bg-white rounded-radius-md shadow-card w-full max-w-md overflow-hidden animate-in zoom-in-95 duration-200"
+        role="dialog"
+        aria-modal="true"
+      >
+        <div className="p-space-6">
+          <h3 className="font-display text-display-xs text-navy-deep font-medium mb-space-3">
+            Hapus & Pindahkan Produk
+          </h3>
+          
+          <div className="text-body-md text-slate space-y-space-4">
+            <p>
+              Kategori <strong>{category.name}</strong> masih digunakan oleh <strong>{category._count.products} produk</strong>.
+            </p>
+
+            {hasValidTarget ? (
+              <>
+                <p>
+                  Pilih kategori tujuan untuk memindahkan produk-produk tersebut sebelum kategori ini dihapus:
+                </p>
+                <select
+                  value={targetId}
+                  onChange={(e) => setTargetId(e.target.value)}
+                  disabled={isPending}
+                  className="w-full bg-ivory border border-slate/30 focus:border-red-signal focus:ring-1 focus:ring-red-signal rounded-radius-sm px-space-3 py-2 text-navy-deep font-body text-body-md transition-colors outline-none disabled:opacity-50"
+                >
+                  <option value="" disabled>-- Pilih Kategori Tujuan --</option>
+                  {validTargets.map(t => (
+                    <option key={t.id} value={t.id}>{t.name}</option>
+                  ))}
+                </select>
+              </>
+            ) : (
+              <div className="p-space-4 bg-gold-hairline/10 border border-gold-hairline/30 rounded-radius-sm text-navy-deep">
+                <strong>Tidak dapat menghapus:</strong> Ini adalah satu-satunya kategori yang ada di sistem. Anda harus membuat kategori lain terlebih dahulu sebelum memindahkan produk dan menghapus kategori ini.
+              </div>
+            )}
+          </div>
+        </div>
+        
+        <div className="bg-ivory/50 px-space-6 py-space-4 border-t border-slate/10 flex justify-end gap-space-3">
+          <button
+            onClick={onClose}
+            disabled={isPending}
+            className="px-space-4 py-2 rounded-radius-sm text-body-sm font-medium text-slate hover:bg-slate/10 transition-colors disabled:opacity-50"
+          >
+            Batal
+          </button>
+          
+          {hasValidTarget && (
+            <button
+              onClick={() => onConfirm(targetId)}
+              disabled={isPending || !targetId}
+              className="px-space-4 py-2 rounded-radius-sm text-body-sm font-medium bg-red-signal text-ivory hover:bg-red-signal/90 transition-colors disabled:opacity-50 shadow-sm"
+            >
+              {isPending ? "Memproses..." : "Pindahkan & Hapus"}
+            </button>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}

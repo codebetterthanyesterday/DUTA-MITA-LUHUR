@@ -1,11 +1,18 @@
 import Link from "next/link";
 import { LogoutButton } from "@/components/admin/logout-button";
+import { AdminNav } from "@/components/admin/admin-nav";
+import { auth } from "@/auth";
 
-export default function AdminLayout({
+export default async function AdminLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const session = await auth();
+
+  if (!session?.user) {
+    return <>{children}</>;
+  }
   return (
     <div className="min-h-screen bg-ivory text-navy-deep flex flex-col md:flex-row">
       {/* Sidebar */}
@@ -18,29 +25,7 @@ export default function AdminLayout({
             <LogoutButton />
           </div>
         </div>
-        <nav className="flex-grow p-space-4 flex flex-row md:flex-col gap-2 overflow-x-auto md:overflow-visible">
-          <Link
-            href="./"
-            className="flex-shrink-0 px-space-3 py-space-2 rounded-radius-sm text-body-sm font-medium hover:bg-slate/10 transition-colors"
-          >
-            Dashboard
-          </Link>
-          <Link
-            href="products"
-            className="flex-shrink-0 px-space-3 py-space-2 rounded-radius-sm text-body-sm font-medium hover:bg-slate/10 transition-colors"
-          >
-            Produk
-          </Link>
-          <div className="flex-shrink-0 px-space-3 py-space-2 rounded-radius-sm text-body-sm font-medium text-ivory/50 cursor-not-allowed">
-            Kategori (Coming Soon)
-          </div>
-          <Link
-            href="rfq"
-            className="flex-shrink-0 px-space-3 py-space-2 rounded-radius-sm text-body-sm font-medium hover:bg-slate/10 transition-colors"
-          >
-            RFQ
-          </Link>
-        </nav>
+        <AdminNav />
         <div className="p-space-4 border-t border-slate/20 hidden md:block">
           <LogoutButton />
         </div>
