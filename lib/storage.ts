@@ -15,25 +15,28 @@ if (!supabaseUrl || !supabaseServiceKey) {
 const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
 /**
- * Uploads a file to Supabase Storage in the 'product-images' bucket.
+ * Uploads a file to Supabase Storage in the specified bucket.
  * Uses the service role key, so it bypasses RLS (assuming it's called from a secure server action).
  * 
  * @param file The file to upload
- * @returns The public URL of the uploaded image
+ * @param bucket The Supabase storage bucket name
+ * @param folder Optional folder path within the bucket
+ * @returns The public URL of the uploaded file
  * @throws Error if upload fails
  */
-export async function uploadProductImage(file: File): Promise<string> {
+export async function uploadFile(file: File, bucket: string, folder?: string): Promise<string> {
   if (!supabaseUrl || !supabaseServiceKey) {
     throw new Error("Storage credentials missing.");
   }
 
   // Generate a unique filename using timestamp and a random string to prevent collisions
   const fileExt = file.name.split('.').pop();
-  const fileName = `${Date.now()}-${Math.random().toString(36).substring(2, 15)}.${fileExt}`;
+  const rawFileName = `${Date.now()}-${Math.random().toString(36).substring(2, 15)}.${fileExt}`;
+  const fileName = folder ? `${folder}/${rawFileName}` : rawFileName;
   
   const { data, error } = await supabase
     .storage
-    .from('product-images')
+    .from(bucket)
     .upload(fileName, file, {
       cacheControl: '3600',
       upsert: false
@@ -41,13 +44,13 @@ export async function uploadProductImage(file: File): Promise<string> {
 
   if (error) {
     console.error("Supabase storage upload error:", error);
-    throw new Error(`Gagal mengunggah gambar: ${error.message}`);
+    throw new Error(`Gagal mengunggah file: ${error.message}`);
   }
 
   // Retrieve public URL
   const { data: publicUrlData } = supabase
     .storage
-    .from('product-images')
+    .from(bucket)
     .getPublicUrl(data.path);
 
   return publicUrlData.publicUrl;

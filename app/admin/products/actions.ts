@@ -4,7 +4,7 @@ import { auth } from "@/auth";
 import prisma from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
-import { uploadProductImage } from "@/lib/storage";
+import { uploadFile } from "@/lib/storage";
 import { slugify } from "@/lib/slugify";
 
 export async function uploadImageAction(formData: FormData) {
@@ -18,7 +18,7 @@ export async function uploadImageAction(formData: FormData) {
     throw new Error("No file provided");
   }
 
-  const url = await uploadProductImage(file);
+  const url = await uploadFile(file, "product-images");
   return { url };
 }
 

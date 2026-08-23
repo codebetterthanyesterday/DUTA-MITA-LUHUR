@@ -1,12 +1,24 @@
+"use client";
+
+import { useState } from "react";
 import { CompanyProfile } from "@/lib/content/company-profile";
+import { SectionEditButton } from "@/components/admin/section-edit-button";
+import { HistoryModal } from "@/components/tentang-kami/modals/history-modal";
 
 type HistoryProps = {
   history: CompanyProfile["history"];
+  isAdmin?: boolean;
 };
 
-export function History({ history }: HistoryProps) {
+export function History({ history, isAdmin = false }: HistoryProps) {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
   return (
-    <section className="bg-ivory py-space-12 md:py-space-16 px-space-4 md:px-space-6">
+    <section className="relative group bg-ivory py-space-12 md:py-space-16 px-space-4 md:px-space-6 border-b border-slate/10">
+      {isAdmin && (
+        <SectionEditButton onClick={() => setIsModalOpen(true)} label="Edit Riwayat" className="opacity-0 group-hover:opacity-100 focus:opacity-100" />
+      )}
+      
       <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-space-6 md:gap-space-10 items-start">
         {/* Left Column: Prose */}
         <div className="prose prose-slate prose-lg max-w-none font-body text-navy-deep">
@@ -14,7 +26,7 @@ export function History({ history }: HistoryProps) {
             {history.intro}
           </p>
           {history.body.split("\n\n").map((paragraph, idx) => (
-            <p key={idx} className="text-body-md leading-relaxed text-slate mt-space-4">
+            <p key={idx} className="text-body-md leading-relaxed text-slate mt-space-4 whitespace-pre-wrap">
               {paragraph}
             </p>
           ))}
@@ -30,6 +42,14 @@ export function History({ history }: HistoryProps) {
           </span>
         </div>
       </div>
+
+      {isAdmin && (
+        <HistoryModal 
+          isOpen={isModalOpen} 
+          onClose={() => setIsModalOpen(false)} 
+          initialData={{ intro: history.intro, body: history.body }} 
+        />
+      )}
     </section>
   );
 }

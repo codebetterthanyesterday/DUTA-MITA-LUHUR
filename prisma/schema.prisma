@@ -10,12 +10,13 @@ datasource db {
 }
 
 model User {
-  id        String   @id @default(cuid())
+  id           String   @id @default(cuid())
   email        String   @unique
   name         String?
   passwordHash String
+  role         String   @default("ADMIN")
   createdAt    DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  updatedAt    DateTime @updatedAt
 }
 
 model Category {
@@ -131,4 +132,42 @@ model RFQ {
 
   @@index([status])
   @@index([createdAt])
+}
+
+model CompanyProfile {
+  id           String   @id @default("main")
+  historyIntro String   @db.Text
+  historyBody  String   @db.Text
+  vision       String   @db.Text
+  updatedAt    DateTime @updatedAt
+
+  missionItems   CompanyMissionItem[]
+  facilityStats  FacilityStat[]
+  facilityImages FacilityImage[]
+}
+
+model CompanyMissionItem {
+  id               String         @id @default(cuid())
+  text             String
+  sortOrder        Int            @default(0)
+  companyProfileId String
+  companyProfile   CompanyProfile @relation(fields: [companyProfileId], references: [id], onDelete: Cascade)
+}
+
+model FacilityStat {
+  id               String         @id @default(cuid())
+  label            String
+  value            String
+  sortOrder        Int            @default(0)
+  companyProfileId String
+  companyProfile   CompanyProfile @relation(fields: [companyProfileId], references: [id], onDelete: Cascade)
+}
+
+model FacilityImage {
+  id               String         @id @default(cuid())
+  url              String
+  altText          String
+  sortOrder        Int            @default(0)
+  companyProfileId String
+  companyProfile   CompanyProfile @relation(fields: [companyProfileId], references: [id], onDelete: Cascade)
 }

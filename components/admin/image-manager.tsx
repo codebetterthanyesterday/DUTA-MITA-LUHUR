@@ -7,19 +7,23 @@ export type ImageState = {
   newFiles: { id: string; file: File; previewUrl: string; isPrimary: boolean }[];
 };
 
-interface ProductImageManagerProps {
+interface ImageManagerProps {
   state: ImageState;
   onChange: (newState: ImageState) => void;
   error?: string;
   disabled?: boolean;
+  hidePrimary?: boolean;
+  label?: string;
 }
 
-export function ProductImageManager({
+export function ImageManager({
   state,
   onChange,
   error,
   disabled = false,
-}: ProductImageManagerProps) {
+  hidePrimary = false,
+  label = "Gambar Produk",
+}: ImageManagerProps) {
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   // Cleanup object URLs on unmount to avoid memory leaks
@@ -101,7 +105,7 @@ export function ProductImageManager({
     <div className="space-y-space-3">
       <div className="flex items-center justify-between">
         <label className="block font-body font-medium text-navy-deep text-body-sm">
-          Gambar Produk
+          {label}
         </label>
         <div>
           <input
@@ -158,26 +162,28 @@ export function ProductImageManager({
                   </button>
                 </div>
                 
-                <div className="flex justify-center">
-                  {!img.isPrimary ? (
-                    <button
-                      type="button"
-                      onClick={() => setPrimary("existing", img.id)}
-                      disabled={disabled}
-                      className="text-[11px] font-medium bg-navy-deep/80 text-white px-2 py-1 rounded backdrop-blur-md hover:bg-navy-deep transition-colors"
-                    >
-                      Jadikan Utama
-                    </button>
-                  ) : (
-                    <span className="text-[11px] font-medium bg-gold-hairline text-navy-deep px-2 py-1 rounded shadow-sm">
-                      Utama
-                    </span>
-                  )}
-                </div>
+                {!hidePrimary && (
+                  <div className="flex justify-center">
+                    {!img.isPrimary ? (
+                      <button
+                        type="button"
+                        onClick={() => setPrimary("existing", img.id)}
+                        disabled={disabled}
+                        className="text-[11px] font-medium bg-navy-deep/80 text-white px-2 py-1 rounded backdrop-blur-md hover:bg-navy-deep transition-colors"
+                      >
+                        Jadikan Utama
+                      </button>
+                    ) : (
+                      <span className="text-[11px] font-medium bg-gold-hairline text-navy-deep px-2 py-1 rounded shadow-sm">
+                        Utama
+                      </span>
+                    )}
+                  </div>
+                )}
               </div>
 
               {/* Persistent Primary Badge for inactive state */}
-              {img.isPrimary && (
+              {!hidePrimary && img.isPrimary && (
                 <div className="absolute bottom-2 right-2 md:bottom-auto md:right-auto md:top-2 md:left-2 group-hover:hidden">
                   <span className="text-[10px] font-bold bg-gold-hairline text-navy-deep px-1.5 py-0.5 rounded shadow-sm">
                     UTAMA
@@ -212,25 +218,27 @@ export function ProductImageManager({
                   </button>
                 </div>
                 
-                <div className="flex justify-center">
-                  {!img.isPrimary ? (
-                    <button
-                      type="button"
-                      onClick={() => setPrimary("new", img.id)}
-                      disabled={disabled}
-                      className="text-[11px] font-medium bg-navy-deep/80 text-white px-2 py-1 rounded backdrop-blur-md hover:bg-navy-deep transition-colors"
-                    >
-                      Jadikan Utama
-                    </button>
-                  ) : (
-                    <span className="text-[11px] font-medium bg-gold-hairline text-navy-deep px-2 py-1 rounded shadow-sm">
-                      Utama
-                    </span>
-                  )}
-                </div>
+                {!hidePrimary && (
+                  <div className="flex justify-center">
+                    {!img.isPrimary ? (
+                      <button
+                        type="button"
+                        onClick={() => setPrimary("new", img.id)}
+                        disabled={disabled}
+                        className="text-[11px] font-medium bg-navy-deep/80 text-white px-2 py-1 rounded backdrop-blur-md hover:bg-navy-deep transition-colors"
+                      >
+                        Jadikan Utama
+                      </button>
+                    ) : (
+                      <span className="text-[11px] font-medium bg-gold-hairline text-navy-deep px-2 py-1 rounded shadow-sm">
+                        Utama
+                      </span>
+                    )}
+                  </div>
+                )}
               </div>
 
-              {img.isPrimary && (
+              {!hidePrimary && img.isPrimary && (
                 <div className="absolute bottom-2 right-2 md:bottom-auto md:right-auto md:top-2 md:left-2 group-hover:hidden">
                   <span className="text-[10px] font-bold bg-gold-hairline text-navy-deep px-1.5 py-0.5 rounded shadow-sm">
                     UTAMA

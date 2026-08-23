@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import { ProductSpecFields, SpecRow } from "./product-spec-fields";
-import { ProductImageManager, ImageState } from "./product-image-manager";
+import { ImageManager, ImageState } from "./image-manager";
 import { createProduct, updateProduct, uploadImageAction, ProductFormValues } from "@/app/admin/products/actions";
 
 type CategoryOption = { id: string; name: string };
@@ -278,13 +278,13 @@ export function ProductForm({ categories, initialProduct, backUrl }: ProductForm
 
       {/* Specifications */}
       <ProductSpecFields
-        specifications={specifications}
+        items={specifications}
         onChange={setSpecifications}
         disabled={isPending}
       />
 
       {/* Images */}
-      <ProductImageManager
+      <ImageManager
         state={imageState}
         onChange={setImageState}
         disabled={isPending}

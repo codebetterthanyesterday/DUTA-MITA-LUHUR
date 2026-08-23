@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Fraunces, Inter, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
+import { auth } from "@/auth";
+import { AdminBar } from "@/components/admin/admin-bar";
 
 const fraunces = Fraunces({
   variable: "--font-display",
@@ -28,11 +30,12 @@ export const metadata: Metadata = {
   description: "B2B Rubber Export Company based in Indonesia",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const session = await auth();
   return (
     <html
       lang="en"
@@ -40,6 +43,7 @@ export default function RootLayout({
     >
       <body className="min-h-full flex flex-col font-body bg-ivory text-navy-deep">
         {children}
+        {session?.user && <AdminBar />}
       </body>
     </html>
   );

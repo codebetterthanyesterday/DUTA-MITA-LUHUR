@@ -1,13 +1,25 @@
+"use client";
+
+import { useState } from "react";
 import { CompanyProfile } from "@/lib/content/company-profile";
+import { SectionEditButton } from "@/components/admin/section-edit-button";
+import { VisionMissionModal } from "@/components/tentang-kami/modals/vision-mission-modal";
 
 type VisionMissionProps = {
   vision: CompanyProfile["vision"];
   mission: CompanyProfile["mission"];
+  isAdmin?: boolean;
 };
 
-export function VisionMission({ vision, mission }: VisionMissionProps) {
+export function VisionMission({ vision, mission, isAdmin = false }: VisionMissionProps) {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
   return (
-    <section className="bg-ivory py-space-12 md:py-space-16 px-space-4 md:px-space-6 border-t border-border-hairline">
+    <section className="relative group bg-ivory py-space-12 md:py-space-16 px-space-4 md:px-space-6 border-t border-border-hairline">
+      {isAdmin && (
+        <SectionEditButton onClick={() => setIsModalOpen(true)} label="Edit Visi & Misi" className="opacity-0 group-hover:opacity-100 focus:opacity-100" />
+      )}
+      
       <div className="max-w-4xl mx-auto text-center">
         {/* Vision Statement */}
         <div className="mb-space-12">
@@ -25,8 +37,8 @@ export function VisionMission({ vision, mission }: VisionMissionProps) {
           </h3>
           <ul className="space-y-space-3">
             {mission.map((item, idx) => (
-              <li key={idx} className="flex items-start gap-space-3 group">
-                <span className="font-mono text-caption text-navy-deep/40 mt-1 group-hover:text-gold-hairline transition-colors">
+              <li key={idx} className="flex items-start gap-space-3 group/item">
+                <span className="font-mono text-caption text-navy-deep/40 mt-1 group-hover/item:text-gold-hairline transition-colors">
                   {(idx + 1).toString().padStart(2, "0")}
                 </span>
                 <span className="font-body text-body-md text-slate leading-relaxed">
@@ -37,6 +49,14 @@ export function VisionMission({ vision, mission }: VisionMissionProps) {
           </ul>
         </div>
       </div>
+
+      {isAdmin && (
+        <VisionMissionModal 
+          isOpen={isModalOpen} 
+          onClose={() => setIsModalOpen(false)} 
+          initialData={{ vision, mission }} 
+        />
+      )}
     </section>
   );
 }

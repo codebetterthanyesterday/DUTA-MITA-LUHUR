@@ -11,6 +11,14 @@ const nextConfig: NextConfig = {
       { source: `/${slug}/:path*`, destination: "/admin/:path*" },
     ];
   },
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "*.supabase.co",
+      },
+    ],
+  },
 };
 
 export default nextConfig;

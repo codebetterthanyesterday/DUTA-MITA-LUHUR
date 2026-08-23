@@ -3,6 +3,9 @@ import prisma from "@/lib/prisma";
 import Image from "next/image";
 import Link from "next/link";
 import { FinalCta } from "@/components/shared/final-cta";
+import { auth } from "@/auth";
+import { CertificationCard } from "@/components/sertifikasi/certification-card";
+import { AddCertificationButton } from "@/components/sertifikasi/add-certification-button";
 
 export const revalidate = 3600;
 
@@ -13,13 +16,13 @@ export const metadata: Metadata = {
 };
 
 export default async function SertifikasiPage() {
-  const certifications = await prisma.certification.findMany({
-    where: { isActive: true },
-    orderBy: [{ sortOrder: "asc" }, { name: "asc" }],
-  });
+  const session = await auth();
+  const isAdmin = (session?.user as any)?.role === "ADMIN";
 
-  // Temporarily set to empty array for testing empty state
-  // const certifications: any[] = []; 
+  const certifications = await prisma.certification.findMany({
+    where: isAdmin ? undefined : { isActive: true },
+    orderBy: [{ sortOrder: "asc" }, { name: "asc" }],
+  }); 
 
   return (
     <main className="min-h-screen bg-ivory text-navy-deep flex flex-col">
@@ -50,71 +53,16 @@ export default async function SertifikasiPage() {
       {/* 3. Certification Grid */}
       <section className="bg-ivory pb-space-8 px-space-4 md:px-space-6">
         <div className="max-w-7xl mx-auto">
+          {isAdmin && (
+            <div className="flex justify-end mb-space-4">
+              <AddCertificationButton />
+            </div>
+          )}
+
           {certifications.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-space-4">
               {certifications.map((cert) => (
-                <div
-                  key={cert.id}
-                  className="bg-white rounded-radius-md shadow-card border-l-4 border-red-signal flex flex-col p-space-4 md:p-space-5 overflow-hidden"
-                >
-                  {/* Logo Area */}
-                  <div className="h-12 w-32 mb-space-4 relative shrink-0">
-                    {cert.logoUrl ? (
-                      <Image
-                        src={cert.logoUrl}
-                        alt={`${cert.issuingBody} logo`}
-                        fill
-                        className="object-contain object-left"
-                      />
-                    ) : (
-                      <div className="w-full h-full bg-slate/10 rounded-sm" />
-                    )}
-                  </div>
-
-                  {/* Text Content */}
-                  <div className="flex-1 flex flex-col">
-                    <h2 className="font-display font-medium text-display-md text-navy-deep leading-tight mb-space-1">
-                      {cert.name}
-                    </h2>
-                    <span className="font-mono text-caption text-slate uppercase mb-space-3 block">
-                      {cert.issuingBody}
-                    </span>
-                    <p
-                      className="text-body-sm text-slate mb-space-4"
-                      style={{
-                        display: "-webkit-box",
-                        WebkitLineClamp: 3,
-                        WebkitBoxOrient: "vertical",
-                        overflow: "hidden",
-                      }}
-                    >
-                      {cert.description}
-                    </p>
-                  </div>
-
-                  {/* Footer Meta & Button */}
-                  <div className="mt-auto pt-space-4 border-t border-slate/10 flex flex-col items-start gap-space-3">
-                    {cert.validUntil && (
-                      <span className="text-body-sm text-slate">
-                        Berlaku hingga:{" "}
-                        {cert.validUntil.toLocaleDateString("id-ID", {
-                          month: "long",
-                          year: "numeric",
-                        })}
-                      </span>
-                    )}
-                    {cert.certificateUrl && (
-                      <a
-                        href={cert.certificateUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-flex border border-navy-deep/30 text-navy-deep text-body-sm font-medium rounded-radius-sm px-space-3 py-1.5 hover:bg-navy-base/5 transition-colors"
-                      >
-                        Lihat Sertifikat &rarr;
-                      </a>
-                    )}
-                  </div>
-                </div>
+                <CertificationCard key={cert.id} cert={cert} isAdmin={isAdmin} />
               ))}
             </div>
           ) : (

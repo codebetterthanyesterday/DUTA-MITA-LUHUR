@@ -403,6 +403,45 @@ async function main() {
   }
   console.log(`✓ Seeded 5 RFQ entries`);
 
+  // 6. Seed Company Profile
+  await prisma.companyProfile.upsert({
+    where: { id: "main" },
+    update: {},
+    create: {
+      id: "main",
+      historyIntro: "Berdiri sejak awal tahun 2000-an, PT Duta Mitra Luhur telah mengukuhkan posisinya sebagai salah satu pemain utama dalam industri pengolahan dan ekspor karet alam di Indonesia.",
+      historyBody: "Berawal dari fasilitas pengolahan skala menengah, kami terus berinovasi dan meningkatkan kapasitas produksi untuk memenuhi permintaan pasar global yang terus berkembang. Melalui dedikasi terhadap kualitas dan kepatuhan terhadap standar internasional, kami memproduksi berbagai grade karet alam unggulan, termasuk Ribbed Smoked Sheet (RSS), Crumb Rubber (Standard Indonesian Rubber / SIR), dan Centrifuged Latex.\n\nKomitmen kami tidak hanya berfokus pada kualitas produk akhir, tetapi juga pada keberlanjutan rantai pasok. Kami menjalin kemitraan erat dengan petani karet lokal, memastikan pasokan bahan baku yang konsisten sekaligus mendukung kesejahteraan komunitas petani. Dengan fasilitas produksi modern dan tim quality control yang berpengalaman, setiap pengiriman dari PT Duta Mitra Luhur dijamin memenuhi spesifikasi ketat yang disyaratkan oleh industri manufaktur dan otomotif dunia.",
+      vision: "Menjadi produsen dan eksportir karet alam terdepan yang diakui secara global karena kualitas, keandalan, dan komitmen terhadap keberlanjutan.",
+      missionItems: {
+        create: [
+          { text: "Memproduksi karet alam bermutu tinggi (SIR, RSS, Latex) yang memenuhi standar industri internasional.", sortOrder: 1 },
+          { text: "Membangun hubungan jangka panjang yang saling menguntungkan dengan mitra bisnis dan pelanggan di seluruh dunia.", sortOrder: 2 },
+          { text: "Menerapkan praktik produksi yang ramah lingkungan dan mendukung kesejahteraan petani lokal.", sortOrder: 3 },
+          { text: "Terus berinovasi dalam proses pengolahan untuk meningkatkan efisiensi dan konsistensi produk.", sortOrder: 4 },
+        ]
+      },
+      facilityStats: {
+        create: [
+          { value: "150+", label: "Ton produksi / bulan", sortOrder: 1 },
+          { value: "12", label: "Negara tujuan ekspor", sortOrder: 2 },
+          { value: "ISO 9001", label: "Sertifikasi kualitas", sortOrder: 3 },
+          { value: "15+", label: "Tahun pengalaman", sortOrder: 4 },
+        ]
+      },
+      facilityImages: {
+        create: [
+          { url: "/images/facilities/placeholder.jpg", altText: "Area Penerimaan Bahan Baku Karet (Bokar)", sortOrder: 1 },
+          { url: "/images/facilities/placeholder.jpg", altText: "Fasilitas Pengolahan Crumb Rubber (SIR)", sortOrder: 2 },
+          { url: "/images/facilities/placeholder.jpg", altText: "Mesin Sentrifugasi Latex", sortOrder: 3 },
+          { url: "/images/facilities/placeholder.jpg", altText: "Ruang Pengasapan Ribbed Smoked Sheet (RSS)", sortOrder: 4 },
+          { url: "/images/facilities/placeholder.jpg", altText: "Laboratorium Quality Control (QC)", sortOrder: 5 },
+          { url: "/images/facilities/placeholder.jpg", altText: "Gudang Penyimpanan dan Persiapan Ekspor", sortOrder: 6 },
+        ]
+      }
+    }
+  });
+  console.log(`✓ Upserted Company Profile (id: 'main')`);
+
   console.log("✅ Seeding completed successfully!");
 }
 
