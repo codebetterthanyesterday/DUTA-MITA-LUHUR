@@ -91,7 +91,7 @@ export function RfqForm({ products, initialSelectedIds = [] }: RfqFormProps) {
               name="name"
               defaultValue={""}
               disabled={isPending}
-              className="w-full bg-ivory/50 border border-slate/30 focus:border-red-signal focus:ring-1 focus:ring-red-signal rounded-radius-sm px-space-3 py-2 text-navy-deep font-body text-body-md transition-colors disabled:opacity-50 outline-none"
+              className="w-full bg-ivory/50 border border-slate/30 focus:border-red-signal focus:ring-1 focus:ring-red-signal rounded-radius-sm px-space-3 py-2 min-h-[44px] text-navy-deep font-body text-body-md transition-colors disabled:opacity-50 outline-none"
             />
             {state.fieldErrors?.name && (
               <p className="text-red-signal text-body-sm mt-1">{state.fieldErrors.name[0]}</p>
@@ -107,7 +107,7 @@ export function RfqForm({ products, initialSelectedIds = [] }: RfqFormProps) {
               name="company"
               defaultValue={""}
               disabled={isPending}
-              className="w-full bg-ivory/50 border border-slate/30 focus:border-red-signal focus:ring-1 focus:ring-red-signal rounded-radius-sm px-space-3 py-2 text-navy-deep font-body text-body-md transition-colors disabled:opacity-50 outline-none"
+              className="w-full bg-ivory/50 border border-slate/30 focus:border-red-signal focus:ring-1 focus:ring-red-signal rounded-radius-sm px-space-3 py-2 min-h-[44px] text-navy-deep font-body text-body-md transition-colors disabled:opacity-50 outline-none"
             />
             {state.fieldErrors?.company && (
               <p className="text-red-signal text-body-sm mt-1">{state.fieldErrors.company[0]}</p>
@@ -126,7 +126,7 @@ export function RfqForm({ products, initialSelectedIds = [] }: RfqFormProps) {
               name="email"
               defaultValue={""}
               disabled={isPending}
-              className="w-full bg-ivory/50 border border-slate/30 focus:border-red-signal focus:ring-1 focus:ring-red-signal rounded-radius-sm px-space-3 py-2 text-navy-deep font-body text-body-md transition-colors disabled:opacity-50 outline-none"
+              className="w-full bg-ivory/50 border border-slate/30 focus:border-red-signal focus:ring-1 focus:ring-red-signal rounded-radius-sm px-space-3 py-2 min-h-[44px] text-navy-deep font-body text-body-md transition-colors disabled:opacity-50 outline-none"
             />
             {state.fieldErrors?.email && (
               <p className="text-red-signal text-body-sm mt-1">{state.fieldErrors.email[0]}</p>
@@ -142,7 +142,7 @@ export function RfqForm({ products, initialSelectedIds = [] }: RfqFormProps) {
               name="phone"
               defaultValue={""}
               disabled={isPending}
-              className="w-full bg-ivory/50 border border-slate/30 focus:border-red-signal focus:ring-1 focus:ring-red-signal rounded-radius-sm px-space-3 py-2 text-navy-deep font-body text-body-md transition-colors disabled:opacity-50 outline-none"
+              className="w-full bg-ivory/50 border border-slate/30 focus:border-red-signal focus:ring-1 focus:ring-red-signal rounded-radius-sm px-space-3 py-2 min-h-[44px] text-navy-deep font-body text-body-md transition-colors disabled:opacity-50 outline-none"
             />
             {state.fieldErrors?.phone && (
               <p className="text-red-signal text-body-sm mt-1">{state.fieldErrors.phone[0]}</p>
@@ -159,7 +159,7 @@ export function RfqForm({ products, initialSelectedIds = [] }: RfqFormProps) {
             name="country"
             defaultValue={""}
             disabled={isPending}
-            className="w-full bg-ivory/50 border border-slate/30 focus:border-red-signal focus:ring-1 focus:ring-red-signal rounded-radius-sm px-space-3 py-2 text-navy-deep font-body text-body-md transition-colors disabled:opacity-50 outline-none"
+            className="w-full bg-ivory/50 border border-slate/30 focus:border-red-signal focus:ring-1 focus:ring-red-signal rounded-radius-sm px-space-3 py-2 min-h-[44px] text-navy-deep font-body text-body-md transition-colors disabled:opacity-50 outline-none"
           >
             <option value="" disabled>Pilih Negara...</option>
             {countries.map((c) => (
@@ -198,14 +198,14 @@ export function RfqForm({ products, initialSelectedIds = [] }: RfqFormProps) {
               defaultValue={""}
               placeholder="Jumlah"
               disabled={isPending}
-              className="w-2/3 bg-ivory/50 border border-slate/30 focus:border-red-signal focus:ring-1 focus:ring-red-signal rounded-radius-sm px-space-3 py-2 text-navy-deep font-body text-body-md transition-colors disabled:opacity-50 outline-none"
+              className="w-2/3 bg-ivory/50 border border-slate/30 focus:border-red-signal focus:ring-1 focus:ring-red-signal rounded-radius-sm px-space-3 py-2 min-h-[44px] text-navy-deep font-body text-body-md transition-colors disabled:opacity-50 outline-none"
             />
             <select
               id="quantityEstimateUnit"
               name="quantityEstimateUnit"
               defaultValue={""}
               disabled={isPending}
-              className="w-1/3 bg-ivory/50 border border-slate/30 focus:border-red-signal focus:ring-1 focus:ring-red-signal rounded-radius-sm px-space-3 py-2 text-navy-deep font-body text-body-md transition-colors disabled:opacity-50 outline-none"
+              className="w-1/3 bg-ivory/50 border border-slate/30 focus:border-red-signal focus:ring-1 focus:ring-red-signal rounded-radius-sm px-space-3 py-2 min-h-[44px] text-navy-deep font-body text-body-md transition-colors disabled:opacity-50 outline-none"
             >
               <option value="">Unit...</option>
               <option value="ton">Ton (MT)</option>
@@ -231,7 +231,7 @@ export function RfqForm({ products, initialSelectedIds = [] }: RfqFormProps) {
             name="message"
             rows={4}
             disabled={isPending}
-            className="w-full bg-ivory/50 border border-slate/30 focus:border-red-signal focus:ring-1 focus:ring-red-signal rounded-radius-sm px-space-3 py-2 text-navy-deep font-body text-body-md transition-colors disabled:opacity-50 outline-none resize-y"
+            className="w-full bg-ivory/50 border border-slate/30 focus:border-red-signal focus:ring-1 focus:ring-red-signal rounded-radius-sm px-space-3 py-2 min-h-[44px] text-navy-deep font-body text-body-md transition-colors disabled:opacity-50 outline-none resize-y"
             placeholder="Tambahkan informasi spesifik, pertanyaan lead time, dsb."
           ></textarea>
         </div>

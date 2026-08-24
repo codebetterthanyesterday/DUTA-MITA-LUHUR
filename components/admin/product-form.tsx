@@ -178,7 +178,7 @@ export function ProductForm({ categories, initialProduct, backUrl }: ProductForm
               value={name}
               onChange={(e) => setName(e.target.value)}
               disabled={isPending}
-              className="w-full bg-ivory/50 border border-slate/30 focus:border-red-signal focus:ring-1 focus:ring-red-signal rounded-radius-sm px-space-3 py-2 text-navy-deep font-body text-body-md transition-colors disabled:opacity-50 outline-none"
+              className="w-full bg-ivory/50 border border-slate/30 focus:border-red-signal focus:ring-1 focus:ring-red-signal rounded-radius-sm px-space-3 py-2 min-h-[44px] text-navy-deep font-body text-body-md transition-colors disabled:opacity-50 outline-none"
             />
           </div>
           <div>
@@ -189,7 +189,7 @@ export function ProductForm({ categories, initialProduct, backUrl }: ProductForm
               value={categoryId}
               onChange={(e) => setCategoryId(e.target.value)}
               disabled={isPending}
-              className="w-full bg-ivory/50 border border-slate/30 focus:border-red-signal focus:ring-1 focus:ring-red-signal rounded-radius-sm px-space-3 py-2 text-navy-deep font-body text-body-md transition-colors disabled:opacity-50 outline-none"
+              className="w-full bg-ivory/50 border border-slate/30 focus:border-red-signal focus:ring-1 focus:ring-red-signal rounded-radius-sm px-space-3 py-2 min-h-[44px] text-navy-deep font-body text-body-md transition-colors disabled:opacity-50 outline-none"
             >
               <option value="" disabled>Pilih Kategori...</option>
               {categories.map((c) => (
@@ -208,7 +208,7 @@ export function ProductForm({ categories, initialProduct, backUrl }: ProductForm
             value={shortDescription}
             onChange={(e) => setShortDescription(e.target.value)}
             disabled={isPending}
-            className="w-full bg-ivory/50 border border-slate/30 focus:border-red-signal focus:ring-1 focus:ring-red-signal rounded-radius-sm px-space-3 py-2 text-navy-deep font-body text-body-md transition-colors disabled:opacity-50 outline-none"
+            className="w-full bg-ivory/50 border border-slate/30 focus:border-red-signal focus:ring-1 focus:ring-red-signal rounded-radius-sm px-space-3 py-2 min-h-[44px] text-navy-deep font-body text-body-md transition-colors disabled:opacity-50 outline-none"
           />
         </div>
 
@@ -221,7 +221,7 @@ export function ProductForm({ categories, initialProduct, backUrl }: ProductForm
             onChange={(e) => setDescription(e.target.value)}
             disabled={isPending}
             rows={5}
-            className="w-full bg-ivory/50 border border-slate/30 focus:border-red-signal focus:ring-1 focus:ring-red-signal rounded-radius-sm px-space-3 py-2 text-navy-deep font-body text-body-md transition-colors disabled:opacity-50 outline-none resize-y"
+            className="w-full bg-ivory/50 border border-slate/30 focus:border-red-signal focus:ring-1 focus:ring-red-signal rounded-radius-sm px-space-3 py-2 min-h-[44px] text-navy-deep font-body text-body-md transition-colors disabled:opacity-50 outline-none resize-y"
           />
         </div>
       </div>
@@ -244,7 +244,7 @@ export function ProductForm({ categories, initialProduct, backUrl }: ProductForm
               value={moqValue}
               onChange={(e) => setMoqValue(e.target.value)}
               disabled={isPending}
-              className="w-full bg-ivory/50 border border-slate/30 focus:border-red-signal focus:ring-1 focus:ring-red-signal rounded-radius-sm px-space-3 py-2 text-navy-deep font-body text-body-md transition-colors disabled:opacity-50 outline-none"
+              className="w-full bg-ivory/50 border border-slate/30 focus:border-red-signal focus:ring-1 focus:ring-red-signal rounded-radius-sm px-space-3 py-2 min-h-[44px] text-navy-deep font-body text-body-md transition-colors disabled:opacity-50 outline-none"
             />
           </div>
           <div>
@@ -257,7 +257,7 @@ export function ProductForm({ categories, initialProduct, backUrl }: ProductForm
               value={moqUnit}
               onChange={(e) => setMoqUnit(e.target.value)}
               disabled={isPending}
-              className="w-full bg-ivory/50 border border-slate/30 focus:border-red-signal focus:ring-1 focus:ring-red-signal rounded-radius-sm px-space-3 py-2 text-navy-deep font-body text-body-md transition-colors disabled:opacity-50 outline-none"
+              className="w-full bg-ivory/50 border border-slate/30 focus:border-red-signal focus:ring-1 focus:ring-red-signal rounded-radius-sm px-space-3 py-2 min-h-[44px] text-navy-deep font-body text-body-md transition-colors disabled:opacity-50 outline-none"
             />
           </div>
           <div>
@@ -270,7 +270,7 @@ export function ProductForm({ categories, initialProduct, backUrl }: ProductForm
               value={packaging}
               onChange={(e) => setPackaging(e.target.value)}
               disabled={isPending}
-              className="w-full bg-ivory/50 border border-slate/30 focus:border-red-signal focus:ring-1 focus:ring-red-signal rounded-radius-sm px-space-3 py-2 text-navy-deep font-body text-body-md transition-colors disabled:opacity-50 outline-none"
+              className="w-full bg-ivory/50 border border-slate/30 focus:border-red-signal focus:ring-1 focus:ring-red-signal rounded-radius-sm px-space-3 py-2 min-h-[44px] text-navy-deep font-body text-body-md transition-colors disabled:opacity-50 outline-none"
             />
           </div>
         </div>

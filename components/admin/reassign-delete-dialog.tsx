@@ -37,11 +37,11 @@ export function ReassignDeleteDialog({
       
       {/* Dialog */}
       <div 
-        className="relative bg-white rounded-radius-md shadow-card w-full max-w-md overflow-hidden animate-in zoom-in-95 duration-200"
+        className="relative bg-white rounded-radius-md shadow-card w-full max-w-md max-h-[90dvh] flex flex-col overflow-hidden animate-in zoom-in-95 duration-200"
         role="dialog"
         aria-modal="true"
       >
-        <div className="p-space-6">
+        <div className="p-space-6 flex-1 overflow-y-auto">
           <h3 className="font-display text-display-xs text-navy-deep font-medium mb-space-3">
             Hapus & Pindahkan Produk
           </h3>
@@ -76,11 +76,11 @@ export function ReassignDeleteDialog({
           </div>
         </div>
         
-        <div className="bg-ivory/50 px-space-6 py-space-4 border-t border-slate/10 flex justify-end gap-space-3">
+        <div className="bg-ivory/50 px-space-6 py-space-4 border-t border-slate/10 flex justify-end gap-space-3 shrink-0">
           <button
             onClick={onClose}
             disabled={isPending}
-            className="px-space-4 py-2 rounded-radius-sm text-body-sm font-medium text-slate hover:bg-slate/10 transition-colors disabled:opacity-50"
+            className="px-space-4 py-2 rounded-radius-sm text-body-sm font-medium text-slate hover:bg-slate/10 transition-colors disabled:opacity-50 min-h-[44px]"
           >
             Batal
           </button>
@@ -89,7 +89,7 @@ export function ReassignDeleteDialog({
             <button
               onClick={() => onConfirm(targetId)}
               disabled={isPending || !targetId}
-              className="px-space-4 py-2 rounded-radius-sm text-body-sm font-medium bg-red-signal text-ivory hover:bg-red-signal/90 transition-colors disabled:opacity-50 shadow-sm"
+              className="px-space-4 py-2 rounded-radius-sm text-body-sm font-medium bg-red-signal text-ivory hover:bg-red-signal/90 transition-colors disabled:opacity-50 shadow-sm min-h-[44px]"
             >
               {isPending ? "Memproses..." : "Pindahkan & Hapus"}
             </button>

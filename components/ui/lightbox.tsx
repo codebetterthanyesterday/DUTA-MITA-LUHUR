@@ -45,7 +45,7 @@ export function Lightbox({ isOpen, onClose, imageUrl, altText }: LightboxProps) 
         <button
           type="button"
           onClick={onClose}
-          className="absolute top-0 right-0 z-10 text-ivory/70 hover:text-ivory bg-navy-deep/50 hover:bg-navy-deep/80 p-2 rounded-radius-sm transition-colors"
+          className="absolute top-2 right-2 z-10 text-ivory/70 hover:text-ivory bg-navy-deep/50 hover:bg-navy-deep/80 rounded-radius-sm transition-colors min-w-[44px] min-h-[44px] flex items-center justify-center"
           aria-label="Close lightbox"
         >
           <svg className="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">

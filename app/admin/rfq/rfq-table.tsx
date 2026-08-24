@@ -152,8 +152,8 @@ export function RfqTable({ rfqs: initialRfqs }: RfqTableProps) {
         })}
       </div>
 
-      {/* Table */}
-      <div className="bg-white rounded-radius-md shadow-card border border-slate/10 overflow-hidden">
+      {/* Table (Desktop/Tablet) */}
+      <div className="hidden md:block bg-white rounded-radius-md shadow-card border border-slate/10 overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-left font-body">
             <thead className="bg-navy-base text-ivory text-body-sm font-medium">
@@ -206,9 +206,9 @@ export function RfqTable({ rfqs: initialRfqs }: RfqTableProps) {
                     </td>
                     <td className="px-space-4 py-space-3 text-right">
                       <button
-                        className="text-body-sm font-medium text-navy-deep hover:text-red-signal transition-colors inline-flex items-center gap-1"
+                        className="text-body-sm font-medium text-navy-deep hover:text-red-signal hover:bg-red-signal/10 transition-colors inline-flex items-center justify-center gap-1 min-h-[44px] min-w-[44px] px-2 rounded"
                       >
-                        Lihat Detail
+                        Lihat
                         <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
                       </button>
                     </td>
@@ -226,32 +226,89 @@ export function RfqTable({ rfqs: initialRfqs }: RfqTableProps) {
             </tbody>
           </table>
         </div>
-        
-        {/* Pagination Controls */}
-        {totalPages > 1 && (
-          <div className="px-space-4 py-space-3 border-t border-slate/10 bg-ivory/30 flex items-center justify-between">
-            <span className="text-body-sm text-slate">
-              Menampilkan {Math.min((page - 1) * itemsPerPage + 1, filteredRfqs.length)} - {Math.min(page * itemsPerPage, filteredRfqs.length)} dari {filteredRfqs.length}
-            </span>
-            <div className="flex items-center gap-space-2">
-              <button
-                onClick={() => setPage(p => Math.max(1, p - 1))}
-                disabled={page === 1}
-                className="px-3 py-1 rounded-radius-sm border border-slate/20 text-body-sm font-medium hover:bg-slate/5 disabled:opacity-50 transition-colors"
-              >
-                Prev
-              </button>
-              <button
-                onClick={() => setPage(p => Math.min(totalPages, p + 1))}
-                disabled={page === totalPages}
-                className="px-3 py-1 rounded-radius-sm border border-slate/20 text-body-sm font-medium hover:bg-slate/5 disabled:opacity-50 transition-colors"
-              >
-                Next
-              </button>
+      </div>
+
+      {/* Card List (Mobile) */}
+      <div className="md:hidden space-y-space-4">
+        {paginatedRfqs.length > 0 ? (
+          paginatedRfqs.map((rfq) => (
+            <div 
+              key={rfq.id} 
+              className="bg-white rounded-radius-md shadow-card border border-slate/10 p-space-4 space-y-space-3 cursor-pointer"
+              onClick={() => setSelectedRfqId(rfq.id)}
+            >
+              <div className="flex justify-between items-start gap-space-2">
+                <div>
+                  <h3 className="font-medium text-navy-deep">{rfq.name}</h3>
+                  <div className="text-body-sm text-slate">{rfq.company} • {rfq.country}</div>
+                </div>
+                <div className="text-caption text-slate shrink-0 pt-1">
+                  {rfq.createdAt.toLocaleDateString("id-ID", { day: '2-digit', month: 'short', year: 'numeric' })}
+                </div>
+              </div>
+              <div className="flex justify-between items-center text-body-sm border-t border-slate/10 pt-space-2">
+                <span className="text-slate">Produk:</span>
+                <span className="font-medium text-navy-deep max-w-[150px] truncate">
+                  {rfq.products.length > 0 ? (
+                    rfq.products.map(p => p.name).join(", ")
+                  ) : (
+                    <span className="text-slate italic">Pertanyaan Umum</span>
+                  )}
+                </span>
+              </div>
+              <div className="flex justify-between items-center text-body-sm" onClick={e => e.stopPropagation()}>
+                <span className="text-slate">Status:</span>
+                <div className="relative min-w-[100px] min-h-[44px] flex justify-end items-center">
+                  <select
+                    value={rfq.status}
+                    onChange={(e) => handleStatusChange(rfq.id, e.target.value as RfqStatus)}
+                    disabled={isPending}
+                    className="w-full h-full appearance-none bg-transparent absolute inset-0 text-transparent cursor-pointer z-10"
+                  >
+                    <option value="NEW">Baru</option>
+                    <option value="IN_PROGRESS">Diproses</option>
+                    <option value="CLOSED">Selesai</option>
+                  </select>
+                  <div className="pointer-events-none relative z-0">
+                    <StatusBadge status={rfq.status} />
+                  </div>
+                </div>
+              </div>
             </div>
+          ))
+        ) : (
+          <div className="bg-white rounded-radius-md shadow-card border border-slate/10 p-space-8 text-center text-slate">
+            {optimisticRfqs.length === 0 
+              ? "Belum ada RFQ yang masuk."
+              : "Tidak ada RFQ yang cocok dengan pencarian dan filter Anda."}
           </div>
         )}
       </div>
+
+      {/* Pagination Controls */}
+      {totalPages > 1 && (
+        <div className="px-space-4 py-space-4 bg-white rounded-radius-md shadow-card border border-slate/10 flex flex-col sm:flex-row items-center justify-between gap-space-4">
+          <span className="text-body-sm text-slate">
+            Menampilkan {Math.min((page - 1) * itemsPerPage + 1, filteredRfqs.length)} - {Math.min(page * itemsPerPage, filteredRfqs.length)} dari {filteredRfqs.length}
+          </span>
+          <div className="flex items-center gap-space-2 w-full sm:w-auto">
+            <button
+              onClick={() => setPage(p => Math.max(1, p - 1))}
+              disabled={page === 1}
+              className="flex-1 sm:flex-none px-3 py-1 min-h-[44px] rounded-radius-sm border border-slate/20 text-body-sm font-medium hover:bg-slate/5 disabled:opacity-50 transition-colors"
+            >
+              Prev
+            </button>
+            <button
+              onClick={() => setPage(p => Math.min(totalPages, p + 1))}
+              disabled={page === totalPages}
+              className="flex-1 sm:flex-none px-3 py-1 min-h-[44px] rounded-radius-sm border border-slate/20 text-body-sm font-medium hover:bg-slate/5 disabled:opacity-50 transition-colors"
+            >
+              Next
+            </button>
+          </div>
+        </div>
+      )}
 
       <RfqDetailDrawer
         isOpen={selectedRfqId !== null}

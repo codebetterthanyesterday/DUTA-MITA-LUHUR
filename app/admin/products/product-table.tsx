@@ -118,8 +118,8 @@ export function ProductTable({ products: initialProducts, categories }: ProductT
         </select>
       </div>
 
-      {/* Table */}
-      <div className="bg-white rounded-radius-md shadow-card border border-slate/10 overflow-hidden">
+      {/* Table (Desktop/Tablet) */}
+      <div className="hidden md:block bg-white rounded-radius-md shadow-card border border-slate/10 overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-left font-body">
             <thead className="bg-navy-base text-ivory text-body-sm font-medium">
@@ -199,32 +199,102 @@ export function ProductTable({ products: initialProducts, categories }: ProductT
             </tbody>
           </table>
         </div>
-        
-        {/* Pagination Controls */}
-        {totalPages > 1 && (
-          <div className="px-space-4 py-space-3 border-t border-slate/10 bg-ivory/30 flex items-center justify-between">
-            <span className="text-body-sm text-slate">
-              Menampilkan {Math.min((page - 1) * itemsPerPage + 1, filteredProducts.length)} - {Math.min(page * itemsPerPage, filteredProducts.length)} dari {filteredProducts.length}
-            </span>
-            <div className="flex items-center gap-space-2">
-              <button
-                onClick={() => setPage(p => Math.max(1, p - 1))}
-                disabled={page === 1}
-                className="px-3 py-1 rounded-radius-sm border border-slate/20 text-body-sm font-medium hover:bg-slate/5 disabled:opacity-50 transition-colors"
-              >
-                Prev
-              </button>
-              <button
-                onClick={() => setPage(p => Math.min(totalPages, p + 1))}
-                disabled={page === totalPages}
-                className="px-3 py-1 rounded-radius-sm border border-slate/20 text-body-sm font-medium hover:bg-slate/5 disabled:opacity-50 transition-colors"
-              >
-                Next
-              </button>
+      </div>
+
+      {/* Card List (Mobile) */}
+      <div className="md:hidden space-y-space-4">
+        {paginatedProducts.length > 0 ? (
+          paginatedProducts.map((product) => (
+            <div key={product.id} className="bg-white rounded-radius-md shadow-card border border-slate/10 p-space-4 space-y-space-3">
+              <div className="flex justify-between items-start gap-space-2">
+                <div>
+                  <h3 className="font-medium text-navy-deep">{product.name}</h3>
+                  <div className="text-body-sm text-slate">{product.slug}</div>
+                </div>
+                <div className="flex items-center gap-space-1 shrink-0">
+                  <Link
+                    href={`products/${product.id}/edit`}
+                    className="p-2 text-slate hover:text-red-signal hover:bg-red-signal/10 rounded transition-colors min-w-[44px] min-h-[44px] flex justify-center items-center"
+                    title="Edit"
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                      <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                    </svg>
+                  </Link>
+                  <button
+                    onClick={() => setDeleteId(product.id)}
+                    className="p-2 text-slate hover:text-red-signal hover:bg-red-signal/10 rounded transition-colors min-w-[44px] min-h-[44px] flex justify-center items-center"
+                    title="Hapus"
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <polyline points="3 6 5 6 21 6"></polyline>
+                      <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+              <div className="flex justify-between items-center text-body-sm">
+                <span className="text-slate">Kategori:</span>
+                <span className="font-medium text-navy-deep">{product.categoryName}</span>
+              </div>
+              <div className="flex justify-between items-center text-body-sm">
+                <span className="text-slate">Status:</span>
+                <button
+                  onClick={() => handleToggle(product.id, product.isActive)}
+                  className={`inline-flex items-center justify-center px-3 py-1.5 rounded-full text-[11px] font-bold uppercase transition-colors min-h-[44px] min-w-[80px] ${
+                    product.isActive
+                      ? "bg-emerald-100 text-emerald-700 hover:bg-emerald-200"
+                      : "bg-slate/10 text-slate hover:bg-slate/20"
+                  }`}
+                >
+                  {product.isActive ? "Aktif" : "Nonaktif"}
+                </button>
+              </div>
+              <div className="flex justify-between items-center text-body-sm">
+                <span className="text-slate">Terkait RFQ:</span>
+                {product.rfqCount > 0 ? (
+                  <span className="inline-flex items-center justify-center bg-blue-100 text-blue-700 font-medium px-3 py-1 rounded-full text-xs">
+                    {product.rfqCount}
+                  </span>
+                ) : (
+                  <span className="text-slate/50">-</span>
+                )}
+              </div>
             </div>
+          ))
+        ) : (
+          <div className="bg-white rounded-radius-md shadow-card border border-slate/10 p-space-8 text-center text-slate">
+            Tidak ada produk ditemukan.
           </div>
         )}
       </div>
+
+      {/* Pagination Controls */}
+      {totalPages > 1 && (
+        <div className="px-space-4 py-space-4 bg-white rounded-radius-md shadow-card border border-slate/10 flex flex-col sm:flex-row items-center justify-between gap-space-4">
+          <span className="text-body-sm text-slate">
+            Menampilkan {Math.min((page - 1) * itemsPerPage + 1, filteredProducts.length)} - {Math.min(page * itemsPerPage, filteredProducts.length)} dari {filteredProducts.length}
+          </span>
+          <div className="flex items-center gap-space-2 w-full sm:w-auto">
+            <button
+              onClick={() => setPage(p => Math.max(1, p - 1))}
+              disabled={page === 1}
+              className="flex-1 sm:flex-none px-3 py-1 min-h-[44px] rounded-radius-sm border border-slate/20 text-body-sm font-medium hover:bg-slate/5 disabled:opacity-50 transition-colors"
+            >
+              Prev
+            </button>
+            <button
+              onClick={() => setPage(p => Math.min(totalPages, p + 1))}
+              disabled={page === totalPages}
+              className="flex-1 sm:flex-none px-3 py-1 min-h-[44px] rounded-radius-sm border border-slate/20 text-body-sm font-medium hover:bg-slate/5 disabled:opacity-50 transition-colors"
+            >
+              Next
+            </button>
+          </div>
+        </div>
+      )}
+
 
       <ConfirmDialog
         isOpen={!!deleteId}

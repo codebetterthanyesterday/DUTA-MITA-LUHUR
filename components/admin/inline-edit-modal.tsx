@@ -39,7 +39,7 @@ export function InlineEditModal({ isOpen, onClose, title, children }: InlineEdit
       
       {/* Modal */}
       <div 
-        className="relative bg-ivory w-full max-w-3xl max-h-[90vh] flex flex-col rounded-radius-md shadow-card overflow-hidden"
+        className="relative bg-ivory w-full max-w-3xl max-h-[90dvh] flex flex-col rounded-radius-md shadow-card overflow-hidden"
         role="dialog"
         aria-modal="true"
         aria-labelledby="modal-title"
@@ -50,7 +50,7 @@ export function InlineEditModal({ isOpen, onClose, title, children }: InlineEdit
           </h2>
           <button 
             onClick={onClose}
-            className="text-slate hover:text-navy-deep transition-colors p-2 -mr-2"
+            className="text-slate hover:text-navy-deep transition-colors p-2 -mr-2 min-w-[44px] min-h-[44px] flex items-center justify-center"
             aria-label="Tutup modal"
           >
             ✕

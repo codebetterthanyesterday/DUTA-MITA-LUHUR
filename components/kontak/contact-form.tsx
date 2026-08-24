@@ -77,7 +77,7 @@ export function ContactForm() {
             name="name"
             defaultValue={"" /* In standard usage the browser preserves values natively on re-render unless controlled */}
             disabled={isPending}
-            className="w-full bg-ivory/50 border border-slate/30 focus:border-red-signal focus:ring-1 focus:ring-red-signal rounded-radius-sm px-space-3 py-2 text-navy-deep font-body text-body-md transition-colors disabled:opacity-50 outline-none"
+            className="w-full bg-ivory/50 border border-slate/30 focus:border-red-signal focus:ring-1 focus:ring-red-signal rounded-radius-sm px-space-3 py-2 min-h-[44px] text-navy-deep font-body text-body-md transition-colors disabled:opacity-50 outline-none"
           />
           {state.fieldErrors?.name && (
             <p className="text-red-signal text-body-sm mt-1">{state.fieldErrors.name[0]}</p>
@@ -93,7 +93,7 @@ export function ContactForm() {
             id="email"
             name="email"
             disabled={isPending}
-            className="w-full bg-ivory/50 border border-slate/30 focus:border-red-signal focus:ring-1 focus:ring-red-signal rounded-radius-sm px-space-3 py-2 text-navy-deep font-body text-body-md transition-colors disabled:opacity-50 outline-none"
+            className="w-full bg-ivory/50 border border-slate/30 focus:border-red-signal focus:ring-1 focus:ring-red-signal rounded-radius-sm px-space-3 py-2 min-h-[44px] text-navy-deep font-body text-body-md transition-colors disabled:opacity-50 outline-none"
           />
           {state.fieldErrors?.email && (
             <p className="text-red-signal text-body-sm mt-1">{state.fieldErrors.email[0]}</p>
@@ -109,7 +109,7 @@ export function ContactForm() {
             id="subject"
             name="subject"
             disabled={isPending}
-            className="w-full bg-ivory/50 border border-slate/30 focus:border-red-signal focus:ring-1 focus:ring-red-signal rounded-radius-sm px-space-3 py-2 text-navy-deep font-body text-body-md transition-colors disabled:opacity-50 outline-none"
+            className="w-full bg-ivory/50 border border-slate/30 focus:border-red-signal focus:ring-1 focus:ring-red-signal rounded-radius-sm px-space-3 py-2 min-h-[44px] text-navy-deep font-body text-body-md transition-colors disabled:opacity-50 outline-none"
           />
         </div>
 
@@ -122,7 +122,7 @@ export function ContactForm() {
             name="message"
             rows={5}
             disabled={isPending}
-            className="w-full bg-ivory/50 border border-slate/30 focus:border-red-signal focus:ring-1 focus:ring-red-signal rounded-radius-sm px-space-3 py-2 text-navy-deep font-body text-body-md transition-colors disabled:opacity-50 outline-none resize-y"
+            className="w-full bg-ivory/50 border border-slate/30 focus:border-red-signal focus:ring-1 focus:ring-red-signal rounded-radius-sm px-space-3 py-2 min-h-[44px] text-navy-deep font-body text-body-md transition-colors disabled:opacity-50 outline-none resize-y"
           ></textarea>
           {state.fieldErrors?.message && (
             <p className="text-red-signal text-body-sm mt-1">{state.fieldErrors.message[0]}</p>

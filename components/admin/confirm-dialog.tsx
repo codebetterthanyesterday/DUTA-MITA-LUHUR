@@ -48,7 +48,7 @@ export function ConfirmDialog({
 
       {/* Modal Card */}
       <div
-        className="relative bg-white rounded-radius-md shadow-card w-full max-w-md p-space-6 md:p-space-8 animate-in zoom-in-95 duration-200"
+        className="relative bg-white rounded-radius-md shadow-card w-full max-w-md max-h-[90dvh] overflow-y-auto p-space-6 md:p-space-8 animate-in zoom-in-95 duration-200"
         role="dialog"
         aria-modal="true"
         aria-labelledby="dialog-title"
@@ -65,7 +65,7 @@ export function ConfirmDialog({
             type="button"
             onClick={onClose}
             disabled={isPending}
-            className="px-space-4 py-space-2 rounded-radius-sm font-body font-medium text-body-sm text-slate hover:bg-slate/10 transition-colors disabled:opacity-50"
+            className="px-space-4 py-space-2 rounded-radius-sm font-body font-medium text-body-sm text-slate hover:bg-slate/10 transition-colors disabled:opacity-50 min-h-[44px]"
           >
             Batal
           </button>
@@ -73,7 +73,7 @@ export function ConfirmDialog({
             type="button"
             onClick={onConfirm}
             disabled={isPending}
-            className="px-space-4 py-space-2 rounded-radius-sm font-body font-medium text-body-sm bg-red-signal text-ivory hover:bg-red-signal/90 transition-colors disabled:opacity-50 min-w-[100px] flex justify-center"
+            className="px-space-4 py-space-2 rounded-radius-sm font-body font-medium text-body-sm bg-red-signal text-ivory hover:bg-red-signal/90 transition-colors disabled:opacity-50 min-w-[100px] min-h-[44px] flex items-center justify-center"
           >
             {isPending ? (
               <svg className="animate-spin h-5 w-5 text-ivory" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">

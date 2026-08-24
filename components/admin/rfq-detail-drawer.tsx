@@ -91,7 +91,7 @@ export function RfqDetailDrawer({
             type="button"
             onClick={onClose}
             disabled={isPending}
-            className="p-2 -mr-2 text-slate hover:text-red-signal transition-colors rounded-full hover:bg-slate/10"
+            className="p-2 -mr-2 text-slate hover:text-red-signal transition-colors rounded-full hover:bg-slate/10 min-w-[44px] min-h-[44px] flex items-center justify-center"
             aria-label="Tutup"
           >
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -189,7 +189,7 @@ export function RfqDetailDrawer({
             value={rfq.status}
             onChange={(e) => onStatusChange(rfq.id, e.target.value as RfqStatus)}
             disabled={isPending}
-            className="w-full bg-white border border-slate/30 focus:border-red-signal focus:ring-1 focus:ring-red-signal rounded-radius-sm px-space-3 py-2 text-navy-deep font-body text-body-md transition-colors outline-none disabled:opacity-50"
+            className="w-full bg-white border border-slate/30 focus:border-red-signal focus:ring-1 focus:ring-red-signal rounded-radius-sm px-space-3 py-2 text-navy-deep font-body text-body-md transition-colors outline-none disabled:opacity-50 min-h-[44px]"
           >
             <option value="NEW">Baru</option>
             <option value="IN_PROGRESS">Diproses</option>

@@ -63,7 +63,7 @@ export function CategoryForm({ initialData }: CategoryFormProps) {
           defaultValue={initialData?.name || ""}
           required
           disabled={isPending}
-          className="w-full bg-white border border-slate/30 focus:border-red-signal focus:ring-1 focus:ring-red-signal rounded-radius-sm px-space-3 py-2 text-navy-deep font-body text-body-md transition-colors outline-none disabled:opacity-50"
+          className="w-full bg-white border border-slate/30 focus:border-red-signal focus:ring-1 focus:ring-red-signal rounded-radius-sm px-space-3 py-2 min-h-[44px] text-navy-deep font-body text-body-md transition-colors outline-none disabled:opacity-50"
         />
         {fieldErrors?.name && <p className="mt-1 text-red-signal text-body-sm">{fieldErrors.name[0]}</p>}
       </div>
@@ -78,7 +78,7 @@ export function CategoryForm({ initialData }: CategoryFormProps) {
           rows={3}
           defaultValue={initialData?.description || ""}
           disabled={isPending}
-          className="w-full bg-white border border-slate/30 focus:border-red-signal focus:ring-1 focus:ring-red-signal rounded-radius-sm px-space-3 py-2 text-navy-deep font-body text-body-md transition-colors outline-none disabled:opacity-50"
+          className="w-full bg-white border border-slate/30 focus:border-red-signal focus:ring-1 focus:ring-red-signal rounded-radius-sm px-space-3 py-2 min-h-[44px] text-navy-deep font-body text-body-md transition-colors outline-none disabled:opacity-50"
         />
       </div>
 
@@ -92,7 +92,7 @@ export function CategoryForm({ initialData }: CategoryFormProps) {
           name="sortOrder"
           defaultValue={initialData?.sortOrder ?? ""}
           disabled={isPending}
-          className="w-full sm:max-w-[150px] bg-white border border-slate/30 focus:border-red-signal focus:ring-1 focus:ring-red-signal rounded-radius-sm px-space-3 py-2 text-navy-deep font-body text-body-md transition-colors outline-none disabled:opacity-50"
+          className="w-full sm:max-w-[150px] bg-white border border-slate/30 focus:border-red-signal focus:ring-1 focus:ring-red-signal rounded-radius-sm px-space-3 py-2 min-h-[44px] text-navy-deep font-body text-body-md transition-colors outline-none disabled:opacity-50"
         />
         <p className="mt-1 text-slate text-body-sm">Angka lebih kecil tampil lebih dulu</p>
         {fieldErrors?.sortOrder && <p className="mt-1 text-red-signal text-body-sm">{fieldErrors.sortOrder[0]}</p>}
