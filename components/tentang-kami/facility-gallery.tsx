@@ -6,13 +6,14 @@ import { CompanyProfile } from "@/lib/content/company-profile";
 import { Lightbox } from "@/components/ui/lightbox";
 import { SectionEditButton } from "@/components/admin/section-edit-button";
 import { FacilityGalleryModal } from "@/components/tentang-kami/modals/facility-gallery-modal";
+import { useEditMode } from "@/components/admin/edit-mode";
 
 type FacilityGalleryProps = {
   images: CompanyProfile["facilityImages"];
-  isAdmin?: boolean;
 };
 
-export function FacilityGallery({ images, isAdmin = false }: FacilityGalleryProps) {
+export function FacilityGallery({ images }: FacilityGalleryProps) {
+  const { enabled: isAdmin } = useEditMode();
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -22,7 +23,7 @@ export function FacilityGallery({ images, isAdmin = false }: FacilityGalleryProp
   return (
     <section className="relative group bg-ivory py-space-12 md:py-space-16 px-space-4 md:px-space-6 border-t border-border-hairline">
       {isAdmin && (
-        <SectionEditButton onClick={() => setIsModalOpen(true)} label="Edit Galeri" className="opacity-0 group-hover:opacity-100 focus:opacity-100" />
+        <SectionEditButton onClick={() => setIsModalOpen(true)} label="Edit Galeri" className="" />
       )}
       
       <div className="max-w-7xl mx-auto">

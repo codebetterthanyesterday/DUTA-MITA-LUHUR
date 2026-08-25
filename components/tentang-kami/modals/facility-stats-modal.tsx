@@ -37,8 +37,6 @@ export function FacilityStatsModal({ isOpen, onClose, initialData }: FacilitySta
         <ProductSpecFields
           items={stats}
           onChange={setStats}
-          label="Statistik Kapasitas & Fasilitas"
-          addButtonText="+ Tambah Statistik"
           disabled={isPending}
         />
 

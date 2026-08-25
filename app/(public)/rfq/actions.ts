@@ -3,6 +3,7 @@
 import { z } from "zod";
 import prisma from "@/lib/prisma";
 import { countries } from "@/lib/countries";
+import { isAdminRequest } from "@/lib/auth-helpers";
 
 const rfqSchema = z.object({
   name: z.string().min(2, { message: "Nama minimal 2 karakter." }),
@@ -55,6 +56,13 @@ export async function submitRfq(
   prevState: RfqActionState,
   formData: FormData
 ): Promise<RfqActionState> {
+  if (await isAdminRequest()) {
+    return {
+      success: false,
+      error: "Akun admin tidak dapat mengajukan RFQ. Keluar dari akun admin untuk mengirimkan formulir ini sebagai pengunjung.",
+    };
+  }
+
   const data = {
     name: formData.get("name") as string,
     company: formData.get("company") as string,

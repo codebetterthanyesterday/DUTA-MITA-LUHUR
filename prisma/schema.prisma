@@ -105,7 +105,11 @@ model ContactMessage {
   email     String
   subject   String?
   message   String   @db.Text
+  isRead    Boolean  @default(false)
   createdAt DateTime @default(now())
+
+  @@index([isRead])
+  @@index([createdAt])
 }
 
 enum RfqStatus {
@@ -135,15 +139,29 @@ model RFQ {
 }
 
 model CompanyProfile {
-  id           String   @id @default("main")
-  historyIntro String   @db.Text
-  historyBody  String   @db.Text
-  vision       String   @db.Text
-  updatedAt    DateTime @updatedAt
+  id             String   @id @default("main")
+  headerTitle    String   @default("Pilar Keandalan Ekspor Karet Alam Indonesia")
+  headerSubtitle String   @db.Text @default("Mendedikasikan diri pada kualitas, konsistensi, dan keberlanjutan untuk memasok industri manufaktur global.")
+  historyIntro    String   @db.Text
+  historyBody     String   @db.Text
+  historyImageUrl String?
+  historyImageAlt String?
+  vision          String   @db.Text
+  exportCountries String[] @default([])
+  updatedAt       DateTime @updatedAt
 
   missionItems   CompanyMissionItem[]
   facilityStats  FacilityStat[]
   facilityImages FacilityImage[]
+}
+
+/// Generic key/value store for editable page content ("home.hero", "site.contact", ...).
+/// The shape of `data` is defined and validated per key by the Zod schemas in
+/// lib/content/blocks.ts, so adding a new editable section needs no migration.
+model ContentBlock {
+  key       String   @id
+  data      Json
+  updatedAt DateTime @updatedAt
 }
 
 model CompanyMissionItem {

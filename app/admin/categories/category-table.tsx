@@ -1,10 +1,12 @@
 "use client";
 
 import React, { useState, useTransition } from "react";
-import Link from "next/link";
+import { Pencil, Trash2, FolderOpen, GripVertical } from "lucide-react";
 import { deleteCategory, reassignAndDeleteCategory } from "./actions";
 import { ConfirmDialog } from "@/components/admin/confirm-dialog";
 import { ReassignDeleteDialog } from "@/components/admin/reassign-delete-dialog";
+import { EmptyState } from "@/components/admin/ui/empty-state";
+import { IconButton } from "@/components/admin/ui/icon-button";
 
 export type CategoryListItem = {
   id: string;
@@ -21,8 +23,8 @@ interface CategoryTableProps {
 export function CategoryTable({ categories }: CategoryTableProps) {
   const [isPending, startTransition] = useTransition();
   const [deleteId, setDeleteId] = useState<string | null>(null);
-  
-  const categoryToDelete = categories.find(c => c.id === deleteId) || null;
+
+  const categoryToDelete = categories.find((c) => c.id === deleteId) || null;
   const hasProducts = (categoryToDelete?._count.products || 0) > 0;
 
   const handleConfirmSimpleDelete = () => {
@@ -49,129 +51,107 @@ export function CategoryTable({ categories }: CategoryTableProps) {
 
   return (
     <div className="space-y-space-4">
-      <div className="flex justify-between items-center mb-space-4">
-        <h2 className="text-body-lg font-medium text-navy-deep">Daftar Kategori</h2>
-        <Link
-          href="categories/new"
-          className="px-space-4 py-2 rounded-radius-sm text-body-sm font-medium bg-red-signal text-ivory hover:bg-red-signal/90 transition-colors shadow-sm"
-        >
-          Tambah Kategori Baru
-        </Link>
-      </div>
-
-      {/* Table (Desktop/Tablet) */}
-      <div className="hidden md:block bg-white rounded-radius-md shadow-card border border-slate/10 overflow-hidden">
-        <div className="overflow-x-auto">
-          <table className="w-full text-left font-body">
-            <thead className="bg-navy-base text-ivory text-body-sm font-medium">
-              <tr>
-                <th className="px-space-4 py-space-3">Nama</th>
-                <th className="px-space-4 py-space-3 hidden sm:table-cell">Slug</th>
-                <th className="px-space-4 py-space-3 text-center">Urutan</th>
-                <th className="px-space-4 py-space-3 text-center">Jumlah Produk</th>
-                <th className="px-space-4 py-space-3 text-right">Aksi</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-slate/10 text-body-md text-navy-deep">
-              {categories.length > 0 ? (
-                categories.map((cat) => (
-                  <tr key={cat.id} className="hover:bg-slate/5 transition-colors">
-                    <td className="px-space-4 py-space-3 font-medium">
-                      {cat.name}
-                      {/* Mobile slug fallback */}
-                      <div className="sm:hidden text-caption font-mono text-slate mt-1">{cat.slug}</div>
-                    </td>
-                    <td className="px-space-4 py-space-3 hidden sm:table-cell text-caption font-mono text-slate">
-                      {cat.slug}
-                    </td>
-                    <td className="px-space-4 py-space-3 text-center">
-                      {cat.sortOrder}
-                    </td>
-                    <td className="px-space-4 py-space-3 text-center">
-                      {cat._count.products}
-                    </td>
-                    <td className="px-space-4 py-space-3 text-right space-x-2">
-                      <Link
-                        href={`categories/${cat.id}/edit`}
-                        className="inline-flex items-center justify-center text-body-sm font-medium text-navy-deep hover:bg-slate/10 rounded transition-colors min-w-[44px] min-h-[44px] px-2"
-                      >
-                        Edit
-                      </Link>
-                      <button
-                        type="button"
-                        onClick={() => setDeleteId(cat.id)}
-                        className="inline-flex items-center justify-center text-body-sm font-medium text-red-signal hover:bg-red-signal/10 rounded transition-colors min-w-[44px] min-h-[44px] px-2"
-                      >
-                        Hapus
-                      </button>
-                    </td>
+      {categories.length === 0 ? (
+        <EmptyState
+          icon={FolderOpen}
+          title="Belum ada kategori"
+          description="Buat kategori pertama untuk mulai mengelompokkan produk."
+        />
+      ) : (
+        <>
+          {/* Table (md and up) */}
+          <div className="hidden md:block bg-white rounded-radius-md shadow-card border border-border-hairline overflow-hidden">
+            <div className="overflow-x-auto">
+              <table className="w-full text-left font-body">
+                <thead className="bg-navy-deep text-ivory text-body-sm font-medium">
+                  <tr>
+                    <th className="px-space-4 py-space-3">Nama</th>
+                    <th className="px-space-4 py-space-3 hidden lg:table-cell">Slug</th>
+                    <th className="px-space-4 py-space-3 text-center">Urutan</th>
+                    <th className="px-space-4 py-space-3 text-center">Produk</th>
+                    <th className="px-space-4 py-space-3 text-right">Aksi</th>
                   </tr>
-                ))
-              ) : (
-                <tr>
-                  <td colSpan={5} className="px-space-4 py-space-8 text-center text-slate">
-                    Belum ada kategori yang dibuat.
-                  </td>
-                </tr>
-              )}
-            </tbody>
-          </table>
-        </div>
-      </div>
-
-      {/* Card List (Mobile) */}
-      <div className="md:hidden space-y-space-4">
-        {categories.length > 0 ? (
-          categories.map((cat) => (
-            <div key={cat.id} className="bg-white rounded-radius-md shadow-card border border-slate/10 p-space-4 space-y-space-3">
-              <div className="flex justify-between items-start gap-space-2">
-                <div>
-                  <h3 className="font-medium text-navy-deep">{cat.name}</h3>
-                  <div className="text-caption font-mono text-slate mt-1">{cat.slug}</div>
-                </div>
-                <div className="flex items-center gap-space-1 shrink-0">
-                  <Link
-                    href={`categories/${cat.id}/edit`}
-                    className="p-2 text-slate hover:text-navy-deep hover:bg-slate/10 rounded transition-colors min-w-[44px] min-h-[44px] flex justify-center items-center"
-                    title="Edit"
-                  >
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                      <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
-                      <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
-                    </svg>
-                  </Link>
-                  <button
-                    onClick={() => setDeleteId(cat.id)}
-                    className="p-2 text-slate hover:text-red-signal hover:bg-red-signal/10 rounded transition-colors min-w-[44px] min-h-[44px] flex justify-center items-center"
-                    title="Hapus"
-                  >
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                      <polyline points="3 6 5 6 21 6"></polyline>
-                      <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
-                    </svg>
-                  </button>
-                </div>
-              </div>
-              <div className="flex justify-between items-center text-body-sm border-t border-slate/10 pt-space-2">
-                <span className="text-slate">Urutan:</span>
-                <span className="font-medium text-navy-deep">{cat.sortOrder}</span>
-              </div>
-              <div className="flex justify-between items-center text-body-sm">
-                <span className="text-slate">Jumlah Produk:</span>
-                <span className="font-medium text-navy-deep">{cat._count.products}</span>
-              </div>
+                </thead>
+                <tbody className="divide-y divide-border-hairline text-body-md text-navy-deep">
+                  {categories.map((cat) => (
+                    <tr key={cat.id} className="hover:bg-ivory/60 transition-colors group">
+                      <td className="px-space-4 py-space-3 font-medium">
+                        {cat.name}
+                        <div className="lg:hidden text-caption font-mono text-slate mt-1">{cat.slug}</div>
+                      </td>
+                      <td className="px-space-4 py-space-3 hidden lg:table-cell text-caption font-mono text-slate">
+                        {cat.slug}
+                      </td>
+                      <td className="px-space-4 py-space-3 text-center">
+                        <span className="inline-flex items-center gap-1 text-slate">
+                          <GripVertical className="w-3.5 h-3.5 text-slate/40" aria-hidden="true" />
+                          {cat.sortOrder}
+                        </span>
+                      </td>
+                      <td className="px-space-4 py-space-3 text-center">
+                        <span
+                          className="inline-flex items-center justify-center bg-navy-deep/5 text-navy-deep font-medium min-w-6 h-6 px-1.5 rounded-full text-xs"
+                          style={{ fontVariantNumeric: "tabular-nums" }}
+                        >
+                          {cat._count.products}
+                        </span>
+                      </td>
+                      <td className="px-space-4 py-space-3">
+                        <div className="flex items-center justify-end gap-1 opacity-60 group-hover:opacity-100 transition-opacity">
+                          <IconButton icon={Pencil} label="Edit kategori" href={`categories/${cat.id}/edit`} />
+                          <IconButton
+                            icon={Trash2}
+                            label="Hapus kategori"
+                            tone="danger"
+                            onClick={() => setDeleteId(cat.id)}
+                          />
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             </div>
-          ))
-        ) : (
-          <div className="bg-white rounded-radius-md shadow-card border border-slate/10 p-space-8 text-center text-slate">
-            Belum ada kategori yang dibuat.
           </div>
-        )}
-      </div>
 
-      {/* Conditionally render the correct dialog based on product count */}
-      {categoryToDelete && (
-        hasProducts ? (
+          {/* Card list (below md) */}
+          <div className="md:hidden space-y-space-3">
+            {categories.map((cat) => (
+              <div
+                key={cat.id}
+                className="bg-white rounded-radius-md shadow-card border border-border-hairline p-space-4 space-y-space-3"
+              >
+                <div className="flex justify-between items-start gap-space-2">
+                  <div className="min-w-0">
+                    <h3 className="font-medium text-navy-deep truncate">{cat.name}</h3>
+                    <div className="text-caption font-mono text-slate mt-1 truncate">{cat.slug}</div>
+                  </div>
+                  <div className="flex items-center gap-1 shrink-0 -mr-2">
+                    <IconButton icon={Pencil} label="Edit kategori" href={`categories/${cat.id}/edit`} />
+                    <IconButton
+                      icon={Trash2}
+                      label="Hapus kategori"
+                      tone="danger"
+                      onClick={() => setDeleteId(cat.id)}
+                    />
+                  </div>
+                </div>
+                <div className="flex items-center gap-2 pt-space-2 border-t border-border-hairline">
+                  <span className="text-caption text-slate bg-ivory px-2 py-1 rounded-radius-sm">
+                    Urutan {cat.sortOrder}
+                  </span>
+                  <span className="text-caption text-navy-deep font-medium bg-navy-deep/5 px-2 py-1 rounded-radius-sm">
+                    {cat._count.products} produk
+                  </span>
+                </div>
+              </div>
+            ))}
+          </div>
+        </>
+      )}
+
+      {categoryToDelete &&
+        (hasProducts ? (
           <ReassignDeleteDialog
             isOpen={true}
             onClose={() => !isPending && setDeleteId(null)}
@@ -189,8 +169,7 @@ export function CategoryTable({ categories }: CategoryTableProps) {
             message={`Hapus kategori ${categoryToDelete.name}? Tindakan ini tidak dapat dibatalkan.`}
             isPending={isPending}
           />
-        )
-      )}
+        ))}
     </div>
   );
 }

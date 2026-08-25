@@ -1,13 +1,17 @@
 "use client";
 
 import Image from "next/image";
-
-import React, { useRef, useEffect } from "react";
+import React, { useMemo, useRef, useState, useEffect } from "react";
+import { UploadCloud, X, Star } from "lucide-react";
 
 export type ImageState = {
   existing: { id: string; url: string; isPrimary: boolean }[];
   newFiles: { id: string; file: File; previewUrl: string; isPrimary: boolean }[];
 };
+
+type Slot =
+  | { kind: "existing"; id: string; src: string; isPrimary: boolean }
+  | { kind: "new"; id: string; src: string; isPrimary: boolean };
 
 interface ImageManagerProps {
   state: ImageState;
@@ -15,239 +19,237 @@ interface ImageManagerProps {
   error?: string;
   disabled?: boolean;
   hidePrimary?: boolean;
-  label?: string;
 }
 
+/**
+ * Product image picker: one large preview of the selected slot (primary by
+ * default) with a thumbnail filmstrip underneath — the layout a shopper-facing
+ * catalog editor expects, rather than an undifferentiated grid of squares.
+ */
 export function ImageManager({
   state,
   onChange,
   error,
   disabled = false,
   hidePrimary = false,
-  label = "Gambar Produk",
 }: ImageManagerProps) {
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const [isDragging, setIsDragging] = useState(false);
+  const [activeId, setActiveId] = useState<string | null>(null);
 
-  // Cleanup object URLs on unmount to avoid memory leaks
   useEffect(() => {
-    const urls = state.newFiles.map(f => f.previewUrl);
+    const urls = state.newFiles.map((f) => f.previewUrl);
     return () => {
-      urls.forEach(url => URL.revokeObjectURL(url));
+      urls.forEach((url) => URL.revokeObjectURL(url));
     };
   }, [state.newFiles]);
 
-  const setPrimary = (type: "existing" | "new", id: string) => {
-    if (disabled) return;
-    onChange({
-      existing: state.existing.map(img => ({ ...img, isPrimary: type === "existing" && img.id === id })),
-      newFiles: state.newFiles.map(img => ({ ...img, isPrimary: type === "new" && img.id === id })),
-    });
-  };
+  const slots: Slot[] = useMemo(
+    () => [
+      ...state.existing.map((img) => ({ kind: "existing" as const, id: img.id, src: img.url, isPrimary: img.isPrimary })),
+      ...state.newFiles.map((img) => ({ kind: "new" as const, id: img.id, src: img.previewUrl, isPrimary: img.isPrimary })),
+    ],
+    [state]
+  );
 
-  const removeExisting = (id: string) => {
-    if (disabled) return;
-    let nextExisting = state.existing.filter(img => img.id !== id);
-    let nextNew = [...state.newFiles];
-    
-    // Auto-promote if we removed the primary
-    const removedWasPrimary = state.existing.find(img => img.id === id)?.isPrimary;
-    if (removedWasPrimary) {
-      if (nextExisting.length > 0) nextExisting[0].isPrimary = true;
-      else if (nextNew.length > 0) nextNew[0].isPrimary = true;
-    }
+  const active = slots.find((s) => s.id === activeId) ?? slots.find((s) => s.isPrimary) ?? slots[0] ?? null;
 
-    onChange({ existing: nextExisting, newFiles: nextNew });
-  };
-
-  const removeNew = (id: string) => {
-    if (disabled) return;
-    const removedFile = state.newFiles.find(img => img.id === id);
-    if (removedFile) URL.revokeObjectURL(removedFile.previewUrl);
-    
-    let nextNew = state.newFiles.filter(img => img.id !== id);
-    let nextExisting = [...state.existing];
-
-    // Auto-promote if we removed the primary
-    if (removedFile?.isPrimary) {
-      if (nextExisting.length > 0) nextExisting[0].isPrimary = true;
-      else if (nextNew.length > 0) nextNew[0].isPrimary = true;
-    }
-
-    onChange({ existing: nextExisting, newFiles: nextNew });
-  };
-
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (disabled || !e.target.files) return;
-    
-    const files = Array.from(e.target.files);
-    if (files.length === 0) return;
-
-    const hasAnyPrimary = state.existing.some(i => i.isPrimary) || state.newFiles.some(i => i.isPrimary);
-    
+  const addFiles = (files: File[]) => {
+    if (disabled || files.length === 0) return;
+    const hasAnyPrimary = state.existing.some((i) => i.isPrimary) || state.newFiles.some((i) => i.isPrimary);
     const newAddedFiles = files.map((file, idx) => ({
       id: crypto.randomUUID(),
       file,
       previewUrl: URL.createObjectURL(file),
-      // Automatically make the first added file primary if there's no primary yet
       isPrimary: !hasAnyPrimary && idx === 0,
     }));
+    onChange({ existing: state.existing, newFiles: [...state.newFiles, ...newAddedFiles] });
+    setActiveId(newAddedFiles[0].id);
+  };
 
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    addFiles(Array.from(e.target.files ?? []));
+    if (fileInputRef.current) fileInputRef.current.value = "";
+  };
+
+  const setPrimary = (slot: Slot) => {
+    if (disabled) return;
     onChange({
-      existing: state.existing,
-      newFiles: [...state.newFiles, ...newAddedFiles],
+      existing: state.existing.map((img) => ({ ...img, isPrimary: slot.kind === "existing" && img.id === slot.id })),
+      newFiles: state.newFiles.map((img) => ({ ...img, isPrimary: slot.kind === "new" && img.id === slot.id })),
     });
+  };
 
-    // Reset input so the same files can be selected again if needed
-    if (fileInputRef.current) {
-      fileInputRef.current.value = "";
+  const removeSlot = (slot: Slot) => {
+    if (disabled) return;
+    if (activeId === slot.id) setActiveId(null);
+
+    if (slot.kind === "existing") {
+      const nextExisting = state.existing.filter((img) => img.id !== slot.id);
+      const nextNew = [...state.newFiles];
+      if (slot.isPrimary) {
+        if (nextExisting.length > 0) nextExisting[0].isPrimary = true;
+        else if (nextNew.length > 0) nextNew[0].isPrimary = true;
+      }
+      onChange({ existing: nextExisting, newFiles: nextNew });
+    } else {
+      const removedFile = state.newFiles.find((img) => img.id === slot.id);
+      if (removedFile) URL.revokeObjectURL(removedFile.previewUrl);
+      const nextNew = state.newFiles.filter((img) => img.id !== slot.id);
+      const nextExisting = [...state.existing];
+      if (slot.isPrimary) {
+        if (nextExisting.length > 0) nextExisting[0].isPrimary = true;
+        else if (nextNew.length > 0) nextNew[0].isPrimary = true;
+      }
+      onChange({ existing: nextExisting, newFiles: nextNew });
     }
   };
 
+  const handleDrop = (e: React.DragEvent) => {
+    e.preventDefault();
+    setIsDragging(false);
+    if (disabled) return;
+    const files = Array.from(e.dataTransfer.files).filter((f) => f.type.startsWith("image/"));
+    addFiles(files);
+  };
+
   return (
-    <div className="space-y-space-3">
-      <div className="flex items-center justify-between">
-        <label className="block font-body font-medium text-navy-deep text-body-sm">
-          {label}
-        </label>
-        <div>
-          <input
-            type="file"
-            accept="image/*"
-            multiple
-            className="hidden"
-            ref={fileInputRef}
-            onChange={handleFileChange}
-            disabled={disabled}
+    <div className="space-y-space-4">
+      <input
+        type="file"
+        accept="image/*"
+        multiple
+        className="hidden"
+        ref={fileInputRef}
+        onChange={handleFileChange}
+        disabled={disabled}
+      />
+
+      {error && <p className="text-red-signal text-body-sm">{error}</p>}
+
+      {slots.length === 0 ? (
+        <button
+          type="button"
+          onClick={() => fileInputRef.current?.click()}
+          onDragOver={(e) => {
+            e.preventDefault();
+            setIsDragging(true);
+          }}
+          onDragLeave={() => setIsDragging(false)}
+          onDrop={handleDrop}
+          disabled={disabled}
+          className={`w-full rounded-radius-md border-2 border-dashed p-space-8 text-center transition-colors disabled:opacity-50 ${
+            isDragging ? "border-red-signal bg-red-signal/5" : "border-border-hairline hover:border-navy-deep/30 bg-ivory/40"
+          }`}
+        >
+          <UploadCloud
+            className={`w-8 h-8 mx-auto mb-space-2 ${isDragging ? "text-red-signal" : "text-slate/50"}`}
+            aria-hidden="true"
           />
-          <button
-            type="button"
-            onClick={() => fileInputRef.current?.click()}
-            disabled={disabled}
-            className="text-body-sm font-medium text-red-signal hover:text-red-signal/80 transition-colors disabled:opacity-50"
-          >
-            + Unggah Gambar
-          </button>
-        </div>
-      </div>
-
-      {error && <p className="text-red-signal text-body-sm mb-1">{error}</p>}
-
-      {state.existing.length === 0 && state.newFiles.length === 0 ? (
-        <div className="p-space-8 border border-slate/20 border-dashed rounded-radius-sm text-center text-slate text-body-sm bg-ivory/30">
-          Belum ada gambar. Klik "Unggah Gambar" untuk menambahkan file.
-        </div>
+          <p className="font-body text-body-md text-navy-deep font-medium">
+            Tarik & lepas gambar di sini
+          </p>
+          <p className="font-body text-body-sm text-slate mt-1">atau klik untuk memilih file</p>
+        </button>
       ) : (
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-space-4">
-          {/* Existing Images */}
-          {state.existing.map((img) => (
-            <div key={img.id} className="relative group rounded-radius-sm border border-slate/20 overflow-hidden aspect-square bg-ivory">
-              <Image src={img.url} alt="Product image" fill sizes="(max-width: 640px) 50vw, 25vw" className="object-cover" />
-              
-              {/* Badges/Controls overlay */}
-              <div className="absolute inset-0 bg-navy-deep/40 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col justify-between p-2">
-                <div className="flex justify-between items-start">
-                  <span className="bg-slate/80 text-white text-[10px] uppercase px-1.5 py-0.5 rounded-sm backdrop-blur-md">
-                    Tersimpan
-                  </span>
-                  <button
-                    type="button"
-                    onClick={() => removeExisting(img.id)}
-                    disabled={disabled}
-                    className="bg-red-signal/90 hover:bg-red-signal text-white rounded-full p-1 transition-colors"
-                    title="Hapus gambar"
-                  >
-                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                      <line x1="18" y1="6" x2="6" y2="18"></line>
-                      <line x1="6" y1="6" x2="18" y2="18"></line>
-                    </svg>
-                  </button>
-                </div>
-                
-                {!hidePrimary && (
-                  <div className="flex justify-center">
-                    {!img.isPrimary ? (
-                      <button
-                        type="button"
-                        onClick={() => setPrimary("existing", img.id)}
-                        disabled={disabled}
-                        className="text-[11px] font-medium bg-navy-deep/80 text-white px-2 py-1 rounded backdrop-blur-md hover:bg-navy-deep transition-colors"
-                      >
-                        Jadikan Utama
-                      </button>
-                    ) : (
-                      <span className="text-[11px] font-medium bg-gold-hairline text-navy-deep px-2 py-1 rounded shadow-sm">
-                        Utama
-                      </span>
-                    )}
-                  </div>
-                )}
-              </div>
-
-              {/* Persistent Primary Badge for inactive state */}
-              {!hidePrimary && img.isPrimary && (
-                <div className="absolute bottom-2 right-2 md:bottom-auto md:right-auto md:top-2 md:left-2 group-hover:hidden">
-                  <span className="text-[10px] font-bold bg-gold-hairline text-navy-deep px-1.5 py-0.5 rounded shadow-sm">
-                    UTAMA
+        <>
+          {/* Hero preview */}
+          {active && (
+            <div
+              className="relative rounded-radius-lg overflow-hidden aspect-[4/3] bg-ivory border border-border-hairline"
+              onDragOver={(e) => {
+                e.preventDefault();
+                setIsDragging(true);
+              }}
+              onDragLeave={() => setIsDragging(false)}
+              onDrop={handleDrop}
+            >
+              <Image
+                src={active.src}
+                alt="Pratinjau gambar produk"
+                fill
+                unoptimized={active.kind === "new"}
+                sizes="(max-width: 768px) 100vw, 640px"
+                className="object-cover"
+              />
+              {isDragging && (
+                <div className="absolute inset-0 bg-red-signal/10 border-2 border-red-signal flex items-center justify-center">
+                  <span className="bg-white px-space-3 py-space-1 rounded-radius-sm font-body text-body-sm font-medium text-red-signal">
+                    Lepas untuk menambah
                   </span>
                 </div>
               )}
-            </div>
-          ))}
-
-          {/* New Files Preview */}
-          {state.newFiles.map((img) => (
-            <div key={img.id} className="relative group rounded-radius-sm border-2 border-red-signal/20 overflow-hidden aspect-square bg-ivory">
-              <Image src={img.previewUrl} alt="New preview" fill unoptimized className="object-cover" />
-              
-              <div className="absolute inset-0 bg-navy-deep/40 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col justify-between p-2">
-                <div className="flex justify-between items-start">
-                  <span className="bg-red-signal text-white text-[10px] uppercase px-1.5 py-0.5 rounded-sm shadow-sm">
+              <div className="absolute top-2 left-2 flex items-center gap-1.5">
+                {active.kind === "new" && (
+                  <span className="bg-red-signal text-white text-[10px] font-semibold uppercase px-2 py-1 rounded-full shadow-sm">
                     Baru
                   </span>
-                  <button
-                    type="button"
-                    onClick={() => removeNew(img.id)}
-                    disabled={disabled}
-                    className="bg-red-signal/90 hover:bg-red-signal text-white rounded-full p-1 transition-colors"
-                    title="Batal unggah"
-                  >
-                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                      <line x1="18" y1="6" x2="6" y2="18"></line>
-                      <line x1="6" y1="6" x2="18" y2="18"></line>
-                    </svg>
-                  </button>
-                </div>
-                
-                {!hidePrimary && (
-                  <div className="flex justify-center">
-                    {!img.isPrimary ? (
-                      <button
-                        type="button"
-                        onClick={() => setPrimary("new", img.id)}
-                        disabled={disabled}
-                        className="text-[11px] font-medium bg-navy-deep/80 text-white px-2 py-1 rounded backdrop-blur-md hover:bg-navy-deep transition-colors"
-                      >
-                        Jadikan Utama
-                      </button>
-                    ) : (
-                      <span className="text-[11px] font-medium bg-gold-hairline text-navy-deep px-2 py-1 rounded shadow-sm">
-                        Utama
-                      </span>
-                    )}
-                  </div>
+                )}
+                {!hidePrimary && active.isPrimary && (
+                  <span className="inline-flex items-center gap-1 bg-gold-hairline text-navy-deep text-[10px] font-bold uppercase px-2 py-1 rounded-full shadow-sm">
+                    <Star className="w-3 h-3 fill-current" aria-hidden="true" />
+                    Utama
+                  </span>
                 )}
               </div>
-
-              {!hidePrimary && img.isPrimary && (
-                <div className="absolute bottom-2 right-2 md:bottom-auto md:right-auto md:top-2 md:left-2 group-hover:hidden">
-                  <span className="text-[10px] font-bold bg-gold-hairline text-navy-deep px-1.5 py-0.5 rounded shadow-sm">
-                    UTAMA
-                  </span>
-                </div>
+              <button
+                type="button"
+                onClick={() => removeSlot(active)}
+                disabled={disabled}
+                className="absolute top-2 right-2 w-8 h-8 rounded-full bg-white/90 hover:bg-red-signal hover:text-white text-red-signal flex items-center justify-center transition-colors"
+                title="Hapus gambar ini"
+                aria-label="Hapus gambar ini"
+              >
+                <X className="w-4 h-4" aria-hidden="true" />
+              </button>
+              {!hidePrimary && !active.isPrimary && (
+                <button
+                  type="button"
+                  onClick={() => setPrimary(active)}
+                  disabled={disabled}
+                  className="absolute bottom-2 left-1/2 -translate-x-1/2 inline-flex items-center gap-1.5 bg-white/95 hover:bg-white text-navy-deep text-body-sm font-medium px-space-3 py-1.5 rounded-full shadow-sm transition-colors"
+                >
+                  <Star className="w-3.5 h-3.5" aria-hidden="true" />
+                  Jadikan Gambar Utama
+                </button>
               )}
             </div>
-          ))}
-        </div>
+          )}
+
+          {/* Thumbnail filmstrip */}
+          <div className="flex gap-space-2 overflow-x-auto pb-1 -mx-1 px-1">
+            {slots.map((slot) => (
+              <button
+                key={slot.id}
+                type="button"
+                onClick={() => setActiveId(slot.id)}
+                className={`relative shrink-0 w-16 h-16 rounded-radius-sm overflow-hidden border-2 transition-all ${
+                  active?.id === slot.id
+                    ? "border-red-signal ring-2 ring-red-signal/20"
+                    : "border-border-hairline hover:border-navy-deep/30"
+                }`}
+                aria-label="Pilih gambar ini"
+                aria-current={active?.id === slot.id}
+              >
+                <Image src={slot.src} alt="" fill unoptimized={slot.kind === "new"} className="object-cover" sizes="64px" />
+                {!hidePrimary && slot.isPrimary && (
+                  <span className="absolute bottom-0.5 right-0.5 w-3.5 h-3.5 rounded-full bg-gold-hairline flex items-center justify-center">
+                    <Star className="w-2 h-2 text-navy-deep fill-current" aria-hidden="true" />
+                  </span>
+                )}
+              </button>
+            ))}
+            <button
+              type="button"
+              onClick={() => fileInputRef.current?.click()}
+              disabled={disabled}
+              className="shrink-0 w-16 h-16 rounded-radius-sm border-2 border-dashed border-border-hairline hover:border-navy-deep/30 flex items-center justify-center text-slate hover:text-navy-deep transition-colors disabled:opacity-50"
+              aria-label="Tambah gambar"
+            >
+              <UploadCloud className="w-5 h-5" aria-hidden="true" />
+            </button>
+          </div>
+        </>
       )}
     </div>
   );

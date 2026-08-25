@@ -6,13 +6,14 @@ import { Certification } from "@prisma/client";
 import { CertificationModal } from "./certification-modal";
 import { deleteCertification, toggleCertificationActive } from "@/app/(public)/sertifikasi/actions";
 import { Trash2, Edit2, Eye, EyeOff } from "lucide-react";
+import { useEditMode } from "@/components/admin/edit-mode";
 
 type CertificationCardProps = {
   cert: Certification;
-  isAdmin?: boolean;
 };
 
-export function CertificationCard({ cert, isAdmin = false }: CertificationCardProps) {
+export function CertificationCard({ cert }: CertificationCardProps) {
+  const { enabled: isAdmin } = useEditMode();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isPending, startTransition] = useTransition();
 
@@ -57,7 +58,7 @@ export function CertificationCard({ cert, isAdmin = false }: CertificationCardPr
         className={`relative group bg-white rounded-radius-md shadow-card border-l-4 ${cert.isActive ? 'border-red-signal' : 'border-slate/30 opacity-70'} flex flex-col p-space-4 md:p-space-5 overflow-hidden transition-all`}
       >
         {isAdmin && (
-          <div className="absolute top-2 right-2 flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-opacity z-10">
+          <div className="absolute top-2 right-2 flex flex-col gap-2 transition-opacity z-10">
             <button
               onClick={() => setIsModalOpen(true)}
               disabled={isPending}

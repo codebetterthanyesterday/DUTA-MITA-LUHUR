@@ -1,36 +1,38 @@
 import Link from "next/link";
+import type { BlockData } from "@/lib/content/blocks";
 
-export function Hero() {
+export function Hero({ content }: { content: BlockData<"home.hero"> }) {
   return (
     <section className="relative bg-navy-deep text-ivory overflow-hidden py-space-8 md:py-space-12 px-space-4 md:px-space-6 border-b border-slate/20">
       <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-[1.4fr_1fr] gap-space-6 lg:gap-space-8 items-center">
         {/* Left Column: Core Narrative */}
         <div className="z-10 space-y-space-3">
           <span className="inline-block font-mono text-caption uppercase tracking-wider text-gold-hairline">
-            RUBBER EXPORT — TRUSTED INDUSTRIAL PARTNER
+            {content.eyebrow}
           </span>
 
           <h1 className="font-display font-medium text-display-xl text-ivory max-w-[520px] leading-[1.15]">
-            Indonesian Natural Rubber Engineered for Global Industry
+            {content.title}
           </h1>
 
           <p className="font-body text-body-lg text-ivory/70 max-w-[440px] pt-space-1">
-            PT Duta Mitra Luhur memproduksi dan mengekspor polimer karet alam berstandar internasional dengan jaminan konsistensi mutu teknis dan ketepatan logistik global.
+            {content.description}
           </p>
 
           <div className="flex flex-wrap items-center gap-space-2 pt-space-3">
-            <Link
-              href="/katalog"
-              className="bg-red-signal hover:bg-red-signal/90 text-ivory px-space-3 py-space-1 rounded-radius-sm font-body font-medium text-body-sm transition-colors"
-            >
-              Lihat Katalog Produk
-            </Link>
-            <Link
-              href="/kontak"
-              className="border border-ivory/35 hover:bg-ivory/10 text-ivory px-space-3 py-space-1 rounded-radius-sm font-body font-medium text-body-sm transition-colors"
-            >
-              Ajukan Penawaran
-            </Link>
+            {content.ctas.map((cta, index) => (
+              <Link
+                key={`${cta.href}-${cta.label}`}
+                href={cta.href}
+                className={
+                  index === 0
+                    ? "bg-red-signal hover:bg-red-signal/90 text-ivory px-space-3 py-space-1 rounded-radius-sm font-body font-medium text-body-sm transition-colors"
+                    : "border border-ivory/35 hover:bg-ivory/10 text-ivory px-space-3 py-space-1 rounded-radius-sm font-body font-medium text-body-sm transition-colors"
+                }
+              >
+                {cta.label}
+              </Link>
+            ))}
           </div>
         </div>
 
@@ -56,9 +58,9 @@ export function Hero() {
               <circle cx="380" cy="30" r="4" fill="#D81F3C" />
             </svg>
             <div className="flex justify-between items-center px-space-2 font-mono text-caption text-ivory/40 mt-space-1">
-              <span>Origin: Indonesia</span>
-              <span>Hub: Port of Tanjung Perak</span>
-              <span>Global Destinations</span>
+              {content.routeLabels.map((label) => (
+                <span key={label}>{label}</span>
+              ))}
             </div>
           </div>
         </div>

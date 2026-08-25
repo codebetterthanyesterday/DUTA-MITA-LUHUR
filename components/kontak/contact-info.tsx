@@ -1,10 +1,18 @@
 import React from "react";
+import type { BlockData } from "@/lib/content/blocks";
+import { WhatsappLink } from "@/components/shared/whatsapp-link";
 
-export function ContactInfo() {
+export function ContactInfo({
+  contact,
+  isAdmin,
+}: {
+  contact: BlockData<"site.contact">;
+  isAdmin: boolean;
+}) {
   return (
     <div className="bg-white rounded-radius-md shadow-card p-space-6 md:p-space-8">
       <div className="space-y-space-6">
-        
+
         {/* Alamat */}
         <div className="flex items-start gap-space-3">
           <div className="mt-1 flex-shrink-0 text-red-signal">
@@ -14,12 +22,14 @@ export function ContactInfo() {
             </svg>
           </div>
           <div>
-            <h4 className="font-display font-medium text-navy-deep text-body-lg mb-1">Kantor Pusat</h4>
+            <h4 className="font-display font-medium text-navy-deep text-body-lg mb-1">{contact.addressLabel}</h4>
             <p className="font-body text-slate text-body-md leading-relaxed">
-              {/* TODO: replace with real company address once provided by client */}
-              Kawasan Industri Estate Raya Kav. 45<br />
-              Surabaya, Jawa Timur 60293<br />
-              Indonesia
+              {contact.addressLines.map((line, index) => (
+                <React.Fragment key={line}>
+                  {index > 0 && <br />}
+                  {line}
+                </React.Fragment>
+              ))}
             </p>
           </div>
         </div>
@@ -33,8 +43,8 @@ export function ContactInfo() {
           </div>
           <div>
             <h4 className="font-display font-medium text-navy-deep text-body-lg mb-1">Email</h4>
-            <a href="mailto:info@dutamitaluhur.com" className="font-body text-slate hover:text-red-signal transition-colors text-body-md">
-              info@dutamitaluhur.com
+            <a href={`mailto:${contact.email}`} className="font-body text-slate hover:text-red-signal transition-colors text-body-md">
+              {contact.email}
             </a>
           </div>
         </div>
@@ -48,15 +58,14 @@ export function ContactInfo() {
           </div>
           <div>
             <h4 className="font-display font-medium text-navy-deep text-body-lg mb-1">Telepon &amp; WhatsApp</h4>
-            <a href="tel:+62315550199" className="font-body text-slate hover:text-red-signal transition-colors text-body-md block mb-space-2">
-              +62 (31) 555-0199
+            <a href={contact.phoneHref} className="font-body text-slate hover:text-red-signal transition-colors text-body-md block mb-space-2">
+              {contact.phone}
             </a>
-            
+
             {/* Reusing exact WhatsApp button style from footer */}
-            <a
-              href="https://wa.me/62XXXXXXXXXX"
-              target="_blank"
-              rel="noopener noreferrer"
+            <WhatsappLink
+              contact={contact}
+              isAdmin={isAdmin}
               className="inline-flex items-center gap-space-2 bg-red-signal hover:bg-red-signal/90 text-ivory px-space-3 py-space-1 rounded-radius-sm font-body font-medium text-body-sm transition-colors"
             >
               <svg
@@ -68,7 +77,7 @@ export function ContactInfo() {
                 <path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.711 2.598 2.664-.699c.971.53 1.77.813 2.796.814h.005c3.18 0 5.767-2.586 5.768-5.766 0-1.54-.6-2.987-1.689-4.078-1.09-1.089-2.538-1.722-4.084-1.722zm0-2.172c2.094 0 4.062.815 5.542 2.296 1.48 1.48 2.296 3.448 2.296 5.543 0 4.322-3.518 7.84-7.839 7.84-1.328 0-2.614-.337-3.754-.977l-4.276 1.121 1.141-4.172c-.703-1.189-1.074-2.551-1.073-3.947.001-4.321 3.518-7.839 7.84-7.839zm0 13.914c1.157 0 2.29-.311 3.279-.899l.235-.14 2.438.64-.651-2.376.153-.244c.646-1.028.987-2.222.987-3.454-.001-3.328-2.709-6.036-6.038-6.036-1.613 0-3.129.628-4.27 1.769-1.141 1.141-1.769 2.658-1.769 4.271 0 3.329 2.708 6.037 6.037 6.037z" />
               </svg>
               <span>Chat via WhatsApp</span>
-            </a>
+            </WhatsappLink>
           </div>
         </div>
 
@@ -80,9 +89,9 @@ export function ContactInfo() {
             </svg>
           </div>
           <div>
-            <h4 className="font-display font-medium text-navy-deep text-body-lg mb-1">Jam Operasional</h4>
+            <h4 className="font-display font-medium text-navy-deep text-body-lg mb-1">{contact.businessHoursLabel}</h4>
             <p className="font-body text-slate text-body-md">
-              Senin – Jumat, 08.00 – 17.00 WIB
+              {contact.businessHours}
             </p>
           </div>
         </div>

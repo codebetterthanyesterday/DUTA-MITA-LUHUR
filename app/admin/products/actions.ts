@@ -231,3 +231,58 @@ export async function toggleProductStatus(id: string, newStatus: boolean) {
 
   return { success: true };
 }
+
+export async function bulkDeleteProducts(ids: string[]) {
+  const session = await auth();
+  if (!session?.user) throw new Error("Unauthorized");
+  if (!ids?.length) return { success: true };
+
+  const products = await prisma.product.findMany({
+    where: { id: { in: ids } },
+    select: { slug: true }
+  });
+
+  await prisma.product.deleteMany({
+    where: { id: { in: ids } },
+  });
+
+  revalidatePath("/admin/products");
+  revalidatePath("/katalog");
+  revalidatePath("/");
+  for (const p of products) {
+    if (p.slug) revalidatePath(`/katalog/${p.slug}`);
+  }
+
+  return { success: true };
+}
+
+export async function bulkUpdateProducts(ids: string[], data: { isActive?: boolean; categoryId?: string }) {
+  const session = await auth();
+  if (!session?.user) throw new Error("Unauthorized");
+  if (!ids?.length) return { success: true };
+
+  const updateData: any = {};
+  if (data.isActive !== undefined) updateData.isActive = data.isActive;
+  if (data.categoryId !== undefined) updateData.categoryId = data.categoryId;
+
+  if (Object.keys(updateData).length === 0) return { success: true };
+
+  await prisma.product.updateMany({
+    where: { id: { in: ids } },
+    data: updateData,
+  });
+
+  const products = await prisma.product.findMany({
+    where: { id: { in: ids } },
+    select: { slug: true }
+  });
+
+  revalidatePath("/admin/products");
+  revalidatePath("/katalog");
+  revalidatePath("/");
+  for (const p of products) {
+    if (p.slug) revalidatePath(`/katalog/${p.slug}`);
+  }
+
+  return { success: true };
+}

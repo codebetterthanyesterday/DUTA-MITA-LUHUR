@@ -12,12 +12,32 @@ async function requireAdmin() {
   }
 }
 
+// Header
+const headerSchema = z.object({
+  headerTitle: z.string().min(1),
+  headerSubtitle: z.string().min(1),
+});
+export async function updateHeader(data: { headerTitle: string; headerSubtitle: string }) {
+  await requireAdmin();
+  const parsed = headerSchema.parse(data);
+
+  await prisma.companyProfile.upsert({
+    where: { id: "main" },
+    create: { id: "main", ...parsed, historyIntro: "", historyBody: "", vision: "" },
+    update: parsed,
+  });
+
+  revalidatePath("/tentang-kami");
+}
+
 // History
 const historySchema = z.object({
   historyIntro: z.string().min(1),
   historyBody: z.string().min(1),
+  historyImageUrl: z.string().nullable().optional(),
+  historyImageAlt: z.string().nullable().optional(),
 });
-export async function updateCompanyHistory(data: { historyIntro: string; historyBody: string }) {
+export async function updateCompanyHistory(data: z.infer<typeof historySchema>) {
   await requireAdmin();
   const parsed = historySchema.parse(data);
 
@@ -135,6 +155,23 @@ export async function updateFacilityGallery(data: { images: { url: string; altTe
         })),
       });
     }
+  });
+
+  revalidatePath("/tentang-kami");
+}
+
+// Export Countries
+const exportCountriesSchema = z.object({
+  countries: z.array(z.string().min(1)),
+});
+export async function updateExportCountries(data: { countries: string[] }) {
+  await requireAdmin();
+  const parsed = exportCountriesSchema.parse(data);
+
+  await prisma.companyProfile.upsert({
+    where: { id: "main" },
+    create: { id: "main", historyIntro: "", historyBody: "", vision: "", exportCountries: parsed.countries },
+    update: { exportCountries: parsed.countries },
   });
 
   revalidatePath("/tentang-kami");

@@ -1,7 +1,17 @@
 import Link from "next/link";
 import { NAV_LINKS } from "./nav-links";
+import type { BlockData } from "@/lib/content/blocks";
+import { WhatsappLink } from "@/components/shared/whatsapp-link";
 
-export function Footer() {
+export function Footer({
+  contact,
+  credentials,
+  isAdmin,
+}: {
+  contact: BlockData<"site.contact">;
+  credentials: BlockData<"site.footerCredentials">;
+  isAdmin: boolean;
+}) {
   const currentYear = new Date().getFullYear();
 
   return (
@@ -12,17 +22,15 @@ export function Footer() {
           {/* Column 1 — Company */}
           <div className="space-y-space-3">
             <span className="font-display font-medium text-display-md text-ivory block">
-              Duta Mitra Luhur
+              {contact.companyName}
             </span>
             <p className="font-body text-body-sm text-slate max-w-sm">
-              {/* TODO: replace with real company description */}
-              Produsen dan eksportir produk karet alam dan olahan industri berkualitas tinggi dari Indonesia untuk pasar manufaktur global.
+              {contact.tagline}
             </p>
             <div className="pt-space-1">
-              <a
-                href="https://wa.me/62XXXXXXXXXX"
-                target="_blank"
-                rel="noopener noreferrer"
+              <WhatsappLink
+                contact={contact}
+                isAdmin={isAdmin}
                 className="inline-flex items-center gap-space-2 bg-red-signal hover:bg-red-signal/90 text-ivory px-space-3 py-space-1 rounded-radius-sm font-body font-medium text-body-sm transition-colors"
               >
                 <svg
@@ -34,7 +42,7 @@ export function Footer() {
                   <path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.711 2.598 2.664-.699c.971.53 1.77.813 2.796.814h.005c3.18 0 5.767-2.586 5.768-5.766 0-1.54-.6-2.987-1.689-4.078-1.09-1.089-2.538-1.722-4.084-1.722zm0-2.172c2.094 0 4.062.815 5.542 2.296 1.48 1.48 2.296 3.448 2.296 5.543 0 4.322-3.518 7.84-7.839 7.84-1.328 0-2.614-.337-3.754-.977l-4.276 1.121 1.141-4.172c-.703-1.189-1.074-2.551-1.073-3.947.001-4.321 3.518-7.839 7.84-7.839zm0 13.914c1.157 0 2.29-.311 3.279-.899l.235-.14 2.438.64-.651-2.376.153-.244c.646-1.028.987-2.222.987-3.454-.001-3.328-2.709-6.036-6.038-6.036-1.613 0-3.129.628-4.27 1.769-1.141 1.141-1.769 2.658-1.769 4.271 0 3.329 2.708 6.037 6.037 6.037z" />
                 </svg>
                 <span>Chat via WhatsApp</span>
-              </a>
+              </WhatsappLink>
             </div>
           </div>
 
@@ -84,7 +92,7 @@ export function Footer() {
                     d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
                   />
                 </svg>
-                <span>Kawasan Industri Estate, Surabaya, Jawa Timur, Indonesia</span>
+                <span>{contact.addressShort}</span>
               </li>
               <li className="flex items-center gap-space-2">
                 <svg
@@ -101,7 +109,7 @@ export function Footer() {
                     d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
                   />
                 </svg>
-                <span>info@dutaMitraluhur.com</span>
+                <span>{contact.email}</span>
               </li>
               <li className="flex items-center gap-space-2">
                 <svg
@@ -118,7 +126,7 @@ export function Footer() {
                     d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"
                   />
                 </svg>
-                <span>+62 (31) 555-0199</span>
+                <span>{contact.phone}</span>
               </li>
             </ul>
           </div>
@@ -126,35 +134,30 @@ export function Footer() {
           {/* Column 4 — Sertifikasi/Legal */}
           <div>
             <h3 className="font-display font-medium text-display-md text-ivory mb-space-3">
-              Sertifikasi &amp; Standar
+              {credentials.heading}
             </h3>
             <p className="font-body text-body-sm text-slate mb-space-3">
-              Kepatuhan standar mutu internasional untuk pasar ekspor.
+              {credentials.description}
             </p>
-            {/* TODO: PBI-06 will provide full certification data */}
             <div className="flex flex-wrap gap-space-2">
-              <span className="border border-gold-hairline text-ivory px-space-2 py-0.5 rounded-radius-sm font-mono text-caption">
-                ISO 9001:2015
-              </span>
-              <span className="border border-gold-hairline text-ivory px-space-2 py-0.5 rounded-radius-sm font-mono text-caption">
-                SNI Standard
-              </span>
-              <span className="border border-gold-hairline text-ivory px-space-2 py-0.5 rounded-radius-sm font-mono text-caption">
-                ASTM D2000
-              </span>
-              <span className="border border-gold-hairline text-ivory px-space-2 py-0.5 rounded-radius-sm font-mono text-caption">
-                SIR 20
-              </span>
+              {credentials.badges.map((badge) => (
+                <span
+                  key={badge}
+                  className="border border-gold-hairline text-ivory px-space-2 py-0.5 rounded-radius-sm font-mono text-caption"
+                >
+                  {badge}
+                </span>
+              ))}
             </div>
           </div>
         </div>
 
         {/* Bottom Bar */}
         <div className="border-t border-slate/30 pt-space-4 flex flex-col sm:flex-row justify-between items-center gap-space-2 font-body text-body-sm text-slate">
-          <p>© {currentYear} Duta Mitra Luhur. All rights reserved.</p>
+          <p>© {currentYear} {contact.companyName}. All rights reserved.</p>
           <div className="flex items-center gap-space-3">
             <a
-              href="#"
+              href={contact.linkedinUrl}
               aria-label="LinkedIn"
               className="text-slate hover:text-ivory transition-colors p-space-1"
             >
@@ -168,7 +171,7 @@ export function Footer() {
               </svg>
             </a>
             <a
-              href="#"
+              href={contact.instagramUrl}
               aria-label="Instagram"
               className="text-slate hover:text-ivory transition-colors p-space-1"
             >

@@ -3,7 +3,9 @@
 import React, { useEffect } from "react";
 import Link from "next/link";
 import { RfqStatus } from "@prisma/client";
+import { Mail, Phone, MapPin, X, Package } from "lucide-react";
 import { StatusBadge } from "./status-badge";
+import { SelectField } from "./ui/form-fields";
 
 export type DrawerRfq = {
   id: string;
@@ -54,25 +56,29 @@ export function RfqDetailDrawer({
   if (!isOpen || !rfq) return null;
 
   return (
-    <div className="fixed inset-0 z-[100] flex justify-end">
+    <div className="fixed inset-0 z-[100] flex md:justify-end">
       {/* Backdrop */}
       <div
-        className="absolute inset-0 bg-navy-deep/60 backdrop-blur-sm animate-in fade-in duration-200"
+        className="absolute inset-0 bg-navy-deep/60 backdrop-blur-sm animate-admin-fade-in"
         onClick={() => !isPending && onClose()}
         aria-hidden="true"
       />
 
-      {/* Drawer Panel */}
-      <div className="relative w-full md:w-[600px] h-full bg-white shadow-card animate-in slide-in-from-right duration-300 flex flex-col">
+      {/* Panel — full-bleed sheet on mobile, side drawer from md up */}
+      <div
+        role="dialog"
+        aria-modal="true"
+        className="relative w-full md:w-[600px] h-full bg-white shadow-card-hover flex flex-col animate-admin-slide-up md:animate-admin-slide-right"
+      >
         {/* Header */}
-        <div className="flex-shrink-0 p-space-6 border-b border-slate/20 bg-ivory/50 flex items-start justify-between">
-          <div>
-            <h2 className="font-display font-medium text-display-md text-navy-deep mb-space-1">
+        <div className="shrink-0 p-space-5 md:p-space-6 border-b border-border-hairline bg-ivory/60 flex items-start justify-between gap-space-3">
+          <div className="min-w-0">
+            <h2 className="font-display font-medium text-display-md text-navy-deep mb-1 truncate">
               {rfq.name}
             </h2>
-            <div className="font-body text-body-sm text-slate flex flex-wrap gap-2 items-center">
+            <div className="font-body text-body-sm text-slate flex flex-wrap gap-1.5 items-center">
               <span>{rfq.company}</span>
-              <span className="text-slate/40">•</span>
+              <span className="text-slate/40">·</span>
               <span>
                 {rfq.createdAt.toLocaleDateString("id-ID", {
                   day: "2-digit",
@@ -83,7 +89,7 @@ export function RfqDetailDrawer({
                 })}
               </span>
             </div>
-            <div className="mt-space-3">
+            <div className="mt-space-2">
               <StatusBadge status={rfq.status} />
             </div>
           </div>
@@ -91,84 +97,96 @@ export function RfqDetailDrawer({
             type="button"
             onClick={onClose}
             disabled={isPending}
-            className="p-2 -mr-2 text-slate hover:text-red-signal transition-colors rounded-full hover:bg-slate/10 min-w-[44px] min-h-[44px] flex items-center justify-center"
+            className="w-11 h-11 -mr-2 -mt-1 shrink-0 flex items-center justify-center text-slate hover:text-red-signal hover:bg-red-signal/10 rounded-full transition-colors"
             aria-label="Tutup"
           >
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <line x1="18" y1="6" x2="6" y2="18"></line>
-              <line x1="6" y1="6" x2="18" y2="18"></line>
-            </svg>
+            <X className="w-5 h-5" aria-hidden="true" />
           </button>
         </div>
 
-        {/* Scrollable Content */}
-        <div className="flex-grow overflow-y-auto p-space-6 font-body text-navy-deep space-y-space-6">
-          
-          {/* Contact Details */}
+        {/* Scrollable content */}
+        <div className="flex-1 overflow-y-auto p-space-5 md:p-space-6 font-body text-navy-deep space-y-space-6 overscroll-contain">
+          {/* Contact */}
           <div>
-            <h3 className="text-body-sm font-medium text-slate uppercase tracking-wider mb-space-2">Kontak & Lokasi</h3>
+            <h3 className="text-body-sm font-medium text-slate uppercase tracking-wider mb-space-3">
+              Kontak & Lokasi
+            </h3>
             <div className="space-y-space-2 text-body-md">
+              <a
+                href={`mailto:${rfq.email}`}
+                className="flex items-center gap-space-3 hover:text-red-signal transition-colors group"
+              >
+                <span className="w-8 h-8 rounded-full bg-ivory flex items-center justify-center shrink-0 group-hover:bg-red-signal/10 transition-colors">
+                  <Mail className="w-4 h-4 text-slate group-hover:text-red-signal transition-colors" aria-hidden="true" />
+                </span>
+                <span className="break-all">{rfq.email}</span>
+              </a>
+              <a
+                href={`tel:${rfq.phone}`}
+                className="flex items-center gap-space-3 hover:text-red-signal transition-colors group"
+              >
+                <span className="w-8 h-8 rounded-full bg-ivory flex items-center justify-center shrink-0 group-hover:bg-red-signal/10 transition-colors">
+                  <Phone className="w-4 h-4 text-slate group-hover:text-red-signal transition-colors" aria-hidden="true" />
+                </span>
+                {rfq.phone}
+              </a>
               <div className="flex items-center gap-space-3">
-                <svg className="text-slate/60 shrink-0" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
-                <a href={`mailto:${rfq.email}`} className="hover:text-red-signal hover:underline transition-colors break-all">
-                  {rfq.email}
-                </a>
-              </div>
-              <div className="flex items-center gap-space-3">
-                <svg className="text-slate/60 shrink-0" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
-                <a href={`tel:${rfq.phone}`} className="hover:text-red-signal hover:underline transition-colors">
-                  {rfq.phone}
-                </a>
-              </div>
-              <div className="flex items-center gap-space-3">
-                <svg className="text-slate/60 shrink-0" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="10" r="3"></circle><path d="M12 21.7C17.3 17 20 13 20 10a8 8 0 1 0-16 0c0 3 2.7 7 8 11.7z"></path></svg>
-                <span>{rfq.country}</span>
+                <span className="w-8 h-8 rounded-full bg-ivory flex items-center justify-center shrink-0">
+                  <MapPin className="w-4 h-4 text-slate" aria-hidden="true" />
+                </span>
+                {rfq.country}
               </div>
             </div>
           </div>
 
-          <hr className="border-slate/10" />
+          <hr className="border-border-hairline" />
 
-          {/* Interest & Quantity */}
+          {/* Products & quantity */}
           <div>
-            <h3 className="text-body-sm font-medium text-slate uppercase tracking-wider mb-space-3">Kebutuhan Produk</h3>
-            
+            <h3 className="text-body-sm font-medium text-slate uppercase tracking-wider mb-space-3">
+              Kebutuhan Produk
+            </h3>
+
             <div className="mb-space-4">
               {rfq.products.length > 0 ? (
                 <div className="flex flex-wrap gap-2">
-                  {rfq.products.map(p => (
+                  {rfq.products.map((p) => (
                     <Link
                       key={p.id}
-                      href={`../products/${p.id}/edit`} // PBI-14: products/[id]/edit relative link
-                      className="inline-flex px-3 py-1 bg-navy-base/5 border border-navy-deep/10 rounded-full text-body-sm hover:bg-red-signal/10 hover:border-red-signal/30 hover:text-red-signal transition-colors"
-                      title="Lihat Produk"
+                      href={`../products/${p.id}/edit`}
+                      className="inline-flex items-center gap-1.5 px-3 py-1.5 min-h-[36px] bg-navy-deep/5 border border-navy-deep/10 rounded-full text-body-sm hover:bg-red-signal/10 hover:border-red-signal/30 hover:text-red-signal transition-colors"
                     >
+                      <Package className="w-3.5 h-3.5" aria-hidden="true" />
                       {p.name}
                     </Link>
                   ))}
                 </div>
               ) : (
-                <span className="text-slate italic text-body-md">Pertanyaan Umum, tidak terkait produk spesifik</span>
+                <span className="text-slate italic text-body-md">
+                  Pertanyaan umum, tidak terkait produk spesifik
+                </span>
               )}
             </div>
 
             {rfq.quantityEstimateValue !== null && (
-              <div className="bg-ivory/50 rounded-radius-sm p-space-4 border border-slate/10 inline-block">
-                <span className="block text-body-sm text-slate mb-1">Estimasi Kuantitas:</span>
-                <span className="font-medium text-navy-deep text-body-lg">
+              <div className="bg-ivory rounded-radius-md p-space-4 border border-border-hairline inline-block">
+                <span className="block text-body-sm text-slate mb-1">Estimasi Kuantitas</span>
+                <span className="font-display font-medium text-navy-deep text-display-sm">
                   {rfq.quantityEstimateValue.toString()} {rfq.quantityEstimateUnit}
                 </span>
               </div>
             )}
           </div>
 
-          <hr className="border-slate/10" />
+          <hr className="border-border-hairline" />
 
           {/* Message */}
           <div>
-            <h3 className="text-body-sm font-medium text-slate uppercase tracking-wider mb-space-3">Pesan dari Klien</h3>
+            <h3 className="text-body-sm font-medium text-slate uppercase tracking-wider mb-space-3">
+              Pesan dari Klien
+            </h3>
             {rfq.message ? (
-              <div className="bg-ivory rounded-radius-md p-space-5 border border-slate/10 shadow-inner">
+              <div className="bg-ivory rounded-radius-md p-space-5 border border-border-hairline">
                 <p className="whitespace-pre-wrap text-body-md leading-relaxed text-navy-deep">
                   {rfq.message}
                 </p>
@@ -177,26 +195,22 @@ export function RfqDetailDrawer({
               <p className="text-slate italic text-body-md">Tidak ada pesan tambahan</p>
             )}
           </div>
-
         </div>
 
-        {/* Footer / Status Control */}
-        <div className="flex-shrink-0 p-space-6 border-t border-slate/20 bg-ivory/50">
-          <label className="block text-body-sm font-medium text-slate mb-space-2">
-            Perbarui Status
-          </label>
-          <select
+        {/* Footer — status control, safe-area aware on mobile */}
+        <div className="shrink-0 p-space-5 md:p-space-6 border-t border-border-hairline bg-ivory/60 pb-[max(1.25rem,env(safe-area-inset-bottom))]">
+          <SelectField
+            label="Perbarui Status"
             value={rfq.status}
             onChange={(e) => onStatusChange(rfq.id, e.target.value as RfqStatus)}
             disabled={isPending}
-            className="w-full bg-white border border-slate/30 focus:border-red-signal focus:ring-1 focus:ring-red-signal rounded-radius-sm px-space-3 py-2 text-navy-deep font-body text-body-md transition-colors outline-none disabled:opacity-50 min-h-[44px]"
+            className="bg-white"
           >
             <option value="NEW">Baru</option>
             <option value="IN_PROGRESS">Diproses</option>
             <option value="CLOSED">Selesai</option>
-          </select>
+          </SelectField>
         </div>
-
       </div>
     </div>
   );

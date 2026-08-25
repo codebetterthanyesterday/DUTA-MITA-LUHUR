@@ -4,20 +4,21 @@ import { useState } from "react";
 import { CompanyProfile } from "@/lib/content/company-profile";
 import { SectionEditButton } from "@/components/admin/section-edit-button";
 import { VisionMissionModal } from "@/components/tentang-kami/modals/vision-mission-modal";
+import { useEditMode } from "@/components/admin/edit-mode";
 
 type VisionMissionProps = {
   vision: CompanyProfile["vision"];
   mission: CompanyProfile["mission"];
-  isAdmin?: boolean;
 };
 
-export function VisionMission({ vision, mission, isAdmin = false }: VisionMissionProps) {
+export function VisionMission({ vision, mission }: VisionMissionProps) {
+  const { enabled: isAdmin } = useEditMode();
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   return (
     <section className="relative group bg-ivory py-space-12 md:py-space-16 px-space-4 md:px-space-6 border-t border-border-hairline">
       {isAdmin && (
-        <SectionEditButton onClick={() => setIsModalOpen(true)} label="Edit Visi & Misi" className="opacity-0 group-hover:opacity-100 focus:opacity-100" />
+        <SectionEditButton onClick={() => setIsModalOpen(true)} label="Edit Visi & Misi" className="" />
       )}
       
       <div className="max-w-4xl mx-auto text-center">

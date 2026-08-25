@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import { AlertTriangle, Loader2 } from "lucide-react";
 import { CategoryListItem } from "@/app/admin/categories/category-table";
 
 interface ReassignDeleteDialogProps {
@@ -30,22 +31,25 @@ export function ReassignDeleteDialog({
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
       {/* Backdrop */}
-      <div 
-        className="absolute inset-0 bg-navy-deep/60 backdrop-blur-sm animate-in fade-in duration-200" 
+      <div
+        className="absolute inset-0 bg-navy-deep/60 backdrop-blur-sm animate-admin-fade-in"
         onClick={() => !isPending && onClose()}
       />
-      
+
       {/* Dialog */}
-      <div 
-        className="relative bg-white rounded-radius-md shadow-card w-full max-w-md max-h-[90dvh] flex flex-col overflow-hidden animate-in zoom-in-95 duration-200"
+      <div
+        className="relative bg-white rounded-radius-md shadow-card-hover w-full max-w-md max-h-[90dvh] flex flex-col overflow-hidden animate-admin-pop"
         role="dialog"
         aria-modal="true"
       >
         <div className="p-space-6 flex-1 overflow-y-auto">
-          <h3 className="font-display text-display-xs text-navy-deep font-medium mb-space-3">
+          <div className="w-11 h-11 rounded-full bg-gold-hairline/15 flex items-center justify-center mb-space-4">
+            <AlertTriangle className="w-5 h-5 text-gold-hairline" aria-hidden="true" />
+          </div>
+          <h3 className="font-display text-display-sm text-navy-deep font-medium mb-space-3">
             Hapus & Pindahkan Produk
           </h3>
-          
+
           <div className="text-body-md text-slate space-y-space-4">
             <p>
               Kategori <strong>{category.name}</strong> masih digunakan oleh <strong>{category._count.products} produk</strong>.
@@ -89,8 +93,9 @@ export function ReassignDeleteDialog({
             <button
               onClick={() => onConfirm(targetId)}
               disabled={isPending || !targetId}
-              className="px-space-4 py-2 rounded-radius-sm text-body-sm font-medium bg-red-signal text-ivory hover:bg-red-signal/90 transition-colors disabled:opacity-50 shadow-sm min-h-[44px]"
+              className="px-space-4 py-2 rounded-radius-sm text-body-sm font-medium bg-red-signal text-ivory hover:bg-red-signal/90 transition-colors disabled:opacity-50 shadow-sm min-h-[44px] flex items-center gap-2"
             >
+              {isPending && <Loader2 className="w-4 h-4 animate-spin" aria-hidden="true" />}
               {isPending ? "Memproses..." : "Pindahkan & Hapus"}
             </button>
           )}

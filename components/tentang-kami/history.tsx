@@ -1,22 +1,24 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import { CompanyProfile } from "@/lib/content/company-profile";
 import { SectionEditButton } from "@/components/admin/section-edit-button";
 import { HistoryModal } from "@/components/tentang-kami/modals/history-modal";
+import { useEditMode } from "@/components/admin/edit-mode";
 
 type HistoryProps = {
   history: CompanyProfile["history"];
-  isAdmin?: boolean;
 };
 
-export function History({ history, isAdmin = false }: HistoryProps) {
+export function History({ history }: HistoryProps) {
+  const { enabled: isAdmin } = useEditMode();
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   return (
     <section className="relative group bg-ivory py-space-12 md:py-space-16 px-space-4 md:px-space-6 border-b border-slate/10">
       {isAdmin && (
-        <SectionEditButton onClick={() => setIsModalOpen(true)} label="Edit Riwayat" className="opacity-0 group-hover:opacity-100 focus:opacity-100" />
+        <SectionEditButton onClick={() => setIsModalOpen(true)} label="Edit Riwayat" className="" />
       )}
       
       <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-space-6 md:gap-space-10 items-start">
@@ -32,14 +34,26 @@ export function History({ history, isAdmin = false }: HistoryProps) {
           ))}
         </div>
 
-        {/* Right Column: Large Placeholder Image */}
-        <div className="w-full aspect-[4/3] rounded-radius-md bg-navy-base/5 border border-border-hairline flex flex-col items-center justify-center p-space-4 text-center">
-          <span className="font-mono text-caption text-slate/60 uppercase">
-            Fasilitas Pengolahan
-          </span>
-          <span className="font-mono text-caption text-slate/40 mt-1">
-            PT Duta Mitra Luhur
-          </span>
+        {/* Right Column: Image or Placeholder */}
+        <div className="w-full aspect-[4/3] rounded-radius-md bg-navy-base/5 border border-border-hairline flex flex-col items-center justify-center p-space-4 text-center relative overflow-hidden">
+          {history.imageUrl ? (
+            <Image
+              src={history.imageUrl}
+              alt={history.imageAlt || "Fasilitas Pengolahan PT Duta Mitra Luhur"}
+              fill
+              className="object-cover"
+              sizes="(max-width: 768px) 100vw, 50vw"
+            />
+          ) : (
+            <>
+              <span className="font-mono text-caption text-slate/60 uppercase">
+                Fasilitas Pengolahan
+              </span>
+              <span className="font-mono text-caption text-slate/40 mt-1">
+                PT Duta Mitra Luhur
+              </span>
+            </>
+          )}
         </div>
       </div>
 
@@ -47,7 +61,12 @@ export function History({ history, isAdmin = false }: HistoryProps) {
         <HistoryModal 
           isOpen={isModalOpen} 
           onClose={() => setIsModalOpen(false)} 
-          initialData={{ intro: history.intro, body: history.body }} 
+          initialData={{ 
+            intro: history.intro, 
+            body: history.body,
+            imageUrl: history.imageUrl,
+            imageAlt: history.imageAlt
+          }} 
         />
       )}
     </section>

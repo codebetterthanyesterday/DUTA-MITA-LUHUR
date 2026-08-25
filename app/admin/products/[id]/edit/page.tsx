@@ -1,7 +1,9 @@
 import { auth } from "@/auth";
 import prisma from "@/lib/prisma";
 import { ProductForm } from "@/components/admin/product-form";
+import { PageHeader } from "@/components/admin/ui/page-header";
 import { redirect, notFound } from "next/navigation";
+import { getAdminRoute } from "@/lib/admin-routes";
 
 export default async function EditProductPage(props: { params: Promise<{ id: string }> }) {
   const params = await props.params;
@@ -35,20 +37,18 @@ export default async function EditProductPage(props: { params: Promise<{ id: str
   };
 
   return (
-    <div className="p-space-6 md:p-space-10 max-w-6xl mx-auto">
-      <div className="mb-space-6">
-        <h1 className="font-display font-medium text-display-lg text-navy-deep">
-          Edit Produk: {product.name}
-        </h1>
-        <p className="font-body text-body-sm text-slate mt-space-1">
-          Perbarui informasi produk di bawah ini.
-        </p>
-      </div>
+    <div className="p-space-4 md:p-space-8 max-w-6xl mx-auto">
+      <PageHeader
+        title={`Edit Produk: ${product.name}`}
+        description="Perbarui informasi produk di bawah ini."
+        backHref={getAdminRoute("products")}
+        backLabel="Kembali ke Produk"
+      />
 
-      <ProductForm 
-        categories={categories} 
+      <ProductForm
+        categories={categories}
         initialProduct={initialProduct}
-        backUrl="../../" // relative path back to /admin/products from /admin/products/[id]/edit
+        backUrl={getAdminRoute("products")}
       />
     </div>
   );

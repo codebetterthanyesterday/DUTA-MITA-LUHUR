@@ -1,24 +1,17 @@
 import type { Metadata } from "next";
 import prisma from "@/lib/prisma";
 import { RfqForm } from "@/components/rfq/rfq-form";
+import { AdminActionNotice } from "@/components/shared/admin-action-notice";
+import { Editable } from "@/components/admin/editable";
+import { SeoEditButton } from "@/components/admin/seo-edit-button";
+import { getBlock, getBlocks } from "@/lib/content/get-blocks";
+import { getBlockFormSpec } from "@/lib/content/blocks";
+import { buildMetadata } from "@/lib/content/metadata";
+import { isAdminRequest } from "@/lib/auth-helpers";
 
-const title = "Ajukan Penawaran (RFQ) — PT Duta Mita Luhur";
-const description = "Formulir pengajuan Request for Quote (RFQ) untuk produk karet alam (RSS, SIR, Latex) dari PT Duta Mita Luhur.";
-
-export const metadata: Metadata = {
-  title,
-  description,
-  openGraph: {
-    title,
-    description,
-    type: "website",
-  },
-  twitter: {
-    card: "summary_large_image",
-    title,
-    description,
-  },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  return buildMetadata(await getBlock("seo.rfq"));
+}
 
 export default async function RfqPage({
   searchParams,
@@ -26,6 +19,11 @@ export default async function RfqPage({
   searchParams: Promise<{ product?: string }>;
 }) {
   const { product: productSlug } = await searchParams;
+
+  const [content, isAdmin] = await Promise.all([
+    getBlocks(["rfq.header", "seo.rfq"]),
+    isAdminRequest(),
+  ]);
 
   // Fetch all active products for the multi-select
   const activeProducts = await prisma.product.findMany({
@@ -64,19 +62,27 @@ export default async function RfqPage({
   return (
     <main className="min-h-screen bg-ivory text-navy-deep flex flex-col">
       {/* 1. Page Header Band */}
-      <section className="bg-navy-deep text-ivory py-space-8 px-space-4 md:px-space-6 border-b border-slate/20">
-        <div className="max-w-7xl mx-auto flex flex-col items-center text-center">
-          <span className="font-mono text-caption text-gold-hairline uppercase tracking-wider mb-space-3">
-            AJUKAN PENAWARAN
-          </span>
-          <h1 className="font-display font-medium text-display-lg text-ivory max-w-4xl leading-tight">
-            Request for Quote (RFQ)
-          </h1>
-          <p className="font-body text-body-lg text-ivory/80 max-w-2xl mt-space-3">
-            Dapatkan penawaran harga terbaik dan informasi ketersediaan stok untuk kebutuhan industri Anda.
-          </p>
-        </div>
-      </section>
+      <Editable
+        spec={getBlockFormSpec("rfq.header")}
+        data={content["rfq.header"]}
+        label="Edit Header"
+      >
+        <section className="bg-navy-deep text-ivory py-space-8 px-space-4 md:px-space-6 border-b border-slate/20">
+          <div className="max-w-7xl mx-auto flex flex-col items-center text-center">
+            <span className="font-mono text-caption text-gold-hairline uppercase tracking-wider mb-space-3">
+              {content["rfq.header"].eyebrow}
+            </span>
+            <h1 className="font-display font-medium text-display-lg text-ivory max-w-4xl leading-tight">
+              {content["rfq.header"].title}
+            </h1>
+            <p className="font-body text-body-lg text-ivory/80 max-w-2xl mt-space-3">
+              {content["rfq.header"].subtitle}
+            </p>
+          </div>
+        </section>
+      </Editable>
+
+      <SeoEditButton spec={getBlockFormSpec("seo.rfq")} data={content["seo.rfq"]} />
 
       {/* 2. Form Section */}
       <section className="bg-ivory py-space-12 px-space-4 md:px-space-6 flex-grow">
@@ -89,10 +95,14 @@ export default async function RfqPage({
           </div>
 
           {/* Form Card */}
-          <RfqForm 
-            products={productsForSelect} 
-            initialSelectedIds={initialSelectedIds} 
-          />
+          {isAdmin ? (
+            <AdminActionNotice action="Pengajuan RFQ" className="w-full max-w-3xl mx-auto" />
+          ) : (
+            <RfqForm
+              products={productsForSelect}
+              initialSelectedIds={initialSelectedIds}
+            />
+          )}
         </div>
       </section>
     </main>

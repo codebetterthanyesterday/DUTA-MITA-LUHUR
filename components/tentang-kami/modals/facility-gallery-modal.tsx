@@ -68,7 +68,6 @@ export function FacilityGalleryModal({ isOpen, onClose, initialData }: FacilityG
         <ImageManager
           state={imageState}
           onChange={setImageState}
-          label="Foto-foto Fasilitas"
           hidePrimary={true}
           disabled={isBusy}
         />

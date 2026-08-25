@@ -1,7 +1,9 @@
 import { auth } from "@/auth";
 import prisma from "@/lib/prisma";
 import { ProductForm } from "@/components/admin/product-form";
+import { PageHeader } from "@/components/admin/ui/page-header";
 import { redirect } from "next/navigation";
+import { getAdminRoute } from "@/lib/admin-routes";
 
 export default async function NewProductPage() {
   const session = await auth();
@@ -15,19 +17,17 @@ export default async function NewProductPage() {
   });
 
   return (
-    <div className="p-space-6 md:p-space-10 max-w-6xl mx-auto">
-      <div className="mb-space-6">
-        <h1 className="font-display font-medium text-display-lg text-navy-deep">
-          Tambah Produk Baru
-        </h1>
-        <p className="font-body text-body-sm text-slate mt-space-1">
-          Lengkapi form di bawah ini untuk menambahkan produk ke katalog.
-        </p>
-      </div>
+    <div className="p-space-4 md:p-space-8 max-w-6xl mx-auto">
+      <PageHeader
+        title="Tambah Produk Baru"
+        description="Lengkapi form di bawah ini untuk menambahkan produk ke katalog."
+        backHref={getAdminRoute("products")}
+        backLabel="Kembali ke Produk"
+      />
 
-      <ProductForm 
-        categories={categories} 
-        backUrl="../" // relative path back to /admin/products from /admin/products/new
+      <ProductForm
+        categories={categories}
+        backUrl={getAdminRoute("products")}
       />
     </div>
   );

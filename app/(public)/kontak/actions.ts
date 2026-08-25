@@ -3,6 +3,7 @@
 import { z } from "zod";
 import prisma from "@/lib/prisma";
 import { sendContactNotification } from "@/lib/email";
+import { isAdminRequest } from "@/lib/auth-helpers";
 
 // Zod schema for validation
 const contactSchema = z.object({
@@ -28,6 +29,13 @@ export async function submitContactMessage(
   prevState: ContactActionState,
   formData: FormData
 ): Promise<ContactActionState> {
+  if (await isAdminRequest()) {
+    return {
+      success: false,
+      error: "Akun admin tidak dapat mengirim pesan kontak. Keluar dari akun admin untuk mengirimkan formulir ini sebagai pengunjung.",
+    };
+  }
+
   const data = {
     name: formData.get("name") as string,
     email: formData.get("email") as string,

@@ -6,61 +6,73 @@ import { FinalCta } from "@/components/shared/final-cta";
 import { auth } from "@/auth";
 import { CertificationCard } from "@/components/sertifikasi/certification-card";
 import { AddCertificationButton } from "@/components/sertifikasi/add-certification-button";
+import { Editable } from "@/components/admin/editable";
+import { SeoEditButton } from "@/components/admin/seo-edit-button";
+import { getBlock, getBlocks } from "@/lib/content/get-blocks";
+import { getBlockFormSpec } from "@/lib/content/blocks";
+import { buildMetadata } from "@/lib/content/metadata";
 
 export const revalidate = 3600;
 
-const title = "Sertifikasi & Legalitas — PT Duta Mita Luhur";
-const description = "Kredensial sertifikasi dan legalitas PT Duta Mita Luhur untuk menjamin kualitas karet alam ekspor sesuai standar internasional.";
-
-export const metadata: Metadata = {
-  title,
-  description,
-  openGraph: {
-    title,
-    description,
-    type: "website",
-  },
-  twitter: {
-    card: "summary_large_image",
-    title,
-    description,
-  },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  return buildMetadata(await getBlock("seo.sertifikasi"));
+}
 
 export default async function SertifikasiPage() {
   const session = await auth();
   const isAdmin = (session?.user as any)?.role === "ADMIN";
 
-  const certifications = await prisma.certification.findMany({
-    where: isAdmin ? undefined : { isActive: true },
-    orderBy: [{ sortOrder: "asc" }, { name: "asc" }],
-  }); 
+  const [certifications, content] = await Promise.all([
+    prisma.certification.findMany({
+      where: isAdmin ? undefined : { isActive: true },
+      orderBy: [{ sortOrder: "asc" }, { name: "asc" }],
+    }),
+    getBlocks([
+      "sertifikasi.header",
+      "sertifikasi.intro",
+      "sertifikasi.disclaimer",
+      "sertifikasi.finalCta",
+      "seo.sertifikasi",
+    ]),
+  ]);
 
   return (
     <main className="min-h-screen bg-ivory text-navy-deep flex flex-col">
       {/* 1. Page Header Band */}
-      <section className="bg-navy-deep text-ivory py-space-8 px-space-4 md:px-space-6 border-b border-slate/20">
-        <div className="max-w-7xl mx-auto flex flex-col items-center text-center">
-          <span className="font-mono text-caption text-gold-hairline uppercase tracking-wider mb-space-3">
-            SERTIFIKASI & LEGALITAS
-          </span>
-          <h1 className="font-display font-medium text-display-lg text-ivory max-w-4xl leading-tight">
-            Standar Kualitas Internasional yang Terverifikasi
-          </h1>
-          <p className="font-body text-body-lg text-ivory/80 max-w-2xl mt-space-3">
-            Komitmen tak kenal kompromi pada kualitas, terbukti melalui pengakuan dan sertifikasi resmi.
-          </p>
-        </div>
-      </section>
+      <Editable
+        spec={getBlockFormSpec("sertifikasi.header")}
+        data={content["sertifikasi.header"]}
+        label="Edit Header"
+      >
+        <section className="bg-navy-deep text-ivory py-space-8 px-space-4 md:px-space-6 border-b border-slate/20">
+          <div className="max-w-7xl mx-auto flex flex-col items-center text-center">
+            <span className="font-mono text-caption text-gold-hairline uppercase tracking-wider mb-space-3">
+              {content["sertifikasi.header"].eyebrow}
+            </span>
+            <h1 className="font-display font-medium text-display-lg text-ivory max-w-4xl leading-tight">
+              {content["sertifikasi.header"].title}
+            </h1>
+            <p className="font-body text-body-lg text-ivory/80 max-w-2xl mt-space-3">
+              {content["sertifikasi.header"].subtitle}
+            </p>
+          </div>
+        </section>
+      </Editable>
 
       {/* 2. Trust Context Paragraph */}
-      <section className="bg-ivory pt-space-12 pb-space-8 px-space-4 md:px-space-6">
-        <div className="max-w-7xl mx-auto">
-          <p className="font-body text-body-lg text-slate max-w-3xl leading-relaxed text-center md:text-left">
-            Kepatuhan terhadap standar internasional adalah landasan operasional kami. Kami memahami bahwa kepastian hukum, konsistensi kualitas (ISO), dan kepatuhan lingkungan (REACH) bukan sekadar dokumen—melainkan fondasi kepercayaan bagi rantai pasok industri manufaktur global Anda.
-          </p>
-        </div>
-      </section>
+      <Editable
+        spec={getBlockFormSpec("sertifikasi.intro")}
+        data={content["sertifikasi.intro"]}
+        label="Edit Pengantar"
+      >
+        <section className="bg-ivory pt-space-12 pb-space-8 px-space-4 md:px-space-6">
+          <div className="max-w-7xl mx-auto">
+            <p className="font-body text-body-lg text-slate max-w-3xl leading-relaxed text-center md:text-left">
+              {content["sertifikasi.intro"].body}
+            </p>
+          </div>
+        </section>
+      </Editable>
 
       {/* 3. Certification Grid */}
       <section className="bg-ivory pb-space-8 px-space-4 md:px-space-6">
@@ -74,7 +86,7 @@ export default async function SertifikasiPage() {
           {certifications.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-space-4">
               {certifications.map((cert) => (
-                <CertificationCard key={cert.id} cert={cert} isAdmin={isAdmin} />
+                <CertificationCard key={cert.id} cert={cert} />
               ))}
             </div>
           ) : (
@@ -110,21 +122,30 @@ export default async function SertifikasiPage() {
       </section>
 
       {/* 4. Legal Disclaimer Note */}
-      <section className="bg-ivory pb-space-12 px-space-4 md:px-space-6">
-        <div className="max-w-7xl mx-auto text-center md:text-left">
-          <p className="text-caption text-slate">
-            *Dokumen sertifikasi lengkap tersedia berdasarkan permintaan selama proses inquiry. Sertifikasi yang ditampilkan di atas tunduk pada pembaruan berkala oleh badan penerbit terkait.
-          </p>
-        </div>
-      </section>
+      <Editable
+        spec={getBlockFormSpec("sertifikasi.disclaimer")}
+        data={content["sertifikasi.disclaimer"]}
+        label="Edit Catatan"
+      >
+        <section className="bg-ivory pb-space-12 px-space-4 md:px-space-6">
+          <div className="max-w-7xl mx-auto text-center md:text-left">
+            <p className="text-caption text-slate">{content["sertifikasi.disclaimer"].body}</p>
+          </div>
+        </section>
+      </Editable>
 
       {/* 5. Final CTA Band */}
-      <FinalCta
-        eyebrow="DOKUMENTASI KEPATUHAN"
-        title="Butuh Bukti Legalitas Spesifik untuk Persyaratan Impor Anda?"
-        description="Tim kepatuhan ekspor kami siap membantu menyediakan sertifikat origin (SKA), dokumen phytosanitary, atau hasil lab independen (COA) untuk kelancaran clearance kargo Anda."
-        buttonText="Minta Dokumen Kepatuhan"
-        buttonHref="/kontak"
+      <Editable
+        spec={getBlockFormSpec("sertifikasi.finalCta")}
+        data={content["sertifikasi.finalCta"]}
+        label="Edit Ajakan"
+      >
+        <FinalCta {...content["sertifikasi.finalCta"]} />
+      </Editable>
+
+      <SeoEditButton
+        spec={getBlockFormSpec("seo.sertifikasi")}
+        data={content["seo.sertifikasi"]}
       />
     </main>
   );

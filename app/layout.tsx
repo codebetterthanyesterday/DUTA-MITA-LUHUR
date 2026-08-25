@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Fraunces, Inter, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import { auth } from "@/auth";
-import { AdminBar } from "@/components/admin/admin-bar";
+import { EditModeProvider } from "@/components/admin/edit-mode";
 
 const fraunces = Fraunces({
   variable: "--font-display",
@@ -37,14 +37,16 @@ export default async function RootLayout({
   children: React.ReactNode;
 }) {
   const session = await auth();
+  const isAdmin = (session?.user as { role?: string } | undefined)?.role === "ADMIN";
   return (
     <html
       lang="en"
       className={`${fraunces.variable} ${inter.variable} ${jetbrainsMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col font-body bg-ivory text-navy-deep">
-        {children}
-        {session?.user && <AdminBar />}
+        <EditModeProvider isAdmin={isAdmin}>
+          {children}
+        </EditModeProvider>
       </body>
     </html>
   );

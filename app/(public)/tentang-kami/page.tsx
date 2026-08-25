@@ -1,5 +1,9 @@
 import type { Metadata } from "next";
 import { getCompanyProfile } from "@/lib/content/company-profile";
+import { SeoEditButton } from "@/components/admin/seo-edit-button";
+import { getBlock } from "@/lib/content/get-blocks";
+import { getBlockFormSpec } from "@/lib/content/blocks";
+import { buildMetadata } from "@/lib/content/metadata";
 
 import { Header } from "@/components/tentang-kami/header";
 import { History } from "@/components/tentang-kami/history";
@@ -8,50 +12,35 @@ import { FacilityGallery } from "@/components/tentang-kami/facility-gallery";
 import { ExportReach } from "@/components/tentang-kami/export-reach";
 import { EditableStatsBand } from "@/components/tentang-kami/editable-stats-band";
 
-import { auth } from "@/auth";
 import { FinalCta } from "@/components/shared/final-cta";
 import { notFound } from "next/navigation";
 
-const title = "Tentang Kami — PT Duta Mitra Luhur";
-const description = "Profil perusahaan, sejarah, kapasitas produksi, dan jangkauan ekspor PT Duta Mitra Luhur sebagai produsen karet alam terkemuka di Indonesia.";
-
-export const metadata: Metadata = {
-  title,
-  description,
-  openGraph: {
-    title,
-    description,
-    type: "website",
-  },
-  twitter: {
-    card: "summary_large_image",
-    title,
-    description,
-  },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  return buildMetadata(await getBlock("seo.tentang-kami"));
+}
 
 export default async function TentangKamiPage() {
-  const session = await auth();
-  const isAdmin = (session?.user as any)?.role === "ADMIN";
-
-  const companyProfile = await getCompanyProfile();
+  const [companyProfile, seo] = await Promise.all([
+    getCompanyProfile(),
+    getBlock("seo.tentang-kami"),
+  ]);
   if (!companyProfile) {
     notFound();
   }
 
   return (
     <main className="min-h-screen bg-ivory text-navy-deep flex flex-col">
-      <Header />
-      <History history={companyProfile.history} isAdmin={isAdmin} />
-      <VisionMission vision={companyProfile.vision} mission={companyProfile.mission} isAdmin={isAdmin} />
+      <Header header={companyProfile.header} />
+      <History history={companyProfile.history} />
+      <VisionMission vision={companyProfile.vision} mission={companyProfile.mission} />
 
       {/* 
         Stats Band explicitly requested to match PBI-04's exact styling.
         In PBI-04 (Home) it had bg-navy-base. We pass the same classes to the reusable component.
       */}
-      <EditableStatsBand stats={companyProfile.facilityStats} className="bg-navy-base text-ivory border-y border-slate/20" isAdmin={isAdmin} />
+      <EditableStatsBand stats={companyProfile.facilityStats} className="bg-navy-base text-ivory border-y border-slate/20" />
 
-      <FacilityGallery images={companyProfile.facilityImages} isAdmin={isAdmin} />
+      <FacilityGallery images={companyProfile.facilityImages} />
       <ExportReach countries={companyProfile.exportCountries} />
 
       {/* 
@@ -65,6 +54,8 @@ export default async function TentangKamiPage() {
         buttonText="Hubungi Tim Ekspor"
         buttonHref="/kontak"
       />
+
+      <SeoEditButton spec={getBlockFormSpec("seo.tentang-kami")} data={seo} />
     </main>
   );
 }

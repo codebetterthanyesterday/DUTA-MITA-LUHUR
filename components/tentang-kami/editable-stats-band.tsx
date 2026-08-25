@@ -5,14 +5,15 @@ import { CompanyProfile } from "@/lib/content/company-profile";
 import { StatsBand } from "@/components/shared/stats-band";
 import { SectionEditButton } from "@/components/admin/section-edit-button";
 import { FacilityStatsModal } from "@/components/tentang-kami/modals/facility-stats-modal";
+import { useEditMode } from "@/components/admin/edit-mode";
 
 type EditableStatsBandProps = {
   stats: CompanyProfile["facilityStats"];
   className?: string;
-  isAdmin?: boolean;
 };
 
-export function EditableStatsBand({ stats, className, isAdmin = false }: EditableStatsBandProps) {
+export function EditableStatsBand({ stats, className }: EditableStatsBandProps) {
+  const { enabled: isAdmin } = useEditMode();
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   if (!isAdmin) {
@@ -24,7 +25,7 @@ export function EditableStatsBand({ stats, className, isAdmin = false }: Editabl
       <SectionEditButton 
         onClick={() => setIsModalOpen(true)} 
         label="Edit Statistik" 
-        className="opacity-0 group-hover:opacity-100 focus:opacity-100" 
+        className="" 
       />
       <StatsBand stats={stats} className={className} />
       <FacilityStatsModal

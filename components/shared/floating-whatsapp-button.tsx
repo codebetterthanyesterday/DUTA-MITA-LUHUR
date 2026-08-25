@@ -1,28 +1,22 @@
-"use client";
-
 import React from "react";
+import type { BlockData } from "@/lib/content/blocks";
+import { WhatsappLink } from "./whatsapp-link";
 
 interface FloatingWhatsappButtonProps {
   isAdmin: boolean;
+  contact: BlockData<"site.contact">;
 }
 
-export function FloatingWhatsappButton({ isAdmin }: FloatingWhatsappButtonProps) {
-  // Pre-filled message and URL
-  const phoneNumber = "62XXXXXXXXXX"; // TODO: replace with real WhatsApp Business number
-  const message = "Halo, saya ingin bertanya tentang produk karet Duta Mita Luhur.";
-  const encodedMessage = encodeURIComponent(message);
-  const waUrl = `https://wa.me/${phoneNumber}?text=${encodedMessage}`;
-
+export function FloatingWhatsappButton({ isAdmin, contact }: FloatingWhatsappButtonProps) {
   return (
-    <a
-      href={waUrl}
-      target="_blank"
-      rel="noopener noreferrer"
-      aria-label="Chat WhatsApp"
+    <WhatsappLink
+      contact={contact}
+      isAdmin={isAdmin}
+      ariaLabel="Chat WhatsApp"
       // PBI-20: Conditional positioning to avoid AdminBar
       // AdminBar is fixed at bottom-space-4 right-space-4 (bottom-4 right-4 or similar)
       // We will place this above AdminBar if isAdmin is true, else normal bottom-right
-      className={`fixed right-space-4 z-40 flex items-center justify-center gap-space-2 bg-red-signal hover:bg-red-signal/90 text-ivory rounded-radius-md shadow-card-hover transition-all min-h-[44px] min-w-[44px] px-3 md:px-space-4 py-space-2 
+      className={`fixed right-space-4 z-40 flex items-center justify-center gap-space-2 bg-red-signal hover:bg-red-signal/90 text-ivory rounded-radius-md shadow-card-hover transition-all min-h-[44px] min-w-[44px] px-3 md:px-space-4 py-space-2
         ${isAdmin ? "bottom-[calc(5rem+env(safe-area-inset-bottom))]" : "bottom-[calc(1.5rem+env(safe-area-inset-bottom))]"}
       `}
     >
@@ -38,6 +32,6 @@ export function FloatingWhatsappButton({ isAdmin }: FloatingWhatsappButtonProps)
       <span className="hidden md:inline font-body font-medium text-body-sm whitespace-nowrap">
         Chat WhatsApp
       </span>
-    </a>
+    </WhatsappLink>
   );
 }

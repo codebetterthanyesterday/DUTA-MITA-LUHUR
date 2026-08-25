@@ -88,3 +88,72 @@ body {
     opacity: 1;
   }
 }
+
+/*
+ * Admin portal motion utilities.
+ *
+ * Named explicitly (not `animate-in`/`fade-in`/etc.) because those are
+ * tailwindcss-animate plugin classes and this project doesn't have that
+ * plugin installed — writing them produces no CSS and silently no-ops.
+ */
+@keyframes adminFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes adminPop {
+  from { opacity: 0; transform: scale(0.96); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+@keyframes adminSlideInRight {
+  from { transform: translateX(100%); }
+  to { transform: translateX(0); }
+}
+
+@keyframes adminSlideInUp {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}
+
+@keyframes adminShimmer {
+  from { background-position: 200% 0; }
+  to { background-position: -200% 0; }
+}
+
+.animate-admin-fade-in {
+  animation: adminFadeIn 200ms ease-out both;
+}
+
+.animate-admin-pop {
+  animation: adminPop 220ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.animate-admin-slide-right {
+  animation: adminSlideInRight 280ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.animate-admin-slide-up {
+  animation: adminSlideInUp 280ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.animate-admin-shimmer {
+  background-image: linear-gradient(
+    100deg,
+    rgba(11, 30, 58, 0.06) 30%,
+    rgba(11, 30, 58, 0.12) 45%,
+    rgba(11, 30, 58, 0.06) 60%
+  );
+  background-size: 200% 100%;
+  animation: adminShimmer 1.6s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-admin-fade-in,
+  .animate-admin-pop,
+  .animate-admin-slide-right,
+  .animate-admin-slide-up,
+  .animate-admin-shimmer {
+    animation: none;
+  }
+}

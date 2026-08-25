@@ -1,7 +1,13 @@
 export type CompanyProfile = {
+  header: {
+    title: string;
+    subtitle: string;
+  };
   history: {
     intro: string;
     body: string;
+    imageUrl?: string | null;
+    imageAlt?: string | null;
   };
   vision: string;
   mission: string[];
@@ -38,9 +44,15 @@ export async function getCompanyProfile(): Promise<CompanyProfile | null> {
   if (!dbProfile) return null;
 
   return {
+    header: {
+      title: dbProfile.headerTitle,
+      subtitle: dbProfile.headerSubtitle,
+    },
     history: {
       intro: dbProfile.historyIntro,
       body: dbProfile.historyBody,
+      imageUrl: dbProfile.historyImageUrl,
+      imageAlt: dbProfile.historyImageAlt,
     },
     vision: dbProfile.vision,
     mission: dbProfile.missionItems.map(m => m.text),
@@ -52,6 +64,6 @@ export async function getCompanyProfile(): Promise<CompanyProfile | null> {
       url: i.url,
       altText: i.altText,
     })),
-    exportCountries: staticExportCountries,
+    exportCountries: dbProfile.exportCountries.length > 0 ? dbProfile.exportCountries : staticExportCountries,
   };
 }

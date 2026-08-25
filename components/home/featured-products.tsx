@@ -1,15 +1,20 @@
 import Link from "next/link";
 import { ProductCard } from "@/components/product/product-card";
 import prisma from "@/lib/prisma";
+import type { BlockData } from "@/lib/content/blocks";
 
-export async function FeaturedProducts() {
+export async function FeaturedProducts({
+  content,
+}: {
+  content: BlockData<"home.featuredProducts">;
+}) {
   const products = await prisma.product.findMany({
     where: { isActive: true },
     include: {
       category: true,
       images: { where: { isPrimary: true }, take: 1 },
     },
-    take: 6,
+    take: content.limit,
     orderBy: [{ category: { sortOrder: "asc" } }, { name: "asc" }],
   });
 
@@ -23,13 +28,13 @@ export async function FeaturedProducts() {
       <div className="max-w-7xl mx-auto space-y-space-6">
         <div>
           <span className="font-mono text-caption uppercase tracking-wider text-slate block mb-space-1">
-            Katalog Ekspor
+            {content.eyebrow}
           </span>
           <h2 className="font-display font-medium text-display-lg text-navy-deep">
-            Produk Unggulan
+            {content.title}
           </h2>
           <p className="font-body text-body-md text-slate mt-space-1">
-            Spesifikasi polimer karet alam dan olahan siap ekspor dengan parameter kualitas terverifikasi.
+            {content.description}
           </p>
         </div>
 
@@ -46,7 +51,7 @@ export async function FeaturedProducts() {
             href="/katalog"
             className="inline-flex items-center gap-space-1 font-body font-medium text-body-md text-navy-deep hover:text-red-signal transition-colors"
           >
-            Lihat Semua Produk →
+            {content.linkText}
           </Link>
         </div>
       </div>
