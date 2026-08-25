@@ -5,10 +5,22 @@ import { WhyUs } from "@/components/home/why-us";
 import { FeaturedProducts } from "@/components/home/featured-products";
 import { FinalCta } from "@/components/home/final-cta";
 
+const title = "DUTA Mitra LUHUR — Produsen & Eksportir Karet Alam Industri Indonesia";
+const description = "PT Duta Mitra Luhur memproduksi dan mengekspor polimer karet alam berstandar internasional (SIR 20, SIR 10, RSS, Centrifuged Latex) untuk industri manufaktur global.";
+
 export const metadata: Metadata = {
-  title: "DUTA Mitra LUHUR — Produsen & Eksportir Karet Alam Industri Indonesia",
-  description:
-    "PT Duta Mitra Luhur memproduksi dan mengekspor polimer karet alam berstandar internasional (SIR 20, SIR 10, RSS, Centrifuged Latex) untuk industri manufaktur global.",
+  title,
+  description,
+  openGraph: {
+    title,
+    description,
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title,
+    description,
+  },
 };
 
 export default function HomePage() {

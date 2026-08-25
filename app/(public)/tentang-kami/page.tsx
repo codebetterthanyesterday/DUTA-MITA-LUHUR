@@ -12,10 +12,22 @@ import { auth } from "@/auth";
 import { FinalCta } from "@/components/shared/final-cta";
 import { notFound } from "next/navigation";
 
+const title = "Tentang Kami — PT Duta Mitra Luhur";
+const description = "Profil perusahaan, sejarah, kapasitas produksi, dan jangkauan ekspor PT Duta Mitra Luhur sebagai produsen karet alam terkemuka di Indonesia.";
+
 export const metadata: Metadata = {
-  title: "Tentang Kami — PT Duta Mitra Luhur",
-  description:
-    "Profil perusahaan, sejarah, kapasitas produksi, dan jangkauan ekspor PT Duta Mitra Luhur sebagai produsen karet alam terkemuka di Indonesia.",
+  title,
+  description,
+  openGraph: {
+    title,
+    description,
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title,
+    description,
+  },
 };
 
 export default async function TentangKamiPage() {

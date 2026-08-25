@@ -2,10 +2,22 @@ import type { Metadata } from "next";
 import prisma from "@/lib/prisma";
 import { RfqForm } from "@/components/rfq/rfq-form";
 
+const title = "Ajukan Penawaran (RFQ) — PT Duta Mita Luhur";
+const description = "Formulir pengajuan Request for Quote (RFQ) untuk produk karet alam (RSS, SIR, Latex) dari PT Duta Mita Luhur.";
+
 export const metadata: Metadata = {
-  title: "Ajukan Penawaran (RFQ) — PT Duta Mita Luhur",
-  description:
-    "Formulir pengajuan Request for Quote (RFQ) untuk produk karet alam (RSS, SIR, Latex) dari PT Duta Mita Luhur.",
+  title,
+  description,
+  openGraph: {
+    title,
+    description,
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title,
+    description,
+  },
 };
 
 export default async function RfqPage({

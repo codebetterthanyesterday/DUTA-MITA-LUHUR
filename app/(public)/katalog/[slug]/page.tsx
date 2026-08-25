@@ -34,9 +34,22 @@ export async function generateMetadata({
     };
   }
 
+  const title = `${product.name} | Duta Mitra Luhur`;
+  const description = product.shortDescription || undefined;
+
   return {
-    title: `${product.name} | Duta Mitra Luhur`,
-    description: product.shortDescription || undefined,
+    title,
+    description,
+    openGraph: {
+      title,
+      description,
+      type: "website",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+    },
   };
 }
 

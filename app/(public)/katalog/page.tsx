@@ -2,9 +2,22 @@ import { Metadata } from "next";
 import prisma from "@/lib/prisma";
 import { CatalogExplorer } from "@/components/catalog/catalog-explorer";
 
+const title = "Katalog Produk | Duta Mitra Luhur";
+const description = "Eksplorasi spesifikasi polimer karet alam dan olahan siap ekspor dengan parameter kualitas terverifikasi dari PT Duta Mitra Luhur.";
+
 export const metadata: Metadata = {
-  title: "Katalog Produk | Duta Mitra Luhur",
-  description: "Eksplorasi spesifikasi polimer karet alam dan olahan siap ekspor dengan parameter kualitas terverifikasi dari PT Duta Mitra Luhur.",
+  title,
+  description,
+  openGraph: {
+    title,
+    description,
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title,
+    description,
+  },
 };
 
 export default async function KatalogPage() {

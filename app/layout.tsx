@@ -26,6 +26,7 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"),
   title: "DUTA Mitra LUHUR — Industrial Rubber Manufacturer & Exporter",
   description: "B2B Rubber Export Company based in Indonesia",
 };

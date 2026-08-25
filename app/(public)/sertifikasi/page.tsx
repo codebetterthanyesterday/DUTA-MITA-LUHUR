@@ -9,10 +9,22 @@ import { AddCertificationButton } from "@/components/sertifikasi/add-certificati
 
 export const revalidate = 3600;
 
+const title = "Sertifikasi & Legalitas — PT Duta Mita Luhur";
+const description = "Kredensial sertifikasi dan legalitas PT Duta Mita Luhur untuk menjamin kualitas karet alam ekspor sesuai standar internasional.";
+
 export const metadata: Metadata = {
-  title: "Sertifikasi & Legalitas — PT Duta Mita Luhur",
-  description:
-    "Kredensial sertifikasi dan legalitas PT Duta Mita Luhur untuk menjamin kualitas karet alam ekspor sesuai standar internasional.",
+  title,
+  description,
+  openGraph: {
+    title,
+    description,
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title,
+    description,
+  },
 };
 
 export default async function SertifikasiPage() {

@@ -41,8 +41,7 @@ export function Hero() {
               viewBox="0 0 400 200"
               xmlns="http://www.w3.org/2000/svg"
               className="w-full h-auto"
-              aria-label="DML Global Export Network Route"
-              role="img"
+              aria-hidden="true"
             >
               <path
                 d="M20,160 Q120,40 200,90 T380,30"

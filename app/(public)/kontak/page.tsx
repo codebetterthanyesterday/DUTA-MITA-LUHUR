@@ -2,10 +2,22 @@ import type { Metadata } from "next";
 import { ContactInfo } from "@/components/kontak/contact-info";
 import { ContactForm } from "@/components/kontak/contact-form";
 
+const title = "Hubungi Kami — PT Duta Mita Luhur";
+const description = "Hubungi PT Duta Mita Luhur untuk pertanyaan umum, informasi perusahaan, atau bantuan terkait ekspor karet alam. Kantor pusat kami berlokasi di Surabaya, Indonesia.";
+
 export const metadata: Metadata = {
-  title: "Hubungi Kami — PT Duta Mita Luhur",
-  description:
-    "Hubungi PT Duta Mita Luhur untuk pertanyaan umum, informasi perusahaan, atau bantuan terkait ekspor karet alam. Kantor pusat kami berlokasi di Surabaya, Indonesia.",
+  title,
+  description,
+  openGraph: {
+    title,
+    description,
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title,
+    description,
+  },
 };
 
 export default function KontakPage() {
