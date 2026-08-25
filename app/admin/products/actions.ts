@@ -10,12 +10,12 @@ import { slugify } from "@/lib/slugify";
 export async function uploadImageAction(formData: FormData) {
   const session = await auth();
   if (!session?.user) {
-    throw new Error("Unauthorized");
+    throw new Error("Sesi Anda sudah berakhir. Masuk lagi untuk melanjutkan.");
   }
 
   const file = formData.get("file") as File;
   if (!file) {
-    throw new Error("No file provided");
+    throw new Error("Tidak ada berkas yang dipilih.");
   }
 
   const url = await uploadFile(file, "product-images");
@@ -50,7 +50,7 @@ export type ProductFormValues = z.infer<typeof productSchema>;
 export async function createProduct(data: ProductFormValues) {
   const session = await auth();
   if (!session?.user) {
-    throw new Error("Unauthorized");
+    throw new Error("Sesi Anda sudah berakhir. Masuk lagi untuk melanjutkan.");
   }
 
   const parsed = productSchema.parse(data);
@@ -108,7 +108,7 @@ export async function createProduct(data: ProductFormValues) {
 export async function updateProduct(id: string, data: ProductFormValues) {
   const session = await auth();
   if (!session?.user) {
-    throw new Error("Unauthorized");
+    throw new Error("Sesi Anda sudah berakhir. Masuk lagi untuk melanjutkan.");
   }
 
   const parsed = productSchema.parse(data);
@@ -119,7 +119,7 @@ export async function updateProduct(id: string, data: ProductFormValues) {
   });
 
   if (!existingProduct) {
-    throw new Error("Product not found");
+    throw new Error("Produk itu sudah tidak ada.");
   }
 
   let slug = existingProduct.slug;
@@ -186,7 +186,7 @@ export async function updateProduct(id: string, data: ProductFormValues) {
 export async function deleteProduct(id: string) {
   const session = await auth();
   if (!session?.user) {
-    throw new Error("Unauthorized");
+    throw new Error("Sesi Anda sudah berakhir. Masuk lagi untuk melanjutkan.");
   }
 
   const product = await prisma.product.findUnique({
@@ -195,7 +195,7 @@ export async function deleteProduct(id: string) {
   });
 
   if (!product) {
-    throw new Error("Product not found");
+    throw new Error("Produk itu sudah tidak ada.");
   }
 
   // Delete product. ProductSpecification and ProductImage will be cascade deleted
@@ -215,7 +215,7 @@ export async function deleteProduct(id: string) {
 export async function toggleProductStatus(id: string, newStatus: boolean) {
   const session = await auth();
   if (!session?.user) {
-    throw new Error("Unauthorized");
+    throw new Error("Sesi Anda sudah berakhir. Masuk lagi untuk melanjutkan.");
   }
 
   const product = await prisma.product.update({
@@ -234,7 +234,7 @@ export async function toggleProductStatus(id: string, newStatus: boolean) {
 
 export async function bulkDeleteProducts(ids: string[]) {
   const session = await auth();
-  if (!session?.user) throw new Error("Unauthorized");
+  if (!session?.user) throw new Error("Sesi Anda sudah berakhir. Masuk lagi untuk melanjutkan.");
   if (!ids?.length) return { success: true };
 
   const products = await prisma.product.findMany({
@@ -258,7 +258,7 @@ export async function bulkDeleteProducts(ids: string[]) {
 
 export async function bulkUpdateProducts(ids: string[], data: { isActive?: boolean; categoryId?: string }) {
   const session = await auth();
-  if (!session?.user) throw new Error("Unauthorized");
+  if (!session?.user) throw new Error("Sesi Anda sudah berakhir. Masuk lagi untuk melanjutkan.");
   if (!ids?.length) return { success: true };
 
   const updateData: any = {};

@@ -17,12 +17,12 @@ export async function updateRfqStatus(id: string, status: RfqStatus): Promise<Ac
   try {
     const session = await auth();
     if (!session?.user) {
-      return { success: false, error: "Unauthorized" };
+      return { success: false, error: "Sesi Anda sudah berakhir. Masuk lagi untuk melanjutkan." };
     }
 
     const parsed = updateStatusSchema.safeParse({ id, status });
     if (!parsed.success) {
-      return { success: false, error: "Invalid status value provided." };
+      return { success: false, error: "Status yang dipilih tidak dikenal." };
     }
 
     await prisma.rFQ.update({
@@ -34,6 +34,6 @@ export async function updateRfqStatus(id: string, status: RfqStatus): Promise<Ac
     return { success: true };
   } catch (err: any) {
     console.error("updateRfqStatus error:", err);
-    return { success: false, error: err.message || "Failed to update RFQ status." };
+    return { success: false, error: err.message || "Status gagal diperbarui. Coba lagi beberapa saat lagi." };
   }
 }

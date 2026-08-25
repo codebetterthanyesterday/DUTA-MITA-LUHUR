@@ -32,16 +32,16 @@ export function RfqForm({ products, initialSelectedIds = [] }: RfqFormProps) {
           </svg>
         </div>
         <h3 className="font-display font-medium text-display-md text-navy-deep mb-space-2">
-          Terima Kasih!
+          Permintaan Anda sudah masuk
         </h3>
         <p className="font-body text-slate text-body-md max-w-sm mb-space-6">
-          Terima kasih, tim kami akan menghubungi Anda dalam 1–2 hari kerja.
+          Kami cek dulu ketersediaan stoknya, lalu menghubungi Anda dalam 1–2 hari kerja.
         </p>
         <button
           onClick={() => window.location.reload()}
           className="bg-navy-deep hover:bg-navy-base text-ivory px-space-4 py-space-2 rounded-radius-sm font-body font-medium transition-colors"
         >
-          Ajukan RFQ Lain
+          Kirim Permintaan Lain
         </button>
       </div>
     );
@@ -54,7 +54,7 @@ export function RfqForm({ products, initialSelectedIds = [] }: RfqFormProps) {
           Detail Permintaan Penawaran
         </h2>
         <p className="font-body text-body-sm text-slate">
-          Lengkapi form di bawah ini untuk mendapatkan estimasi harga dan waktu tunggu dari tim sales kami.
+          Makin lengkap isiannya, makin cepat kami bisa memberi harga dan perkiraan waktu kirim.
         </p>
       </div>
 

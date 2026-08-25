@@ -26,7 +26,7 @@ const supabase = createClient(supabaseUrl, supabaseServiceKey);
  */
 export async function uploadFile(file: File, bucket: string, folder?: string): Promise<string> {
   if (!supabaseUrl || !supabaseServiceKey) {
-    throw new Error("Storage credentials missing.");
+    throw new Error("Penyimpanan gambar belum dikonfigurasi. Hubungi pengelola sistem.");
   }
 
   // Generate a unique filename using timestamp and a random string to prevent collisions
@@ -44,7 +44,7 @@ export async function uploadFile(file: File, bucket: string, folder?: string): P
 
   if (error) {
     console.error("Supabase storage upload error:", error);
-    throw new Error(`Gagal mengunggah file: ${error.message}`);
+    throw new Error(`Gambar gagal diunggah: ${error.message}`);
   }
 
   // Retrieve public URL

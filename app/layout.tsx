@@ -3,6 +3,8 @@ import { Fraunces, Inter, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import { auth } from "@/auth";
 import { EditModeProvider } from "@/components/admin/edit-mode";
+import { ToastProvider } from "@/components/ui/toast";
+import { ConfirmProvider } from "@/components/ui/use-confirm";
 
 const fraunces = Fraunces({
   variable: "--font-display",
@@ -44,9 +46,13 @@ export default async function RootLayout({
       className={`${fraunces.variable} ${inter.variable} ${jetbrainsMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col font-body bg-ivory text-navy-deep">
-        <EditModeProvider isAdmin={isAdmin}>
-          {children}
-        </EditModeProvider>
+        <ToastProvider>
+          <ConfirmProvider>
+            <EditModeProvider isAdmin={isAdmin}>
+              {children}
+            </EditModeProvider>
+          </ConfirmProvider>
+        </ToastProvider>
       </body>
     </html>
   );

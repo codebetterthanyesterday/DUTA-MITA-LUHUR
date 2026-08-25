@@ -22,7 +22,7 @@ export function ContactForm() {
           Pesan Terkirim
         </h3>
         <p className="font-body text-slate text-body-md max-w-sm mb-space-6">
-          Terima kasih telah menghubungi kami. Tim kami akan segera menindaklanjuti pesan Anda.
+          Terima kasih. Pesan Anda sudah kami terima dan akan segera kami balas.
         </p>
         <button
           onClick={() => window.location.reload()}
@@ -41,7 +41,7 @@ export function ContactForm() {
           Kirim Pesan
         </h2>
         <p className="font-body text-body-sm text-slate">
-          Isi form di bawah ini dan perwakilan kami akan segera menghubungi Anda.
+          Tulis pertanyaan Anda di sini, kami balas lewat email.
         </p>
       </div>
 

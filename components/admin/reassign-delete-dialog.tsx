@@ -74,7 +74,7 @@ export function ReassignDeleteDialog({
               </>
             ) : (
               <div className="p-space-4 bg-gold-hairline/10 border border-gold-hairline/30 rounded-radius-sm text-navy-deep">
-                <strong>Tidak dapat menghapus:</strong> Ini adalah satu-satunya kategori yang ada di sistem. Anda harus membuat kategori lain terlebih dahulu sebelum memindahkan produk dan menghapus kategori ini.
+                <strong>Belum bisa dihapus.</strong> Ini satu-satunya kategori yang ada. Buat kategori lain dulu, supaya produk di sini punya tempat pindah.
               </div>
             )}
           </div>

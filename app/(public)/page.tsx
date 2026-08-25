@@ -41,7 +41,7 @@ export default async function HomePage() {
       <Editable
         spec={getBlockFormSpec("home.whyUs")}
         data={content["home.whyUs"]}
-        label="Edit Keunggulan"
+        label="Edit Bagian Kenapa Kami"
       >
         <WhyUs content={content["home.whyUs"]} />
       </Editable>

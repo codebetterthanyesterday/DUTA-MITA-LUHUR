@@ -77,13 +77,13 @@ export function ProductForm({ categories, initialProduct, backUrl }: ProductForm
     setErrorMsg(null);
 
     if (!name || !categoryId || !shortDescription || !description || !moqValue || !moqUnit || !packaging) {
-      setErrorMsg("Harap isi semua field wajib (Nama, Kategori, Deskripsi, MOQ, Packaging).");
+      setErrorMsg("Masih ada isian wajib yang kosong: Nama, Kategori, Deskripsi, MOQ, dan Packaging.");
       return;
     }
 
     const numMoq = parseFloat(moqValue);
     if (isNaN(numMoq) || numMoq <= 0) {
-      setErrorMsg("MOQ harus berupa angka positif.");
+      setErrorMsg("MOQ harus berupa angka lebih dari 0.");
       return;
     }
 
@@ -95,7 +95,7 @@ export function ProductForm({ categories, initialProduct, backUrl }: ProductForm
       if (hasLabel && hasValue) {
         validSpecs.push({ label: spec.label.trim(), value: spec.value.trim() });
       } else if (hasLabel || hasValue) {
-        setErrorMsg("Baris spesifikasi ada yang tidak lengkap. Isi keduanya atau hapus baris tersebut.");
+        setErrorMsg("Ada baris spesifikasi yang belum lengkap. Isi nama dan nilainya, atau hapus barisnya.");
         return;
       }
     }
@@ -104,7 +104,7 @@ export function ProductForm({ categories, initialProduct, backUrl }: ProductForm
     if (totalImages > 0) {
       const hasPrimary = imageState.existing.some((i) => i.isPrimary) || imageState.newFiles.some((i) => i.isPrimary);
       if (!hasPrimary) {
-        setErrorMsg("Harap pilih satu gambar sebagai gambar Utama.");
+        setErrorMsg("Pilih satu gambar untuk dijadikan sampul katalog.");
         return;
       }
     }
@@ -146,7 +146,7 @@ export function ProductForm({ categories, initialProduct, backUrl }: ProductForm
       }
     } catch (err: any) {
       console.error(err);
-      setErrorMsg(err.message || "Terjadi kesalahan saat menyimpan produk.");
+      setErrorMsg(err.message || "Produk gagal disimpan. Coba lagi beberapa saat lagi.");
       setIsPending(false);
     }
   };

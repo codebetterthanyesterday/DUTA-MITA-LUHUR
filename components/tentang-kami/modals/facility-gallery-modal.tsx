@@ -4,6 +4,7 @@ import { useState, useTransition } from "react";
 import { InlineEditModal } from "@/components/admin/inline-edit-modal";
 import { updateFacilityGallery, uploadFacilityImageAction } from "@/app/(public)/tentang-kami/actions";
 import { ImageManager, ImageState } from "@/components/admin/image-manager";
+import { useToast } from "@/components/ui/toast";
 
 type FacilityGalleryModalProps = {
   isOpen: boolean;
@@ -22,6 +23,7 @@ export function FacilityGalleryModal({ isOpen, onClose, initialData }: FacilityG
   });
   const [isPending, startTransition] = useTransition();
   const [uploading, setUploading] = useState(false);
+  const toast = useToast();
 
   const handleSave = async () => {
     setUploading(true);
@@ -47,14 +49,14 @@ export function FacilityGalleryModal({ isOpen, onClose, initialData }: FacilityG
           await updateFacilityGallery({ images: finalImages });
           onClose();
         } catch (err) {
-          alert("Gagal menyimpan data ke database.");
+          toast.error("Galeri gagal disimpan. Coba lagi beberapa saat lagi.");
           console.error(err);
         } finally {
           setUploading(false);
         }
       });
     } catch (err) {
-      alert("Gagal mengunggah gambar.");
+      toast.error("Gambar gagal diunggah. Cek koneksi Anda, lalu coba lagi.");
       console.error(err);
       setUploading(false);
     }

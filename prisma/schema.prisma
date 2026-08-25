@@ -140,8 +140,8 @@ model RFQ {
 
 model CompanyProfile {
   id             String   @id @default("main")
-  headerTitle    String   @default("Pilar Keandalan Ekspor Karet Alam Indonesia")
-  headerSubtitle String   @db.Text @default("Mendedikasikan diri pada kualitas, konsistensi, dan keberlanjutan untuk memasok industri manufaktur global.")
+  headerTitle    String   @default("Kami mengolah karet alam sejak awal 2000-an")
+  headerSubtitle String   @db.Text @default("Dari kebun petani di Jawa Timur sampai kontainer yang berangkat dari Tanjung Perak, semuanya kami tangani sendiri.")
   historyIntro    String   @db.Text
   historyBody     String   @db.Text
   historyImageUrl String?

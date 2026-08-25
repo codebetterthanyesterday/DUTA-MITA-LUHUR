@@ -7,6 +7,8 @@ import { CertificationModal } from "./certification-modal";
 import { deleteCertification, toggleCertificationActive } from "@/app/(public)/sertifikasi/actions";
 import { Trash2, Edit2, Eye, EyeOff } from "lucide-react";
 import { useEditMode } from "@/components/admin/edit-mode";
+import { useConfirm } from "@/components/ui/use-confirm";
+import { useToast } from "@/components/ui/toast";
 
 type CertificationCardProps = {
   cert: Certification;
@@ -16,18 +18,24 @@ export function CertificationCard({ cert }: CertificationCardProps) {
   const { enabled: isAdmin } = useEditMode();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isPending, startTransition] = useTransition();
+  const confirm = useConfirm();
+  const toast = useToast();
 
-  const handleDelete = () => {
-    if (window.confirm("Apakah Anda yakin ingin menghapus sertifikasi ini?")) {
-      startTransition(async () => {
-        try {
-          await deleteCertification(cert.id);
-        } catch (err) {
-          alert("Gagal menghapus sertifikasi.");
-          console.error(err);
-        }
-      });
-    }
+  const handleDelete = async () => {
+    const ok = await confirm({
+      title: "Hapus Sertifikasi",
+      message: "Apakah Anda yakin ingin menghapus sertifikasi ini? Tindakan ini tidak dapat dibatalkan.",
+      confirmLabel: "Hapus",
+    });
+    if (!ok) return;
+    startTransition(async () => {
+      try {
+        await deleteCertification(cert.id);
+      } catch (err) {
+        toast.error("Sertifikasi gagal dihapus. Coba lagi beberapa saat lagi.");
+        console.error(err);
+      }
+    });
   };
 
   const handleToggle = () => {
@@ -35,7 +43,7 @@ export function CertificationCard({ cert }: CertificationCardProps) {
       try {
         await toggleCertificationActive(cert.id, !cert.isActive);
       } catch (err) {
-        alert("Gagal memperbarui status sertifikasi.");
+        toast.error("Status sertifikasi gagal diubah. Coba lagi beberapa saat lagi.");
         console.error(err);
       }
     });

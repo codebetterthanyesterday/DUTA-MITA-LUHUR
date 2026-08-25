@@ -2,7 +2,7 @@
 
 import React, { useState, useMemo, useTransition, useOptimistic, useEffect } from "react";
 import { Pencil, Trash2, Package, CheckSquare, Square, X, FolderOpen, ShieldCheck, ShieldOff } from "lucide-react";
-import { ConfirmDialog } from "@/components/admin/confirm-dialog";
+import { ConfirmDialog } from "@/components/ui/confirm-dialog";
 import { SearchInput } from "@/components/admin/ui/toolbar";
 import { Pagination } from "@/components/admin/ui/pagination";
 import { EmptyState } from "@/components/admin/ui/empty-state";
@@ -381,10 +381,11 @@ export function ProductTable({ products: initialProducts, categories }: ProductT
         title="Hapus Produk"
         message={
           <>
-            Apakah Anda yakin ingin menghapus produk <strong>{productToDelete?.name}</strong>?
-            Tindakan ini tidak dapat dibatalkan, namun data pada RFQ terkait (jika ada) akan tetap aman.
+            Hapus produk <strong>{productToDelete?.name}</strong>? Produk yang sudah dihapus
+            tidak bisa dikembalikan. RFQ yang pernah menyebut produk ini tetap aman.
           </>
         }
+        confirmLabel="Hapus"
       />
 
       {/* Bulk Action Bar */}
@@ -424,19 +425,22 @@ export function ProductTable({ products: initialProducts, categories }: ProductT
         isOpen={bulkAction === "delete"}
         onClose={() => setBulkAction(null)}
         onConfirm={handleBulkDelete}
-        title="Hapus Produk Massal"
-        message={`Apakah Anda yakin ingin menghapus ${selectedIds.size} produk terpilih? Tindakan ini tidak dapat dibatalkan.`}
+        title="Hapus Produk Terpilih"
+        message={`Hapus ${selectedIds.size} produk yang dipilih? Produk yang sudah dihapus tidak bisa dikembalikan.`}
+        confirmLabel="Hapus"
       />
-      
+
       {/* Bulk Category Confirm */}
       <ConfirmDialog
         isOpen={bulkAction === "category"}
         onClose={() => { setBulkAction(null); setTargetCategory(""); }}
         onConfirm={handleBulkCategory}
-        title="Pindah Kategori Massal"
+        title="Pindah Kategori"
+        confirmLabel="Pindah"
+        variant="default"
         message={
           <div className="space-y-4 pt-2">
-            <p>Pilih kategori baru untuk {selectedIds.size} produk terpilih:</p>
+            <p>Pindahkan {selectedIds.size} produk ini ke kategori:</p>
             <select
               value={targetCategory}
               onChange={(e) => setTargetCategory(e.target.value)}

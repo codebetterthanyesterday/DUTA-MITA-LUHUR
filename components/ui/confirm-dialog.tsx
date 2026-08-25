@@ -1,7 +1,9 @@
 "use client";
 
 import { useEffect } from "react";
-import { AlertTriangle, Loader2 } from "lucide-react";
+import { AlertTriangle, HelpCircle, Loader2 } from "lucide-react";
+
+export type ConfirmVariant = "danger" | "default";
 
 interface ConfirmDialogProps {
   isOpen: boolean;
@@ -10,6 +12,9 @@ interface ConfirmDialogProps {
   title: string;
   message: React.ReactNode;
   isPending?: boolean;
+  confirmLabel?: string;
+  cancelLabel?: string;
+  variant?: ConfirmVariant;
 }
 
 export function ConfirmDialog({
@@ -19,6 +24,9 @@ export function ConfirmDialog({
   title,
   message,
   isPending = false,
+  confirmLabel = "Konfirmasi",
+  cancelLabel = "Batal",
+  variant = "danger",
 }: ConfirmDialogProps) {
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -38,6 +46,9 @@ export function ConfirmDialog({
 
   if (!isOpen) return null;
 
+  const isDanger = variant === "danger";
+  const Icon = isDanger ? AlertTriangle : HelpCircle;
+
   return (
     <div className="fixed inset-0 z-[100] flex items-center justify-center p-space-4">
       {/* Backdrop */}
@@ -54,8 +65,15 @@ export function ConfirmDialog({
         aria-modal="true"
         aria-labelledby="dialog-title"
       >
-        <div className="w-11 h-11 rounded-full bg-red-signal/10 flex items-center justify-center mb-space-4">
-          <AlertTriangle className="w-5 h-5 text-red-signal" aria-hidden="true" />
+        <div
+          className={`w-11 h-11 rounded-full flex items-center justify-center mb-space-4 ${
+            isDanger ? "bg-red-signal/10" : "bg-navy-deep/10"
+          }`}
+        >
+          <Icon
+            className={`w-5 h-5 ${isDanger ? "text-red-signal" : "text-navy-deep"}`}
+            aria-hidden="true"
+          />
         </div>
         <h2 id="dialog-title" className="font-display font-medium text-display-md text-navy-deep mb-space-3">
           {title}
@@ -71,16 +89,18 @@ export function ConfirmDialog({
             disabled={isPending}
             className="px-space-4 py-space-2 rounded-radius-sm font-body font-medium text-body-sm text-slate hover:bg-slate/10 transition-colors disabled:opacity-50 min-h-[44px]"
           >
-            Batal
+            {cancelLabel}
           </button>
           <button
             type="button"
             onClick={onConfirm}
             disabled={isPending}
-            className="px-space-4 py-space-2 rounded-radius-sm font-body font-medium text-body-sm bg-red-signal text-ivory hover:bg-red-signal/90 transition-colors disabled:opacity-50 min-w-[100px] min-h-[44px] flex items-center justify-center gap-2"
+            className={`px-space-4 py-space-2 rounded-radius-sm font-body font-medium text-body-sm text-ivory transition-colors disabled:opacity-50 min-w-[100px] min-h-[44px] flex items-center justify-center gap-2 ${
+              isDanger ? "bg-red-signal hover:bg-red-signal/90" : "bg-navy-deep hover:bg-navy-base"
+            }`}
           >
             {isPending && <Loader2 className="w-4 h-4 animate-spin" aria-hidden="true" />}
-            Hapus
+            {confirmLabel}
           </button>
         </div>
       </div>

@@ -7,10 +7,10 @@ import { isAdminRequest } from "@/lib/auth-helpers";
 
 // Zod schema for validation
 const contactSchema = z.object({
-  name: z.string().min(2, { message: "Nama minimal 2 karakter." }),
-  email: z.string().email({ message: "Format email tidak valid." }),
+  name: z.string().min(2, { message: "Nama minimal 2 huruf." }),
+  email: z.string().email({ message: "Sepertinya format emailnya keliru." }),
   subject: z.string().optional(),
-  message: z.string().min(10, { message: "Pesan minimal 10 karakter." }),
+  message: z.string().min(10, { message: "Pesannya terlalu pendek, tulis minimal 10 karakter." }),
   companyWebsite: z.string().max(0, { message: "Honeypot filled" }), // Honeypot must be empty
 });
 
@@ -32,7 +32,7 @@ export async function submitContactMessage(
   if (await isAdminRequest()) {
     return {
       success: false,
-      error: "Akun admin tidak dapat mengirim pesan kontak. Keluar dari akun admin untuk mengirimkan formulir ini sebagai pengunjung.",
+      error: "Anda sedang masuk sebagai admin. Keluar dulu dari akun admin kalau mau mengirim pesan sebagai pengunjung.",
     };
   }
 
@@ -84,7 +84,7 @@ export async function submitContactMessage(
     console.error("Failed to submit contact message:", error);
     return {
       success: false,
-      error: "Terjadi kesalahan sistem saat mengirim pesan. Silakan coba lagi nanti.",
+      error: "Pesan gagal terkirim karena ada gangguan di sistem kami. Coba lagi beberapa saat lagi.",
     };
   }
 }

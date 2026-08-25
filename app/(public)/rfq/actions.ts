@@ -6,13 +6,13 @@ import { countries } from "@/lib/countries";
 import { isAdminRequest } from "@/lib/auth-helpers";
 
 const rfqSchema = z.object({
-  name: z.string().min(2, { message: "Nama minimal 2 karakter." }),
-  company: z.string().min(2, { message: "Perusahaan minimal 2 karakter." }),
-  country: z.enum(countries as [string, ...string[]], { 
-    message: "Pilih negara yang valid."
+  name: z.string().min(2, { message: "Nama minimal 2 huruf." }),
+  company: z.string().min(2, { message: "Nama perusahaan minimal 2 huruf." }),
+  country: z.enum(countries as [string, ...string[]], {
+    message: "Pilih negara dari daftar."
   }),
-  email: z.string().email({ message: "Format email tidak valid." }),
-  phone: z.string().min(6, { message: "Nomor telepon minimal 6 karakter." }),
+  email: z.string().email({ message: "Sepertinya format emailnya keliru." }),
+  phone: z.string().min(6, { message: "Nomor telepon minimal 6 angka." }),
   productIds: z.string().optional(),
   quantityEstimateValue: z.string().optional(),
   quantityEstimateUnit: z.string().optional(),
@@ -24,7 +24,7 @@ const rfqSchema = z.object({
   }
   return true;
 }, {
-  message: "Unit kuantitas harus diisi jika nilai kuantitas ada.",
+  message: "Pilih satuannya juga, kilogram atau kontainer.",
   path: ["quantityEstimateUnit"]
 }).refine(data => {
   if (data.quantityEstimateValue) {
@@ -33,7 +33,7 @@ const rfqSchema = z.object({
   }
   return true;
 }, {
-  message: "Kuantitas harus berupa angka positif.",
+  message: "Jumlahnya harus berupa angka lebih dari 0.",
   path: ["quantityEstimateValue"]
 });
 
@@ -59,7 +59,7 @@ export async function submitRfq(
   if (await isAdminRequest()) {
     return {
       success: false,
-      error: "Akun admin tidak dapat mengajukan RFQ. Keluar dari akun admin untuk mengirimkan formulir ini sebagai pengunjung.",
+      error: "Anda sedang masuk sebagai admin. Keluar dulu dari akun admin kalau mau mengirim permintaan sebagai pengunjung.",
     };
   }
 
@@ -146,7 +146,7 @@ export async function submitRfq(
     console.error("Failed to submit RFQ:", error);
     return {
       success: false,
-      error: "Terjadi kesalahan sistem saat mengirim penawaran. Silakan coba lagi nanti."
+      error: "Permintaan gagal terkirim karena ada gangguan di sistem kami. Coba lagi beberapa saat lagi."
     };
   }
 }

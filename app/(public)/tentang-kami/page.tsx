@@ -48,10 +48,10 @@ export default async function TentangKamiPage() {
         custom copy for this specific page.
       */}
       <FinalCta
-        eyebrow="TERTARIK BEKERJA SAMA?"
-        title="Jadilah Bagian dari Jaringan Mitra Global Kami"
-        description="Jelajahi berbagai spesifikasi karet alam kami dan temukan bagaimana PT Duta Mitra Luhur dapat mendukung kontinuitas produksi industri Anda."
-        buttonText="Hubungi Tim Ekspor"
+        eyebrow="Tertarik bekerja sama?"
+        title="Mari bicarakan kebutuhan karet Anda"
+        description="Lihat dulu spesifikasi produk kami, atau langsung hubungi kami untuk membahas grade dan volume yang Anda cari."
+        buttonText="Hubungi Kami"
         buttonHref="/kontak"
       />
 

@@ -35,7 +35,7 @@ export default function AdminLoginPage() {
         router.refresh();
       }
     } catch {
-      setError("Terjadi kesalahan sistem. Silakan coba lagi.");
+      setError("Ada gangguan di sistem kami. Coba lagi beberapa saat lagi.");
       setIsLoading(false);
     }
   };
@@ -59,7 +59,7 @@ export default function AdminLoginPage() {
               <span className="font-display font-medium text-display-sm text-ivory">DML</span>
             </div>
             <h1 className="font-display font-medium text-display-md text-navy-deep">
-              Admin Portal
+              Masuk ke Admin
             </h1>
             <p className="font-body text-body-sm text-slate mt-1">
               PT Duta Mitra Luhur
@@ -151,7 +151,7 @@ export default function AdminLoginPage() {
         </div>
 
         <p className="text-center text-ivory/40 text-caption mt-space-6">
-          Akses terbatas untuk personel yang berwenang.
+          Halaman ini hanya untuk pengelola situs.
         </p>
       </div>
     </div>

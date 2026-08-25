@@ -3,10 +3,11 @@
 import React, { useState, useTransition } from "react";
 import { Pencil, Trash2, FolderOpen, GripVertical } from "lucide-react";
 import { deleteCategory, reassignAndDeleteCategory } from "./actions";
-import { ConfirmDialog } from "@/components/admin/confirm-dialog";
+import { ConfirmDialog } from "@/components/ui/confirm-dialog";
 import { ReassignDeleteDialog } from "@/components/admin/reassign-delete-dialog";
 import { EmptyState } from "@/components/admin/ui/empty-state";
 import { IconButton } from "@/components/admin/ui/icon-button";
+import { useToast } from "@/components/ui/toast";
 
 export type CategoryListItem = {
   id: string;
@@ -23,6 +24,7 @@ interface CategoryTableProps {
 export function CategoryTable({ categories }: CategoryTableProps) {
   const [isPending, startTransition] = useTransition();
   const [deleteId, setDeleteId] = useState<string | null>(null);
+  const toast = useToast();
 
   const categoryToDelete = categories.find((c) => c.id === deleteId) || null;
   const hasProducts = (categoryToDelete?._count.products || 0) > 0;
@@ -32,7 +34,7 @@ export function CategoryTable({ categories }: CategoryTableProps) {
     startTransition(async () => {
       const res = await deleteCategory(deleteId);
       if (!res.success) {
-        alert(res.error);
+        toast.error(res.error);
       }
       setDeleteId(null);
     });
@@ -43,7 +45,7 @@ export function CategoryTable({ categories }: CategoryTableProps) {
     startTransition(async () => {
       const res = await reassignAndDeleteCategory(deleteId, targetCategoryId);
       if (!res.success) {
-        alert(res.error);
+        toast.error(res.error);
       }
       setDeleteId(null);
     });
@@ -166,8 +168,9 @@ export function CategoryTable({ categories }: CategoryTableProps) {
             onClose={() => !isPending && setDeleteId(null)}
             onConfirm={handleConfirmSimpleDelete}
             title="Hapus Kategori"
-            message={`Hapus kategori ${categoryToDelete.name}? Tindakan ini tidak dapat dibatalkan.`}
+            message={`Hapus kategori ${categoryToDelete.name}? Kategori yang sudah dihapus tidak bisa dikembalikan.`}
             isPending={isPending}
+            confirmLabel="Hapus"
           />
         ))}
     </div>

@@ -4,6 +4,7 @@ import { useState, useTransition } from "react";
 import { InlineEditModal } from "@/components/admin/inline-edit-modal";
 import { uploadFacilityImageAction, updateCompanyHistory } from "@/app/(public)/tentang-kami/actions";
 import Image from "next/image";
+import { useToast } from "@/components/ui/toast";
 
 type HistoryModalProps = {
   isOpen: boolean;
@@ -19,6 +20,7 @@ export function HistoryModal({ isOpen, onClose, initialData }: HistoryModalProps
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [isPending, startTransition] = useTransition();
+  const toast = useToast();
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
@@ -50,7 +52,7 @@ export function HistoryModal({ isOpen, onClose, initialData }: HistoryModalProps
         if (previewUrl) URL.revokeObjectURL(previewUrl);
         onClose();
       } catch (err) {
-        alert("Gagal menyimpan data.");
+        toast.error("Sejarah gagal disimpan. Coba lagi beberapa saat lagi.");
         console.error(err);
       }
     });

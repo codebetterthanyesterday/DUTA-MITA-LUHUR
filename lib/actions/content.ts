@@ -23,7 +23,7 @@ export async function updateBlock(
 ): Promise<UpdateBlockResult> {
   const session = await auth();
   if ((session?.user as { role?: string } | undefined)?.role !== "ADMIN") {
-    return { ok: false, message: "Tidak diizinkan. Silakan masuk sebagai admin." };
+    return { ok: false, message: "Sesi Anda sudah berakhir. Masuk lagi sebagai admin untuk menyimpan." };
   }
 
   if (!isBlockKey(key)) {
@@ -40,7 +40,7 @@ export async function updateBlock(
     }
     return {
       ok: false,
-      message: flat.formErrors[0] ?? "Beberapa isian belum valid.",
+      message: flat.formErrors[0] ?? "Ada isian yang belum benar. Periksa lagi di bawah.",
       fieldErrors,
     };
   }

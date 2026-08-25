@@ -73,7 +73,7 @@ export function HeaderModal({ isOpen, onClose, initialData }: HeaderModalProps) 
                 name="headerTitle"
                 defaultValue={initialData.title}
                 className="w-full px-4 py-3 bg-white border border-slate/30 rounded-radius-sm text-navy-deep focus:outline-none focus:border-navy-deep transition-colors"
-                placeholder="Contoh: Pilar Keandalan Ekspor Karet Alam Indonesia"
+                placeholder="Contoh: Kami mengolah karet alam sejak awal 2000-an"
               />
             </div>
 
@@ -85,7 +85,7 @@ export function HeaderModal({ isOpen, onClose, initialData }: HeaderModalProps) 
                 name="headerSubtitle"
                 defaultValue={initialData.subtitle}
                 className="w-full px-4 py-3 bg-white border border-slate/30 rounded-radius-sm text-navy-deep focus:outline-none focus:border-navy-deep transition-colors min-h-[120px]"
-                placeholder="Contoh: Mendedikasikan diri pada kualitas..."
+                placeholder="Contoh: Dari kebun petani sampai kontainer di Tanjung Perak..."
               />
             </div>
           </div>

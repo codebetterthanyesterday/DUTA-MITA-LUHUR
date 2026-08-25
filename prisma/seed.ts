@@ -409,22 +409,22 @@ async function main() {
     update: {},
     create: {
       id: "main",
-      historyIntro: "Berdiri sejak awal tahun 2000-an, PT Duta Mitra Luhur telah mengukuhkan posisinya sebagai salah satu pemain utama dalam industri pengolahan dan ekspor karet alam di Indonesia.",
-      historyBody: "Berawal dari fasilitas pengolahan skala menengah, kami terus berinovasi dan meningkatkan kapasitas produksi untuk memenuhi permintaan pasar global yang terus berkembang. Melalui dedikasi terhadap kualitas dan kepatuhan terhadap standar internasional, kami memproduksi berbagai grade karet alam unggulan, termasuk Ribbed Smoked Sheet (RSS), Crumb Rubber (Standard Indonesian Rubber / SIR), dan Centrifuged Latex.\n\nKomitmen kami tidak hanya berfokus pada kualitas produk akhir, tetapi juga pada keberlanjutan rantai pasok. Kami menjalin kemitraan erat dengan petani karet lokal, memastikan pasokan bahan baku yang konsisten sekaligus mendukung kesejahteraan komunitas petani. Dengan fasilitas produksi modern dan tim quality control yang berpengalaman, setiap pengiriman dari PT Duta Mitra Luhur dijamin memenuhi spesifikasi ketat yang disyaratkan oleh industri manufaktur dan otomotif dunia.",
-      vision: "Menjadi produsen dan eksportir karet alam terdepan yang diakui secara global karena kualitas, keandalan, dan komitmen terhadap keberlanjutan.",
+      historyIntro: "PT Duta Mitra Luhur mulai mengolah dan mengekspor karet alam sejak awal tahun 2000-an dari Surabaya, Jawa Timur.",
+      historyBody: "Kami mulai dari satu fasilitas pengolahan berskala menengah. Seiring permintaan yang bertambah, kapasitasnya kami perbesar sampai bisa melayani kontrak tahunan. Sekarang kami memproduksi Ribbed Smoked Sheet (RSS), Crumb Rubber atau Standard Indonesian Rubber (SIR), dan lateks pekat.\n\nBahan bakunya kami ambil langsung dari petani karet di sekitar Jawa Timur. Hubungan itu kami jaga karena dua alasan: pasokan jadi lebih terjamin, dan petaninya punya pembeli yang pasti. Sebelum dikirim, tiap batch lewat laboratorium quality control kami untuk dicek apakah sudah sesuai spesifikasi yang diminta pembeli.",
+      vision: "Jadi pemasok karet alam yang dipercaya pabrik-pabrik di berbagai negara, karena mutunya konsisten dan pengirimannya tepat waktu.",
       missionItems: {
         create: [
-          { text: "Memproduksi karet alam bermutu tinggi (SIR, RSS, Latex) yang memenuhi standar industri internasional.", sortOrder: 1 },
-          { text: "Membangun hubungan jangka panjang yang saling menguntungkan dengan mitra bisnis dan pelanggan di seluruh dunia.", sortOrder: 2 },
-          { text: "Menerapkan praktik produksi yang ramah lingkungan dan mendukung kesejahteraan petani lokal.", sortOrder: 3 },
-          { text: "Terus berinovasi dalam proses pengolahan untuk meningkatkan efisiensi dan konsistensi produk.", sortOrder: 4 },
+          { text: "Memproduksi SIR, RSS, dan lateks pekat yang memenuhi standar industri internasional.", sortOrder: 1 },
+          { text: "Menjaga hubungan jangka panjang dengan pembeli, bukan sekadar transaksi sekali jalan.", sortOrder: 2 },
+          { text: "Mengolah karet dengan cara yang ramah lingkungan dan adil bagi petani pemasok kami.", sortOrder: 3 },
+          { text: "Terus memperbaiki proses produksi supaya hasilnya makin seragam dari batch ke batch.", sortOrder: 4 },
         ]
       },
       facilityStats: {
         create: [
-          { value: "150+", label: "Ton produksi / bulan", sortOrder: 1 },
+          { value: "150+", label: "Ton karet per bulan", sortOrder: 1 },
           { value: "12", label: "Negara tujuan ekspor", sortOrder: 2 },
-          { value: "ISO 9001", label: "Sertifikasi kualitas", sortOrder: 3 },
+          { value: "ISO 9001", label: "Standar mutu", sortOrder: 3 },
           { value: "15+", label: "Tahun pengalaman", sortOrder: 4 },
         ]
       },

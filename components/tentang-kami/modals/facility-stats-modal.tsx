@@ -4,6 +4,7 @@ import { useState, useTransition } from "react";
 import { InlineEditModal } from "@/components/admin/inline-edit-modal";
 import { updateFacilityStats } from "@/app/(public)/tentang-kami/actions";
 import { ProductSpecFields, SpecRow } from "@/components/admin/product-spec-fields";
+import { useToast } from "@/components/ui/toast";
 
 type FacilityStatsModalProps = {
   isOpen: boolean;
@@ -16,6 +17,7 @@ export function FacilityStatsModal({ isOpen, onClose, initialData }: FacilitySta
     initialData.map((s) => ({ id: crypto.randomUUID(), label: s.label, value: s.value }))
   );
   const [isPending, startTransition] = useTransition();
+  const toast = useToast();
 
   const handleSave = () => {
     startTransition(async () => {
@@ -25,7 +27,7 @@ export function FacilityStatsModal({ isOpen, onClose, initialData }: FacilitySta
         });
         onClose();
       } catch (err) {
-        alert("Gagal menyimpan data.");
+        toast.error("Statistik gagal disimpan. Coba lagi beberapa saat lagi.");
         console.error(err);
       }
     });

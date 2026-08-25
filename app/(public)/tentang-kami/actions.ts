@@ -8,7 +8,7 @@ import { auth } from "@/auth";
 async function requireAdmin() {
   const session = await auth();
   if (!session?.user || (session.user as any).role !== "ADMIN") {
-    throw new Error("Unauthorized: Admin access required.");
+    throw new Error("Sesi Anda sudah berakhir. Masuk lagi sebagai admin untuk melanjutkan.");
   }
 }
 
@@ -181,7 +181,7 @@ export async function uploadFacilityImageAction(formData: FormData) {
   await requireAdmin();
   
   const file = formData.get("file") as File;
-  if (!file) throw new Error("No file provided");
+  if (!file) throw new Error("Tidak ada berkas yang dipilih.");
 
   const { uploadFile } = await import("@/lib/storage");
   const url = await uploadFile(file, "facility-images");

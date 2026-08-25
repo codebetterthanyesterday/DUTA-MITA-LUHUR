@@ -7,7 +7,7 @@ import { auth } from "@/auth";
 import { slugify } from "@/lib/slugify";
 
 const categorySchema = z.object({
-  name: z.string().min(2, "Nama kategori minimal 2 karakter"),
+  name: z.string().min(2, "Nama kategori minimal 2 huruf."),
   description: z.string().optional(),
   sortOrder: z.number().int().optional(),
 });
@@ -16,7 +16,7 @@ export type ActionState = { success: true } | { success: false; error: string; f
 
 export async function createCategory(data: FormData): Promise<ActionState> {
   const session = await auth();
-  if (!session?.user) return { success: false, error: "Unauthorized" };
+  if (!session?.user) return { success: false, error: "Sesi Anda sudah berakhir. Masuk lagi untuk melanjutkan." };
 
   const parsed = categorySchema.safeParse({
     name: data.get("name"),
@@ -25,7 +25,7 @@ export async function createCategory(data: FormData): Promise<ActionState> {
   });
 
   if (!parsed.success) {
-    return { success: false, error: "Invalid data", fieldErrors: parsed.error.flatten().fieldErrors };
+    return { success: false, error: "Ada isian yang belum benar. Periksa lagi formulirnya.", fieldErrors: parsed.error.flatten().fieldErrors };
   }
 
   const { name, description, sortOrder } = parsed.data;
@@ -58,13 +58,13 @@ export async function createCategory(data: FormData): Promise<ActionState> {
     return { success: true };
   } catch (err: any) {
     console.error("Failed to create category:", err);
-    return { success: false, error: "Gagal membuat kategori" };
+    return { success: false, error: "Kategori gagal dibuat. Coba lagi beberapa saat lagi." };
   }
 }
 
 export async function updateCategory(id: string, data: FormData): Promise<ActionState> {
   const session = await auth();
-  if (!session?.user) return { success: false, error: "Unauthorized" };
+  if (!session?.user) return { success: false, error: "Sesi Anda sudah berakhir. Masuk lagi untuk melanjutkan." };
 
   const parsed = categorySchema.safeParse({
     name: data.get("name"),
@@ -73,11 +73,11 @@ export async function updateCategory(id: string, data: FormData): Promise<Action
   });
 
   if (!parsed.success) {
-    return { success: false, error: "Invalid data", fieldErrors: parsed.error.flatten().fieldErrors };
+    return { success: false, error: "Ada isian yang belum benar. Periksa lagi formulirnya.", fieldErrors: parsed.error.flatten().fieldErrors };
   }
 
   const existingCategory = await prisma.category.findUnique({ where: { id } });
-  if (!existingCategory) return { success: false, error: "Kategori tidak ditemukan" };
+  if (!existingCategory) return { success: false, error: "Kategori itu sudah tidak ada." };
 
   const { name, description, sortOrder } = parsed.data;
 
@@ -113,13 +113,13 @@ export async function updateCategory(id: string, data: FormData): Promise<Action
     return { success: true };
   } catch (err: any) {
     console.error("Failed to update category:", err);
-    return { success: false, error: "Gagal memperbarui kategori" };
+    return { success: false, error: "Perubahan gagal disimpan. Coba lagi beberapa saat lagi." };
   }
 }
 
 export async function deleteCategory(id: string): Promise<ActionState> {
   const session = await auth();
-  if (!session?.user) return { success: false, error: "Unauthorized" };
+  if (!session?.user) return { success: false, error: "Sesi Anda sudah berakhir. Masuk lagi untuk melanjutkan." };
 
   try {
     const category = await prisma.category.findUnique({
@@ -127,10 +127,10 @@ export async function deleteCategory(id: string): Promise<ActionState> {
       include: { _count: { select: { products: true } } }
     });
 
-    if (!category) return { success: false, error: "Kategori tidak ditemukan" };
+    if (!category) return { success: false, error: "Kategori itu sudah tidak ada." };
 
     if (category._count.products > 0) {
-      return { success: false, error: "Kategori masih memiliki produk terkait." };
+      return { success: false, error: "Kategori ini masih dipakai oleh beberapa produk." };
     }
 
     await prisma.category.delete({ where: { id } });
@@ -140,16 +140,16 @@ export async function deleteCategory(id: string): Promise<ActionState> {
     return { success: true };
   } catch (err: any) {
     console.error("Failed to delete category:", err);
-    return { success: false, error: "Gagal menghapus kategori" };
+    return { success: false, error: "Kategori gagal dihapus. Coba lagi beberapa saat lagi." };
   }
 }
 
 export async function reassignAndDeleteCategory(id: string, targetCategoryId: string): Promise<ActionState> {
   const session = await auth();
-  if (!session?.user) return { success: false, error: "Unauthorized" };
+  if (!session?.user) return { success: false, error: "Sesi Anda sudah berakhir. Masuk lagi untuk melanjutkan." };
 
   if (id === targetCategoryId) {
-    return { success: false, error: "Kategori tujuan tidak boleh sama dengan kategori yang dihapus" };
+    return { success: false, error: "Kategori tujuan tidak boleh sama dengan kategori yang mau dihapus." };
   }
 
   try {
@@ -159,7 +159,7 @@ export async function reassignAndDeleteCategory(id: string, targetCategoryId: st
     ]);
 
     if (!source || !target) {
-      return { success: false, error: "Kategori sumber atau tujuan tidak valid" };
+      return { success: false, error: "Kategori asal atau tujuannya sudah tidak ada." };
     }
 
     // Individual product detail pages' breadcrumb will reflect this reassignment
@@ -179,6 +179,6 @@ export async function reassignAndDeleteCategory(id: string, targetCategoryId: st
     return { success: true };
   } catch (err: any) {
     console.error("Failed to reassign and delete category:", err);
-    return { success: false, error: "Gagal memindahkan produk dan menghapus kategori" };
+    return { success: false, error: "Produk gagal dipindahkan, jadi kategorinya tidak ikut dihapus." };
   }
 }

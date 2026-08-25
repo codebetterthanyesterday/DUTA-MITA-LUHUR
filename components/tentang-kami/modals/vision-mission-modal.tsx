@@ -4,6 +4,7 @@ import { useState, useTransition } from "react";
 import { InlineEditModal } from "@/components/admin/inline-edit-modal";
 import { updateVisionMission } from "@/app/(public)/tentang-kami/actions";
 import { DynamicTextList, TextRow } from "@/components/admin/dynamic-text-list";
+import { useToast } from "@/components/ui/toast";
 
 type VisionMissionModalProps = {
   isOpen: boolean;
@@ -17,6 +18,7 @@ export function VisionMissionModal({ isOpen, onClose, initialData }: VisionMissi
     initialData.mission.map((m) => ({ id: crypto.randomUUID(), value: m }))
   );
   const [isPending, startTransition] = useTransition();
+  const toast = useToast();
 
   const handleSave = () => {
     startTransition(async () => {
@@ -27,7 +29,7 @@ export function VisionMissionModal({ isOpen, onClose, initialData }: VisionMissi
         });
         onClose();
       } catch (err) {
-        alert("Gagal menyimpan data.");
+        toast.error("Visi dan misi gagal disimpan. Coba lagi beberapa saat lagi.");
         console.error(err);
       }
     });

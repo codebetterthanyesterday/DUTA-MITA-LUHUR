@@ -3,6 +3,7 @@
 import { useState, useTransition } from "react";
 import { Mail, MailOpen, Trash2, ChevronDown } from "lucide-react";
 import { deleteMessage, markAllMessagesRead, setMessageRead } from "./actions";
+import { useConfirm } from "@/components/ui/use-confirm";
 
 export type Message = {
   id: string;
@@ -27,6 +28,7 @@ function formatDate(date: Date): string {
 export function MessageList({ messages }: { messages: Message[] }) {
   const [openId, setOpenId] = useState<string | null>(null);
   const [isPending, startTransition] = useTransition();
+  const confirm = useConfirm();
 
   const unreadCount = messages.filter((message) => !message.isRead).length;
 
@@ -158,8 +160,13 @@ export function MessageList({ messages }: { messages: Message[] }) {
                     <button
                       type="button"
                       disabled={isPending}
-                      onClick={() => {
-                        if (!confirm("Hapus pesan ini secara permanen?")) return;
+                      onClick={async () => {
+                        const ok = await confirm({
+                          title: "Hapus Pesan",
+                          message: "Hapus pesan ini? Pesan yang sudah dihapus tidak bisa dikembalikan.",
+                          confirmLabel: "Hapus",
+                        });
+                        if (!ok) return;
                         startTransition(() => {
                           deleteMessage(message.id);
                         });

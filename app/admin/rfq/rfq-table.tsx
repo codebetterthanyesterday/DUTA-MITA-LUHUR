@@ -10,6 +10,7 @@ import { Pagination } from "@/components/admin/ui/pagination";
 import { EmptyState } from "@/components/admin/ui/empty-state";
 import { updateRfqStatus } from "./actions";
 import { exportRfqsToCsv, RfqExportRow } from "@/lib/csv-export";
+import { useToast } from "@/components/ui/toast";
 
 interface RfqTableProps {
   rfqs: DrawerRfq[];
@@ -70,6 +71,7 @@ export function RfqTable({ rfqs: initialRfqs }: RfqTableProps) {
   );
 
   const [isPending, startTransition] = useTransition();
+  const toast = useToast();
 
   const filteredRfqs = useMemo(() => {
     return optimisticRfqs.filter((r) => {
@@ -107,7 +109,7 @@ export function RfqTable({ rfqs: initialRfqs }: RfqTableProps) {
       const res = await updateRfqStatus(id, newStatus);
       if (!res.success) {
         console.error("Failed to update status:", res.error);
-        alert(`Gagal memperbarui status: ${res.error}`);
+        toast.error(res.error ?? "Status gagal diperbarui. Coba lagi beberapa saat lagi.");
       }
     });
   };

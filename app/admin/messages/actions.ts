@@ -6,7 +6,7 @@ import { isAdminRequest } from "@/lib/auth-helpers";
 
 async function requireAdmin() {
   if (!(await isAdminRequest())) {
-    throw new Error("Unauthorized: Admin access required.");
+    throw new Error("Sesi Anda sudah berakhir. Masuk lagi sebagai admin untuk melanjutkan.");
   }
 }
 

@@ -147,15 +147,15 @@ export const BLOCKS = {
       routeLabels: z.array(z.string().min(1)).max(3),
     }),
     defaults: {
-      eyebrow: "RUBBER EXPORT — TRUSTED INDUSTRIAL PARTNER",
-      title: "Indonesian Natural Rubber Engineered for Global Industry",
+      eyebrow: "Karet alam dari Indonesia",
+      title: "Karet alam Indonesia, siap masuk lini produksi Anda",
       description:
-        "PT Duta Mitra Luhur memproduksi dan mengekspor polimer karet alam berstandar internasional dengan jaminan konsistensi mutu teknis dan ketepatan logistik global.",
+        "Kami mengolah dan mengekspor karet alam dari Surabaya. Mutunya konsisten di tiap batch, dokumen ekspornya lengkap, dan kontainer berangkat sesuai jadwal.",
       ctas: [
-        { label: "Lihat Katalog Produk", href: "/katalog" },
-        { label: "Ajukan Penawaran", href: "/kontak" },
+        { label: "Lihat Katalog", href: "/katalog" },
+        { label: "Minta Penawaran", href: "/kontak" },
       ],
-      routeLabels: ["Origin: Indonesia", "Hub: Port of Tanjung Perak", "Global Destinations"],
+      routeLabels: ["Asal: Indonesia", "Pelabuhan: Tanjung Perak", "Tujuan: 12 negara"],
     },
     fields: [
       { kind: "text", name: "eyebrow", label: "Eyebrow" },
@@ -194,9 +194,9 @@ export const BLOCKS = {
     }),
     defaults: {
       stats: [
-        { value: "150+", label: "Ton produksi / bulan" },
+        { value: "150+", label: "Ton karet per bulan" },
         { value: "12", label: "Negara tujuan ekspor" },
-        { value: "ISO 9001", label: "Sertifikasi kualitas" },
+        { value: "ISO 9001", label: "Standar mutu" },
         { value: "15+", label: "Tahun pengalaman" },
       ],
     },
@@ -210,7 +210,7 @@ export const BLOCKS = {
         max: 6,
         fields: [
           { kind: "text", name: "value", label: "Angka", placeholder: "150+" },
-          { kind: "text", name: "label", label: "Keterangan", placeholder: "Ton produksi / bulan" },
+          { kind: "text", name: "label", label: "Keterangan", placeholder: "Ton karet per bulan" },
         ],
       },
     ],
@@ -218,7 +218,7 @@ export const BLOCKS = {
   }),
 
   "home.whyUs": defineBlock({
-    title: "Edit Keunggulan Kompetitif",
+    title: "Edit Bagian Kenapa Kami",
     schema: z.object({
       eyebrow: z.string().min(1),
       title: z.string().min(1),
@@ -228,23 +228,23 @@ export const BLOCKS = {
         .max(3),
     }),
     defaults: {
-      eyebrow: "Keunggulan Kompetitif",
-      title: "Mengapa Memilih Duta Mitra Luhur",
+      eyebrow: "Kenapa kami",
+      title: "Yang bisa Anda andalkan dari kami",
       items: [
         {
-          title: "Kapasitas Pasokan Terukur",
+          title: "Pasokan yang tidak putus",
           description:
-            "Fasilitas pemrosesan terintegrasi menjamin kontinuitas volume pasokan polimer karet untuk kontrak jangka panjang pabrikan internasional.",
+            "Fasilitas kami mengolah dari bahan baku sampai pengemasan dalam satu alur, jadi volume untuk kontrak tahunan bisa kami penuhi tanpa jeda.",
         },
         {
-          title: "Kepatuhan Spesifikasi Teknis",
+          title: "Spesifikasi yang bisa dicek",
           description:
-            "Pengujian parameter berkala memastikan kesesuaian ketat terhadap standar mutu ASTM D2000, ISO 9001, dan Standar Indonesian Rubber (SIR).",
+            "Setiap batch kami uji sebelum dikirim dan hasilnya kami lampirkan. Standar yang kami pakai: ASTM D2000, ISO 9001, dan Standard Indonesian Rubber (SIR).",
         },
         {
-          title: "Manajemen Logistik Ekspor",
+          title: "Urusan ekspor kami yang tangani",
           description:
-            "Pengalaman menyeluruh dalam penerbitan Certificate of Analysis, kepatuhan kepabeanan, serta pengiriman kontainer tepat waktu ke seluruh dunia.",
+            "Certificate of Analysis, dokumen kepabeanan, sampai jadwal kontainer kami siapkan sendiri. Anda tinggal menunggu barang sampai.",
         },
       ],
     },
@@ -254,8 +254,8 @@ export const BLOCKS = {
       {
         kind: "repeater",
         name: "items",
-        label: "Poin Keunggulan",
-        itemLabel: "Keunggulan",
+        label: "Poin Alasan",
+        itemLabel: "Alasan",
         min: 1,
         max: 3,
         help: "Ikon setiap poin mengikuti urutan dan tidak dapat diubah di sini.",
@@ -269,7 +269,7 @@ export const BLOCKS = {
   }),
 
   "home.featuredProducts": defineBlock({
-    title: "Edit Bagian Produk Unggulan",
+    title: "Edit Bagian Produk Pilihan",
     schema: z.object({
       eyebrow: z.string().min(1),
       title: z.string().min(1),
@@ -278,11 +278,11 @@ export const BLOCKS = {
       limit: z.coerce.number().int().min(1).max(12),
     }),
     defaults: {
-      eyebrow: "Katalog Ekspor",
-      title: "Produk Unggulan",
+      eyebrow: "Katalog",
+      title: "Produk yang paling sering dipesan",
       description:
-        "Spesifikasi polimer karet alam dan olahan siap ekspor dengan parameter kualitas terverifikasi.",
-      linkText: "Lihat Semua Produk →",
+        "Beberapa grade yang paling banyak diminta pembeli. Spesifikasi lengkapnya ada di halaman masing-masing produk.",
+      linkText: "Lihat semua produk →",
       limit: 6,
     },
     fields: [
@@ -302,14 +302,14 @@ export const BLOCKS = {
   }),
 
   "home.finalCta": defineBlock({
-    title: "Edit Ajakan Akhir (Beranda)",
+    title: "Edit Ajakan Penutup (Beranda)",
     schema: ctaSchema,
     defaults: {
-      eyebrow: "MULAI KEMITRAAN EKSPOR",
-      title: "Siap Memenuhi Kebutuhan Pasokan Karet Industri Anda",
+      eyebrow: "Mulai kerja sama",
+      title: "Ada kebutuhan karet yang mau dibicarakan?",
       description:
-        "Hubungi tim perdagangan internasional kami untuk konsultasi spesifikasi teknis, alokasi kuota pengiriman, dan penawaran harga kompetitif FOB/CIF.",
-      buttonText: "Ajukan Penawaran Sekarang",
+        "Sebutkan grade, volume, dan tujuan pengirimannya. Kami balas dengan spesifikasi, ketersediaan stok, dan harga FOB atau CIF.",
+      buttonText: "Minta Penawaran",
       buttonHref: "/kontak",
     },
     fields: ctaFields,
@@ -321,10 +321,10 @@ export const BLOCKS = {
     title: "Edit Header Sertifikasi",
     schema: pageHeaderSchema,
     defaults: {
-      eyebrow: "SERTIFIKASI & LEGALITAS",
-      title: "Standar Kualitas Internasional yang Terverifikasi",
+      eyebrow: "Sertifikasi & legalitas",
+      title: "Sertifikat dan izin yang kami pegang",
       subtitle:
-        "Komitmen tak kenal kompromi pada kualitas, terbukti melalui pengakuan dan sertifikasi resmi.",
+        "Semua dokumen di bawah ini masih aktif, dan salinannya bisa kami kirimkan kalau Anda butuh.",
     },
     fields: pageHeaderFields,
     revalidate: [{ path: "/sertifikasi" }],
@@ -334,7 +334,7 @@ export const BLOCKS = {
     title: "Edit Paragraf Pengantar",
     schema: z.object({ body: z.string().min(1) }),
     defaults: {
-      body: "Kepatuhan terhadap standar internasional adalah landasan operasional kami. Kami memahami bahwa kepastian hukum, konsistensi kualitas (ISO), dan kepatuhan lingkungan (REACH) bukan sekadar dokumen—melainkan fondasi kepercayaan bagi rantai pasok industri manufaktur global Anda.",
+      body: "Buat pembeli di luar negeri, sertifikat bukan sekadar formalitas. Tanpa dokumen yang benar, barang bisa tertahan di pelabuhan dan jadwal produksi Anda ikut mundur. Karena itu kami menjaga legalitas usaha, sertifikasi mutu ISO, dan kepatuhan REACH tetap aktif dan siap diperiksa kapan saja.",
     },
     fields: [{ kind: "textarea", name: "body", label: "Paragraf Pengantar", rows: 5 }],
     revalidate: [{ path: "/sertifikasi" }],
@@ -344,21 +344,21 @@ export const BLOCKS = {
     title: "Edit Catatan Legal",
     schema: z.object({ body: z.string().min(1) }),
     defaults: {
-      body: "*Dokumen sertifikasi lengkap tersedia berdasarkan permintaan selama proses inquiry. Sertifikasi yang ditampilkan di atas tunduk pada pembaruan berkala oleh badan penerbit terkait.",
+      body: "*Salinan lengkap tiap sertifikat bisa diminta saat proses penawaran berjalan. Masa berlaku sertifikat di atas diperbarui berkala oleh lembaga yang menerbitkannya.",
     },
     fields: [{ kind: "textarea", name: "body", label: "Catatan Legal", rows: 3 }],
     revalidate: [{ path: "/sertifikasi" }],
   }),
 
   "sertifikasi.finalCta": defineBlock({
-    title: "Edit Ajakan Akhir (Sertifikasi)",
+    title: "Edit Ajakan Penutup (Sertifikasi)",
     schema: ctaSchema,
     defaults: {
-      eyebrow: "DOKUMENTASI KEPATUHAN",
-      title: "Butuh Bukti Legalitas Spesifik untuk Persyaratan Impor Anda?",
+      eyebrow: "Dokumen ekspor",
+      title: "Butuh dokumen tertentu untuk bea cukai di negara Anda?",
       description:
-        "Tim kepatuhan ekspor kami siap membantu menyediakan sertifikat origin (SKA), dokumen phytosanitary, atau hasil lab independen (COA) untuk kelancaran clearance kargo Anda.",
-      buttonText: "Minta Dokumen Kepatuhan",
+        "Sebutkan saja dokumen yang diminta, misalnya Surat Keterangan Asal (SKA), phytosanitary, atau hasil uji lab independen. Kami siapkan sebelum kargo berangkat.",
+      buttonText: "Tanya Soal Dokumen",
       buttonHref: "/kontak",
     },
     fields: ctaFields,
@@ -375,7 +375,7 @@ export const BLOCKS = {
     defaults: {
       title: "Katalog Produk",
       description:
-        "Eksplorasi jajaran produk karet alam unggulan kami. Dari Ribbed Smoked Sheet premium hingga Crumb Rubber berstandar internasional, kami memastikan parameter teknis yang ketat untuk setiap kebutuhan industri Anda.",
+        "Semua grade yang kami produksi, dari Ribbed Smoked Sheet sampai Crumb Rubber. Klik salah satu untuk melihat spesifikasi teknis lengkapnya.",
     },
     fields: [
       { kind: "text", name: "title", label: "Judul Halaman" },
@@ -389,10 +389,10 @@ export const BLOCKS = {
     title: "Edit Header RFQ",
     schema: pageHeaderSchema,
     defaults: {
-      eyebrow: "AJUKAN PENAWARAN",
-      title: "Request for Quote (RFQ)",
+      eyebrow: "Minta penawaran",
+      title: "Minta Penawaran Harga",
       subtitle:
-        "Dapatkan penawaran harga terbaik dan informasi ketersediaan stok untuk kebutuhan industri Anda.",
+        "Isi formulir di bawah ini dengan grade dan volume yang Anda butuhkan. Kami balas dengan harga, ketersediaan stok, dan perkiraan waktu kirim.",
     },
     fields: pageHeaderFields,
     revalidate: [{ path: "/rfq" }],
@@ -403,10 +403,10 @@ export const BLOCKS = {
     title: "Edit Header Kontak",
     schema: pageHeaderSchema,
     defaults: {
-      eyebrow: "HUBUNGI KAMI",
-      title: "Mari Jalin Kerja Sama Jangka Panjang",
+      eyebrow: "Hubungi kami",
+      title: "Ada yang mau ditanyakan?",
       subtitle:
-        "Tim kami siap membantu menjawab pertanyaan Anda terkait operasional, kemitraan, dan layanan kami.",
+        "Soal produk, kerja sama, atau hal lain, silakan kirim pesan lewat formulir atau hubungi kami langsung.",
     },
     fields: pageHeaderFields,
     revalidate: [{ path: "/kontak" }],
@@ -437,7 +437,7 @@ export const BLOCKS = {
     defaults: {
       companyName: "Duta Mitra Luhur",
       tagline:
-        "Produsen dan eksportir produk karet alam dan olahan industri berkualitas tinggi dari Indonesia untuk pasar manufaktur global.",
+        "Mengolah dan mengekspor karet alam dari Surabaya untuk pabrik-pabrik di berbagai negara.",
       addressLabel: "Kantor Pusat",
       addressLines: [
         "Kawasan Industri Estate Raya Kav. 45",
@@ -450,7 +450,7 @@ export const BLOCKS = {
       phoneHref: "tel:+62315550199",
       whatsappNumber: "6281234567890",
       whatsappMessage:
-        "Halo, saya ingin bertanya tentang produk karet Duta Mitra Luhur.",
+        "Halo, saya mau tanya soal produk karet Duta Mitra Luhur.",
       businessHoursLabel: "Jam Operasional",
       businessHours: "Senin – Jumat, 08.00 – 17.00 WIB",
       mapQuery: "Kawasan Industri Surabaya Rungkut",
@@ -527,7 +527,7 @@ export const BLOCKS = {
     }),
     defaults: {
       heading: "Sertifikasi & Standar",
-      description: "Kepatuhan standar mutu internasional untuk pasar ekspor.",
+      description: "Standar mutu yang kami ikuti untuk pasar ekspor.",
       badges: ["ISO 9001:2015", "SNI Standard", "ASTM D2000", "SIR 20"],
     },
     fields: [
@@ -549,9 +549,9 @@ export const BLOCKS = {
     title: "Edit SEO — Beranda",
     schema: seoSchema,
     defaults: {
-      title: "DUTA Mitra LUHUR — Produsen & Eksportir Karet Alam Industri Indonesia",
+      title: "PT Duta Mitra Luhur — Produsen & Eksportir Karet Alam Indonesia",
       description:
-        "PT Duta Mitra Luhur memproduksi dan mengekspor polimer karet alam berstandar internasional (SIR 20, SIR 10, RSS, Centrifuged Latex) untuk industri manufaktur global.",
+        "PT Duta Mitra Luhur mengolah dan mengekspor karet alam Indonesia (SIR 20, SIR 10, RSS, dan lateks pekat) untuk pabrik manufaktur di berbagai negara.",
     },
     fields: seoFields,
     revalidate: HOME,
@@ -563,7 +563,7 @@ export const BLOCKS = {
     defaults: {
       title: "Tentang Kami — PT Duta Mitra Luhur",
       description:
-        "Profil perusahaan, sejarah, kapasitas produksi, dan jangkauan ekspor PT Duta Mitra Luhur sebagai produsen karet alam terkemuka di Indonesia.",
+        "Profil, sejarah, kapasitas produksi, dan negara tujuan ekspor PT Duta Mitra Luhur, produsen karet alam asal Surabaya.",
     },
     fields: seoFields,
     revalidate: [{ path: "/tentang-kami" }],
@@ -573,9 +573,9 @@ export const BLOCKS = {
     title: "Edit SEO — Katalog",
     schema: seoSchema,
     defaults: {
-      title: "Katalog Produk | Duta Mitra Luhur",
+      title: "Katalog Produk — PT Duta Mitra Luhur",
       description:
-        "Eksplorasi spesifikasi polimer karet alam dan olahan siap ekspor dengan parameter kualitas terverifikasi dari PT Duta Mitra Luhur.",
+        "Daftar grade karet alam siap ekspor dari PT Duta Mitra Luhur, lengkap dengan spesifikasi teknis tiap produk.",
     },
     fields: seoFields,
     revalidate: [{ path: "/katalog" }],
@@ -587,7 +587,7 @@ export const BLOCKS = {
     defaults: {
       title: "Sertifikasi & Legalitas — PT Duta Mitra Luhur",
       description:
-        "Kredensial sertifikasi dan legalitas PT Duta Mitra Luhur untuk menjamin kualitas karet alam ekspor sesuai standar internasional.",
+        "Sertifikat mutu dan dokumen legalitas yang dipegang PT Duta Mitra Luhur untuk kebutuhan ekspor karet alam.",
     },
     fields: seoFields,
     revalidate: [{ path: "/sertifikasi" }],
@@ -597,9 +597,9 @@ export const BLOCKS = {
     title: "Edit SEO — RFQ",
     schema: seoSchema,
     defaults: {
-      title: "Ajukan Penawaran (RFQ) — PT Duta Mitra Luhur",
+      title: "Minta Penawaran Harga (RFQ) — PT Duta Mitra Luhur",
       description:
-        "Formulir pengajuan Request for Quote (RFQ) untuk produk karet alam (RSS, SIR, Latex) dari PT Duta Mitra Luhur.",
+        "Formulir permintaan penawaran untuk karet alam RSS, SIR, dan lateks pekat dari PT Duta Mitra Luhur.",
     },
     fields: seoFields,
     revalidate: [{ path: "/rfq" }],
@@ -609,9 +609,9 @@ export const BLOCKS = {
     title: "Edit SEO — Kontak",
     schema: seoSchema,
     defaults: {
-      title: "Hubungi Kami — PT Duta Mita Luhur",
+      title: "Hubungi Kami — PT Duta Mitra Luhur",
       description:
-        "Hubungi PT Duta Mita Luhur untuk pertanyaan umum, informasi perusahaan, atau bantuan terkait ekspor karet alam. Kantor pusat kami berlokasi di Surabaya, Indonesia.",
+        "Alamat, telepon, dan email PT Duta Mitra Luhur di Surabaya. Hubungi kami untuk pertanyaan produk, informasi perusahaan, atau kerja sama ekspor.",
     },
     fields: seoFields,
     revalidate: [{ path: "/kontak" }],
