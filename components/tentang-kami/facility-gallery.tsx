@@ -34,32 +34,7 @@ export function FacilityGallery({ images, isAdmin = false }: FacilityGalleryProp
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-space-3">
           {images.map((img, idx) => (
-            <button
-              key={idx}
-              type="button"
-              onClick={() => setLightboxIndex(idx)}
-              className="relative w-full aspect-[4/3] rounded-radius-md bg-navy-base/5 border border-border-hairline overflow-hidden group/img cursor-zoom-in hover:bg-navy-base/10 transition-colors flex flex-col items-center justify-center p-space-4 text-center"
-              aria-label={`View larger image of ${img.altText}`}
-            >
-              {img.url ? (
-                <>
-                  <Image
-                    src={img.url}
-                    alt={img.altText}
-                    fill
-                    className="object-cover group-hover/img:scale-105 transition-transform duration-500"
-                  />
-                  <div className="absolute inset-0 bg-navy-deep/0 group-hover/img:bg-navy-deep/20 transition-colors" />
-                  <span className="absolute bottom-4 left-4 right-4 text-center font-mono text-caption text-ivory opacity-0 group-hover/img:opacity-100 transition-opacity drop-shadow-md">
-                    {img.altText}
-                  </span>
-                </>
-              ) : (
-                <span className="font-mono text-caption text-slate/60 uppercase group-hover/img:text-navy-deep transition-colors">
-                  {img.altText}
-                </span>
-              )}
-            </button>
+            <FacilityImageButton key={idx} img={img} idx={idx} setLightboxIndex={setLightboxIndex} />
           ))}
         </div>
       </div>
@@ -79,5 +54,44 @@ export function FacilityGallery({ images, isAdmin = false }: FacilityGalleryProp
         />
       )}
     </section>
+  );
+}
+
+function FacilityImageButton({ img, idx, setLightboxIndex }: { img: any; idx: number; setLightboxIndex: (idx: number) => void }) {
+  const [isLoaded, setIsLoaded] = useState(false);
+
+  return (
+    <button
+      type="button"
+      onClick={() => setLightboxIndex(idx)}
+      className="relative w-full aspect-[4/3] rounded-radius-md bg-navy-base/5 border border-border-hairline overflow-hidden group/img cursor-zoom-in hover:bg-navy-base/10 transition-colors flex flex-col items-center justify-center p-space-4 text-center"
+      aria-label={`View larger image of ${img.altText}`}
+    >
+      {img.url ? (
+        <>
+          <div className="absolute inset-0 flex flex-col items-center justify-center p-space-2 text-center w-full h-full -z-10">
+             <span className="font-mono text-caption text-slate/60 uppercase group-hover/img:text-navy-deep transition-colors">
+               {img.altText}
+             </span>
+          </div>
+          <Image
+            src={img.url}
+            alt={img.altText}
+            fill
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+            className={`object-cover group-hover/img:scale-105 transition-all duration-500 ${isLoaded ? "opacity-100" : "opacity-0"}`}
+            onLoad={() => setIsLoaded(true)}
+          />
+          <div className="absolute inset-0 bg-navy-deep/0 group-hover/img:bg-navy-deep/20 transition-colors" />
+          <span className="absolute bottom-4 left-4 right-4 text-center font-mono text-caption text-ivory opacity-0 group-hover/img:opacity-100 transition-opacity drop-shadow-md z-10">
+            {img.altText}
+          </span>
+        </>
+      ) : (
+        <span className="font-mono text-caption text-slate/60 uppercase group-hover/img:text-navy-deep transition-colors">
+          {img.altText}
+        </span>
+      )}
+    </button>
   );
 }

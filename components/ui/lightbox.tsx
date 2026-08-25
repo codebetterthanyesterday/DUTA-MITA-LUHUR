@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
+import Image from "next/image";
 
 type LightboxProps = {
   isOpen: boolean;
@@ -54,11 +55,12 @@ export function Lightbox({ isOpen, onClose, imageUrl, altText }: LightboxProps) 
         </button>
 
         {imageUrl ? (
-          /* eslint-disable-next-line @next/next/no-img-element */
-          <img
+          <Image
             src={imageUrl}
             alt={altText}
-            className="max-w-full max-h-full object-contain shadow-card-hover rounded-radius-sm"
+            fill
+            sizes="100vw"
+            className="object-contain shadow-card-hover rounded-radius-sm"
           />
         ) : (
           <div className="w-full max-w-4xl aspect-[4/3] bg-navy-base/5 border border-border-hairline rounded-radius-md flex flex-col items-center justify-center p-space-6 text-center shadow-card-hover">

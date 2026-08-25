@@ -180,12 +180,12 @@ export function CatalogExplorer({ categories, products }: CatalogExplorerProps) 
       {/* Product Grid */}
       {filteredProducts.length > 0 ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-space-3">
-          {filteredProducts.map((product) => (
+          {filteredProducts.map((product, index) => (
             <div
               key={product.id}
               className="transition-opacity duration-150 ease-in-out opacity-0 animate-[fadeIn_150ms_ease-in-out_forwards]"
             >
-              <ProductCard product={product} />
+              <ProductCard product={product} priority={index < 3} />
             </div>
           ))}
         </div>

@@ -92,7 +92,8 @@ export function CertificationCard({ cert, isAdmin = false }: CertificationCardPr
               src={cert.logoUrl}
               alt={`${cert.issuingBody} logo`}
               fill
-              className="object-contain object-left"
+              sizes="128px"
+              className="object-contain object-left transition-opacity duration-300 opacity-0 animate-[fadeIn_300ms_ease-in-out_forwards]"
             />
           ) : (
             <div className="w-full h-full bg-slate/10 rounded-sm flex items-center px-2">

@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 
 export type ProductCardData = {
   id: string;
@@ -22,8 +23,9 @@ export type ProductCardData = {
   }[];
 };
 
-export function ProductCard({ product }: { product: ProductCardData }) {
+export function ProductCard({ product, priority = false }: { product: ProductCardData; priority?: boolean }) {
   const [imageError, setImageError] = useState(false);
+  const [isLoaded, setIsLoaded] = useState(false);
   const primaryImage = product.images?.[0];
 
   // Safely format MOQ value
@@ -42,23 +44,27 @@ export function ProductCard({ product }: { product: ProductCardData }) {
       <div>
         {/* Image Area */}
         <div className="aspect-[4/3] bg-navy-base/5 border border-border-hairline rounded-radius-sm mb-space-3 group-hover:bg-navy-base/10 transition-colors relative overflow-hidden flex flex-col items-center justify-center">
-          {primaryImage?.url && !isPlaceholderUrl && !imageError ? (
-            /* eslint-disable-next-line @next/next/no-img-element */
-            <img
+          {/* Neutral Placeholder Background (always rendered underneath) */}
+          <div className="absolute inset-0 flex flex-col items-center justify-center p-space-2 text-center w-full h-full -z-10">
+            <span className="font-mono text-caption uppercase text-slate/70">
+              Spesimen Produk
+            </span>
+            <span className="font-mono text-caption text-slate/50 mt-0.5">
+              {product.category.name}
+            </span>
+          </div>
+
+          {primaryImage?.url && !isPlaceholderUrl && !imageError && (
+            <Image
               src={primaryImage.url}
               alt={primaryImage.altText || product.name}
-              className="absolute inset-0 w-full h-full object-cover"
+              fill
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+              priority={priority}
+              className={`object-cover transition-opacity duration-300 ${isLoaded ? "opacity-100" : "opacity-0"}`}
+              onLoad={() => setIsLoaded(true)}
               onError={() => setImageError(true)}
             />
-          ) : (
-            <div className="flex flex-col items-center justify-center p-space-2 text-center w-full h-full">
-              <span className="font-mono text-caption uppercase text-slate/70">
-                Spesimen Produk
-              </span>
-              <span className="font-mono text-caption text-slate/50 mt-0.5">
-                {product.category.name}
-              </span>
-            </div>
           )}
         </div>
 

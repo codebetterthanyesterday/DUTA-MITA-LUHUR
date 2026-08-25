@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import Image from "next/image";
 import { Lightbox } from "@/components/ui/lightbox";
 
 type ProductImage = {
@@ -20,9 +21,14 @@ export function ProductGallery({ images, productName, categoryName }: ProductGal
   const [activeIndex, setActiveIndex] = useState(0);
   const [isLightboxOpen, setIsLightboxOpen] = useState(false);
   const [imageError, setImageError] = useState<Record<number, boolean>>({});
+  const [isLoaded, setIsLoaded] = useState<Record<number, boolean>>({});
 
   const handleImageError = (index: number) => {
     setImageError((prev) => ({ ...prev, [index]: true }));
+  };
+
+  const handleImageLoad = (index: number) => {
+    setIsLoaded((prev) => ({ ...prev, [index]: true }));
   };
 
   // Close lightbox on Escape key
@@ -49,6 +55,7 @@ export function ProductGallery({ images, productName, categoryName }: ProductGal
   // If no images exist, fallback to a single placeholder
   const activeImage = images.length > 0 ? images[activeIndex] : null;
   const hasError = imageError[activeIndex];
+  const activeIsLoaded = isLoaded[activeIndex];
 
   const renderPlaceholder = (text: string = "Spesimen Produk", subtext: string = categoryName) => (
     <div className="flex flex-col items-center justify-center p-space-2 text-center w-full h-full bg-navy-base/5 border border-border-hairline">
@@ -75,14 +82,19 @@ export function ProductGallery({ images, productName, categoryName }: ProductGal
         aria-label="View larger image"
       >
         {activeImage && !hasError ? (
-          /* eslint-disable-next-line @next/next/no-img-element */
-          <img
-            key={activeImage.id} // Forces re-render for crossfade if needed
-            src={activeImage.url}
-            alt={activeImage.altText || productName}
-            className="absolute inset-0 w-full h-full object-cover transition-opacity duration-150 ease-in-out opacity-0 animate-[fadeIn_150ms_ease-in-out_forwards]"
-            onError={() => handleImageError(activeIndex)}
-          />
+          <>
+            <div className="absolute inset-0 -z-10">{renderPlaceholder()}</div>
+            <Image
+              src={activeImage.url}
+              alt={activeImage.altText || productName}
+              fill
+              sizes="(max-width: 1024px) 100vw, 50vw"
+              priority={true}
+              className={`object-cover transition-opacity duration-300 ${activeIsLoaded ? "opacity-100" : "opacity-0"}`}
+              onLoad={() => handleImageLoad(activeIndex)}
+              onError={() => handleImageError(activeIndex)}
+            />
+          </>
         ) : (
           renderPlaceholder()
         )}
@@ -94,6 +106,7 @@ export function ProductGallery({ images, productName, categoryName }: ProductGal
           {images.map((image, index) => {
             const isThumbError = imageError[index];
             const isActive = index === activeIndex;
+            const thumbIsLoaded = isLoaded[index];
 
             return (
               <button
@@ -109,13 +122,18 @@ export function ProductGallery({ images, productName, categoryName }: ProductGal
                 aria-pressed={isActive}
               >
                 {!isThumbError ? (
-                  /* eslint-disable-next-line @next/next/no-img-element */
-                  <img
-                    src={image.url}
-                    alt={image.altText || `Thumbnail ${index + 1}`}
-                    className="absolute inset-0 w-full h-full object-cover"
-                    onError={() => handleImageError(index)}
-                  />
+                  <>
+                    <div className="absolute inset-0 -z-10 flex items-center justify-center bg-navy-base/5"></div>
+                    <Image
+                      src={image.url}
+                      alt={image.altText || `Thumbnail ${index + 1}`}
+                      fill
+                      sizes="80px"
+                      className={`object-cover transition-opacity duration-300 ${thumbIsLoaded ? "opacity-100" : "opacity-0"}`}
+                      onLoad={() => handleImageLoad(index)}
+                      onError={() => handleImageError(index)}
+                    />
+                  </>
                 ) : (
                   <div className="flex items-center justify-center w-full h-full text-slate/40">
                     <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
