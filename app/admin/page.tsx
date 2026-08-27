@@ -141,7 +141,7 @@ export default async function AdminDashboardPage() {
   const session = await auth();
   const adminSlug = getAdminSlug();
 
-  if (!session?.user) {
+  if (session?.user?.role !== "ADMIN") {
     redirect(`/${adminSlug}/login`);
   }
 

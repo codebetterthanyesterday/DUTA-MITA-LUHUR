@@ -6,7 +6,7 @@ import { MessageList } from "./message-list";
 
 export default async function AdminMessagesPage() {
   const session = await auth();
-  if (!session?.user) {
+  if (session?.user?.role !== "ADMIN") {
     redirect(`/${getAdminSlug()}/login`);
   }
 

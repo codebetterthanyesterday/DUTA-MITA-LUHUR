@@ -8,7 +8,7 @@ import { getAdminRoute } from "@/lib/admin-routes";
 export default async function EditProductPage(props: { params: Promise<{ id: string }> }) {
   const params = await props.params;
   const session = await auth();
-  if (!session?.user) {
+  if (session?.user?.role !== "ADMIN") {
     redirect("/admin");
   }
 

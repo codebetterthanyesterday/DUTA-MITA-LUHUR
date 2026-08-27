@@ -34,13 +34,13 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     jwt({ token, user }) {
       if (user) {
         token.id = user.id;
-        token.role = (user as any).role; // Types workaround
+        token.role = user.role;
       }
       return token;
     },
     session({ session, token }) {
       session.user.id = token.id as string;
-      (session.user as any).role = token.role as string;
+      session.user.role = token.role;
       return session;
     },
   },

@@ -16,7 +16,7 @@ export type ActionResponse = { success: true } | { success: false; error: string
 export async function updateRfqStatus(id: string, status: RfqStatus): Promise<ActionResponse> {
   try {
     const session = await auth();
-    if (!session?.user) {
+    if (session?.user?.role !== "ADMIN") {
       return { success: false, error: "Sesi Anda sudah berakhir. Masuk lagi untuk melanjutkan." };
     }
 
