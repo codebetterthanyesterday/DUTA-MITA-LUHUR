@@ -17,10 +17,10 @@ export default auth((req) => {
 
   // Handle access via the secret slug
   if (slug && nextUrl.pathname.startsWith(`/${slug}`)) {
-    const isAdmin = req.auth?.user?.role === "ADMIN";
+    const isLoggedIn = !!req.auth;
     
-    // Auth check: redirect to login if not logged in or not admin
-    if (!isAdmin && !nextUrl.pathname.endsWith("/login")) {
+    // Auth check: redirect to login if not logged in
+    if (!isLoggedIn && !nextUrl.pathname.endsWith("/login")) {
       return NextResponse.redirect(new URL(`/${slug}/login`, req.url));
     }
     

@@ -9,21 +9,14 @@ datasource db {
   provider = "postgresql"
 }
 
-enum Role {
-  ADMIN
-  BUYER
-}
-
-
 model User {
-  id           String    @id @default(cuid())
-  email        String    @unique
+  id           String   @id @default(cuid())
+  email        String   @unique
   name         String?
   passwordHash String
-  role         Role     @default(BUYER)
+  role         String   @default("ADMIN")
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
-  lastLogin    DateTime?
 }
 
 model Category {

@@ -16,7 +16,7 @@ export type ActionState = { success: true } | { success: false; error: string; f
 
 export async function createCategory(data: FormData): Promise<ActionState> {
   const session = await auth();
-  if (session?.user?.role !== "ADMIN") return { success: false, error: "Sesi Anda sudah berakhir. Masuk lagi untuk melanjutkan." };
+  if (!session?.user) return { success: false, error: "Sesi Anda sudah berakhir. Masuk lagi untuk melanjutkan." };
 
   const parsed = categorySchema.safeParse({
     name: data.get("name"),
@@ -64,7 +64,7 @@ export async function createCategory(data: FormData): Promise<ActionState> {
 
 export async function updateCategory(id: string, data: FormData): Promise<ActionState> {
   const session = await auth();
-  if (session?.user?.role !== "ADMIN") return { success: false, error: "Sesi Anda sudah berakhir. Masuk lagi untuk melanjutkan." };
+  if (!session?.user) return { success: false, error: "Sesi Anda sudah berakhir. Masuk lagi untuk melanjutkan." };
 
   const parsed = categorySchema.safeParse({
     name: data.get("name"),
@@ -119,7 +119,7 @@ export async function updateCategory(id: string, data: FormData): Promise<Action
 
 export async function deleteCategory(id: string): Promise<ActionState> {
   const session = await auth();
-  if (session?.user?.role !== "ADMIN") return { success: false, error: "Sesi Anda sudah berakhir. Masuk lagi untuk melanjutkan." };
+  if (!session?.user) return { success: false, error: "Sesi Anda sudah berakhir. Masuk lagi untuk melanjutkan." };
 
   try {
     const category = await prisma.category.findUnique({
@@ -146,7 +146,7 @@ export async function deleteCategory(id: string): Promise<ActionState> {
 
 export async function reassignAndDeleteCategory(id: string, targetCategoryId: string): Promise<ActionState> {
   const session = await auth();
-  if (session?.user?.role !== "ADMIN") return { success: false, error: "Sesi Anda sudah berakhir. Masuk lagi untuk melanjutkan." };
+  if (!session?.user) return { success: false, error: "Sesi Anda sudah berakhir. Masuk lagi untuk melanjutkan." };
 
   if (id === targetCategoryId) {
     return { success: false, error: "Kategori tujuan tidak boleh sama dengan kategori yang mau dihapus." };

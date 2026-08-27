@@ -9,7 +9,7 @@ import { slugify } from "@/lib/slugify";
 
 export async function uploadImageAction(formData: FormData) {
   const session = await auth();
-  if (session?.user?.role !== "ADMIN") {
+  if (!session?.user) {
     throw new Error("Sesi Anda sudah berakhir. Masuk lagi untuk melanjutkan.");
   }
 
@@ -49,7 +49,7 @@ export type ProductFormValues = z.infer<typeof productSchema>;
 
 export async function createProduct(data: ProductFormValues) {
   const session = await auth();
-  if (session?.user?.role !== "ADMIN") {
+  if (!session?.user) {
     throw new Error("Sesi Anda sudah berakhir. Masuk lagi untuk melanjutkan.");
   }
 
@@ -107,7 +107,7 @@ export async function createProduct(data: ProductFormValues) {
 
 export async function updateProduct(id: string, data: ProductFormValues) {
   const session = await auth();
-  if (session?.user?.role !== "ADMIN") {
+  if (!session?.user) {
     throw new Error("Sesi Anda sudah berakhir. Masuk lagi untuk melanjutkan.");
   }
 
@@ -185,7 +185,7 @@ export async function updateProduct(id: string, data: ProductFormValues) {
 
 export async function deleteProduct(id: string) {
   const session = await auth();
-  if (session?.user?.role !== "ADMIN") {
+  if (!session?.user) {
     throw new Error("Sesi Anda sudah berakhir. Masuk lagi untuk melanjutkan.");
   }
 
@@ -214,7 +214,7 @@ export async function deleteProduct(id: string) {
 
 export async function toggleProductStatus(id: string, newStatus: boolean) {
   const session = await auth();
-  if (session?.user?.role !== "ADMIN") {
+  if (!session?.user) {
     throw new Error("Sesi Anda sudah berakhir. Masuk lagi untuk melanjutkan.");
   }
 
@@ -234,7 +234,7 @@ export async function toggleProductStatus(id: string, newStatus: boolean) {
 
 export async function bulkDeleteProducts(ids: string[]) {
   const session = await auth();
-  if (session?.user?.role !== "ADMIN") throw new Error("Sesi Anda sudah berakhir. Masuk lagi untuk melanjutkan.");
+  if (!session?.user) throw new Error("Sesi Anda sudah berakhir. Masuk lagi untuk melanjutkan.");
   if (!ids?.length) return { success: true };
 
   const products = await prisma.product.findMany({
@@ -258,7 +258,7 @@ export async function bulkDeleteProducts(ids: string[]) {
 
 export async function bulkUpdateProducts(ids: string[], data: { isActive?: boolean; categoryId?: string }) {
   const session = await auth();
-  if (session?.user?.role !== "ADMIN") throw new Error("Sesi Anda sudah berakhir. Masuk lagi untuk melanjutkan.");
+  if (!session?.user) throw new Error("Sesi Anda sudah berakhir. Masuk lagi untuk melanjutkan.");
   if (!ids?.length) return { success: true };
 
   const updateData: any = {};

@@ -8,7 +8,7 @@ import { redirect } from "next/navigation";
 
 export default async function AdminProductsPage() {
   const session = await auth();
-  if (session?.user?.role !== "ADMIN") {
+  if (!session?.user) {
     redirect("/admin");
   }
 

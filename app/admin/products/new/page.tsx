@@ -7,7 +7,7 @@ import { getAdminRoute } from "@/lib/admin-routes";
 
 export default async function NewProductPage() {
   const session = await auth();
-  if (session?.user?.role !== "ADMIN") {
+  if (!session?.user) {
     redirect("/admin");
   }
 

@@ -6,7 +6,7 @@ import { PageHeader } from "@/components/admin/ui/page-header";
 
 export default async function AdminRfqPage() {
   const session = await auth();
-  if (session?.user?.role !== "ADMIN") {
+  if (!session?.user) {
     redirect("/admin");
   }
 
